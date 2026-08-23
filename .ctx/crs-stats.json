@@ -1,0 +1,18 @@
+{
+  "blocks": {
+    "no-ls-use-glob": 9,
+    "no-cd-use-absolute-paths": 4,
+    "no-grep-use-tool": 5,
+    "no-cat-use-read": 6,
+    "no-find-use-glob": 8,
+    "no-bash-use-nu": 12
+  },
+  "last_seen": {
+    "no-bash-use-nu": 1787492995.620583,
+    "no-find-use-glob": 1787492958.53548,
+    "no-cd-use-absolute-paths": 1787492955.529804,
+    "no-ls-use-glob": 1787492966.326015,
+    "no-grep-use-tool": 1787487524.077884,
+    "no-cat-use-read": 1787492971.906655
+  }
+}

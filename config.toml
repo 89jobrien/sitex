@@ -1,0 +1,12 @@
+base_url = "https://89jobrien.github.io/sitex"
+title = "Joseph O'Brien"
+description = "Projects and writing"
+default_language = "en"
+compile_sass = true
+build_search_index = false
+generate_feeds = true
+feed_filenames = ["atom.xml"]
+
+[markdown]
+
+[extra]

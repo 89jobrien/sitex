@@ -1,0 +1,44 @@
+project: sitex
+default: ci
+budget: { calls: 20 }
+
+targets:
+  format:
+    steps:
+      - step: format_run
+        handler: shell::capture
+        args:
+          cmd: "crux run scripts/format.crux"
+
+  lint:
+    steps:
+      - step: lint_run
+        handler: shell::capture
+        args:
+          cmd: "crux run scripts/lint.crux"
+
+  check:
+    steps:
+      - step: zola_check
+        handler: shell::capture
+        args:
+          cmd: "zola check"
+
+  build:
+    depends: [format, lint, check]
+    steps:
+      - step: zola_build
+        handler: shell::capture
+        args:
+          cmd: "zola build"
+
+  serve:
+    steps:
+      - step: zola_serve_open
+        handler: shell::exec
+        args:
+          # long-running dev server; not part of `ci` — run standalone
+          cmd: "zola serve --open"
+
+  ci:
+    depends: [format, lint, check, build]

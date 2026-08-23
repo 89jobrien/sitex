@@ -1,0 +1,184 @@
+---
+title: "devkit"
+date: 2026-08-18
+description: "AI-powered dev workflow toolkit in Go that extracts a self-correcting CI/agent loop into a reusable scaffold -- parallel-role council review, single-pass diff review, log/system diagnose, freeform meta-agent tasks, and a standalone ci-agent that auto-files GitHub/Gitea issues from failed jobs."
+extra:
+  repo: ""
+---
+
+# devkit
+
+AI-powered dev workflow toolkit. Extracts a self-correcting CI/agent loop into a reusable scaffold for any project.
+
+## What it does
+
+- **council** — runs parallel AI roles (strict critic, creative explorer, analyst, security reviewer, performance analyst) against your branch diff and synthesizes a weighted health score. Strict critic and analyst use Anthropic; creative explorer and performance analyst use OpenAI when `OPENAI_API_KEY` is set.
+- **review** — single-pass AI diff review focused on a configurable concern area
+- **diagnose** — runs an LLM agent against local logs and system state to report root cause, evidence, fix, and confidence level
+- **meta** — designs and runs parallel agents for any freeform task against your repo context
+- **ci-agent** — standalone binary that diagnoses failed CI jobs and opens/updates issues automatically (GitHub and Gitea)
+
+## Requirements
+
+- Go 1.23+
+- `ANTHROPIC_API_KEY` (all commands)
+- `OPENAI_API_KEY` (optional — used for two council roles and ci-agent fallback)
+- `GEMINI_API_KEY` (optional — ci-agent fallback only)
+- [gum](https://github.com/charmbracelet/gum) for the interactive installer
+- [`fd`](https://github.com/sharkdp/fd) and [`rg`](https://github.com/BurntSushi/ripgrep) — used by agent tools (GlobTool and GrepTool)
+
+## Install
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/89jobrien/devkit/v0.0.1/install.sh | bash
+```
+
+Or clone and run locally:
+
+```sh
+git clone https://github.com/89jobrien/devkit
+cd devkit
+bash install.sh
+```
+
+The installer will:
+
+1. Ask which components and CI platform(s) to enable
+2. Install the `devkit` and `ci-agent` binaries via `go install`
+3. Write `.devkit.toml` in your project root
+4. Copy the appropriate CI workflow file (`.github/workflows/ci.yml` or `.gitea/workflows/ci.yml`)
+5. Install git hooks — `pre-push` runs `devkit council --base main` (non-blocking); `post-commit` prints a council reminder
+6. Write Claude Code hooks to `.claude/settings.json` so `devkit review` runs after file edits
+
+Bypass git hooks any time with `DEVKIT_SKIP_HOOKS=1 git push`.
+
+## Usage
+
+```sh
+# AI diff review
+devkit review --base main
+
+# Multi-role branch analysis (also runs as a pre-push hook and on PRs)
+devkit council --base main --mode core
+devkit council --base main --mode extensive   # adds security + performance roles
+
+# Diagnose a local service failure from logs and system state
+devkit diagnose
+devkit diagnose --service postgres
+devkit diagnose --log-cmd "tail -n 500 /var/log/myapp.log"
+
+# Run parallel agents on any freeform task
+devkit meta "find all places where we do not validate user input"
+echo "audit the auth layer" | devkit meta
+```
+
+All commands log to `~/.dev-agents/<project>/`.
+
+## GitHub Actions
+
+```php
+  Developer commits
+          │
+          ▼
+    git commit
+          │
+    pre-commit: devkit review --base HEAD
+          │
+    ┌─────┴────────┐
+  issues?        clean
+    │              │
+  abort commit   commit succeeds
+                  │
+                  ▼
+            git push
+             │
+        pre-push: devkit council --base main (non-blocking)
+          │
+          ▼
+    push to GitHub
+                 │
+                 ▼
+          PR open/updated
+                │
+                ▼
+         council job (.github/workflows/devkit.yml)
+       ──────────────────────────────────────────────
+       1. checkout (full history)
+       2. go install devkit@latest
+       3. devkit council --base origin/<base> --mode core
+         → Anthropic: strict-critic, general-analyst
+         → OpenAI:    creative-explorer, performance-analyst
+         → synthesis
+       4. Post PR comment (update existing or create new)
+                │
+                ▼
+          PR comment posted
+          ─────────────────
+          ## devkit council
+            <findings>
+
+                │
+          merge to main
+                │
+                ▼
+          bump-version job (ci/github.yml)
+          ────────────────────────────────
+          reads VERSION, bumps minor (0.N.0)
+          commits + pushes [bump version]
+```
+
+One job in `.github/workflows/devkit.yml`:
+
+- **council** — fires on every PR; runs multi-agent council review and posts findings as a PR comment (updates on re-push)
+
+Required secrets: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`.
+
+## CI integration
+
+The CI templates in `ci/` include:
+
+- A `diagnose` job that runs `ci-agent` automatically on any CI failure, opening a GitHub/Gitea issue with an AI diagnosis
+- A `bump-version` job (GitHub only) that increments the minor version (`0.N.0`) on every successful push to main
+
+## Configuration
+
+`.devkit.toml` (generated by `install.sh`):
+
+```toml
+[project]
+name        = "my-project"
+description = "What it does"
+install_date = "2026-01-01"
+ci_platforms = ["github"]
+
+[components]
+council  = true
+review   = true
+meta     = true
+ci_agent = true
+diagnose = true
+
+[review]
+focus = "security, performance, correctness"
+
+[council]
+mode = "core"
+
+[diagnose]
+# log_cmd = "journalctl -n 200 --no-pager"   # uncomment and customize if needed
+# service = ""                                 # focus on a specific service
+```
+
+## Upgrading
+
+```sh
+bash upgrade.sh
+```
+
+## Architecture
+
+Hexagonal Go: each internal package (`council`, `review`, `diagnose`, `meta`, `loop`, `tools`, `platform`, `log`) defines a `Runner` or `Platform` interface. Concrete implementations are wired at the `cmd/` layer. No package imports another's concrete type.
+
+## License
+
+MIT

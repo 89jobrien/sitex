@@ -1,0 +1,12 @@
+pipeline: lint
+budget: { calls: 4 }
+
+steps:
+  - step: markdownlint_check
+    handler: shell::capture
+    args:
+      cmd: "markdownlint-cli2 'content/**/*.md'"
+
+  - step: log_result
+    handler: ctrl::log
+    args: { field: stdout, compact: true }

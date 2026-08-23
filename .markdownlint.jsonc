@@ -1,0 +1,22 @@
+{
+  // Frontmatter already supplies the page title, so the H1 in body content
+  // is expected and not a "multiple top-level headings" violation.
+  "MD025": false,
+  // Prose lines and generated tables/links routinely exceed 80 chars; wrapping
+  // is handled by prettier's proseWrap, not markdownlint.
+  "MD013": false,
+  // Project notes use fenced blocks for arbitrary output/config snippets
+  // without a language tag.
+  "MD040": false,
+  // Zola content embeds raw HTML (badges, images) intentionally.
+  "MD033": false,
+  // Emphasis-as-subheading is a deliberate style choice in these notes.
+  "MD036": false,
+  // Repeated section headings (e.g. "Export") appear across independent
+  // subsections in the same note.
+  "MD024": false,
+  // rx.md's code fence deliberately shows a literal tab-delimited row.
+  "MD010": { "code_blocks": false },
+  // tracers.md's H1 is the project's actual name, "trace::".
+  "MD026": false
+}

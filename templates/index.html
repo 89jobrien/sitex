@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block content %}
+<section class="profile">
+  <h1>{{ section.title }}</h1>
+  {% if section.extra.role %}
+  <p class="role">{{ section.extra.role }}</p>
+  {% endif %} {% if section.extra.focus %}
+  <ul class="focus-tags">
+    {% for tag in section.extra.focus %}
+    <li>{{ tag }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <div class="bio">{{ section.content | safe }}</div>
+</section>
+{% endblock content %}

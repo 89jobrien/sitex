@@ -1,0 +1,25 @@
+generated: 2026-08-22
+since_days: 30
+sessions_scanned: 1
+total_commands: 13
+top_supported:
+  - command: which markdownlint
+    count: 1
+    rule: no-bash-use-nu
+    est_savings_tokens: 150
+  - command: ls
+    count: 1
+    rule: no-ls-use-glob
+    est_savings_tokens: 227
+  - command: cat /Users/joe/dev/sitex/Cruxfile
+    count: 1
+    rule: no-cat-use-read
+    est_savings_tokens: 38
+  - command: cd /Users/joe/dev/sitex;
+    count: 1
+    rule: no-bash-use-nu
+    est_savings_tokens: 90
+top_unhandled:
+  - base_command: nu
+    count: 9
+    example: "nu -c 'ls /Users/joe/dev/joe/skills/inject/references/artifacts/ | length'"

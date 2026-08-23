@@ -1,0 +1,13 @@
+pipeline: format
+budget: { calls: 4 }
+
+steps:
+  - step: prettier_write
+    handler: shell::capture
+    args:
+      # templates/*.html excluded: prettier's HTML parser can't parse Tera syntax ({{ }}, {% %})
+      cmd: "prettier --write 'content/**/*.md' 'sass/**/*.scss'"
+
+  - step: log_result
+    handler: ctrl::log
+    args: { field: stdout, compact: true }

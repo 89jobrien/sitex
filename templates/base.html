@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+  <link rel="stylesheet" href="{{ get_url(path="style.css") }}">
+  {% if config.generate_feeds %}
+  <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path="atom.xml") }}">
+  {% endif %}
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-title" href="{{ get_url(path="/") }}">{{ config.title }}</a>
+    <nav>
+      <a href="{{ get_url(path="/projects/") }}">Projects</a>
+      <a href="{{ get_url(path="/blog/") }}">Blog</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock content %}
+  </main>
+  <footer class="site-footer">
+    <span>&copy; {{ now() | date(format="%Y") }} Joseph O'Brien</span>
+  </footer>
+</body>
+</html>

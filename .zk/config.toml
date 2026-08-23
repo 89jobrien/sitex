@@ -1,0 +1,40 @@
+# zk notebook config — notes here double as Zola content (YAML frontmatter
+# so both tools read the same files without conversion; zk only parses YAML).
+# https://github.com/zk-org/zk
+
+[note]
+language = "en"
+default-title = "Untitled"
+filename = "{{slug title}}"
+extension = "md"
+template = "default.md"
+
+[group.projects]
+paths = ["content/projects"]
+[group.projects.note]
+template = "project.md"
+
+[group.blog]
+paths = ["content/blog"]
+[group.blog.note]
+template = "post.md"
+
+[format.markdown]
+hashtags = true
+multiword-tags = false
+colon-tags = false
+
+[tool]
+editor = "$EDITOR"
+
+[lsp]
+[lsp.diagnostics]
+wiki-title = "hint"
+dead-link = "error"
+
+[alias]
+new-project = 'zk new --group projects content/projects "$@"'
+new-post = 'zk new --group blog content/blog "$@"'
+list-projects = 'zk list content/projects -x content/projects/_index.md --format "{{title}}" "$@"'
+list-posts = 'zk list content/blog -x content/blog/_index.md --format "{{title}} ({{format-date created \"short\"}})" --sort created- "$@"'
+# NOTE: notes use YAML frontmatter (---) so both zk (YAML-only) and Zola (YAML/TOML) can read the same files.

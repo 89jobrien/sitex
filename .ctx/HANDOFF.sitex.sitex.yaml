@@ -1,0 +1,175 @@
+project: sitex
+id: sitex
+updated: 2026-08-23
+items:
+- id: uncommitted-work
+  name: uncommitted-work
+  priority: P1
+  status: open
+  title: Uncommitted changes (80 files)
+  description: |-
+    Working tree has uncommitted changes:
+    .ctx/godmode/session.json
+    .ctx/godmode/traces/trace.jsonl
+    .github/workflows/deploy.yml
+    .gitignore
+    .zk/config.toml
+    .zk/templates/default.md
+    .zk/templates/post.md
+    .zk/templates/project.md
+    CLAUDE.md
+    Cruxfile
+    README.md
+    config.toml
+    content/_index.md
+    content/blog/_index.md
+    content/blog/hello-world.md
+    content/projects/89jobrien-github-io.md
+    content/projects/_index.md
+    content/projects/agentlint.md
+    content/projects/atelier.md
+    content/projects/bamlish.md
+    content/projects/bazaar.md
+    content/projects/braid.md
+    content/projects/cannibalizer.md
+    content/projects/cargo-promote.md
+    content/projects/claude-code-statusline.md
+    content/projects/coursers.md
+    content/projects/crux.md
+    content/projects/devkit.md
+    content/projects/devobs.md
+    content/projects/disyn.md
+    content/projects/doob.md
+    content/projects/dotfiles.md
+    content/projects/godmode.md
+    content/projects/hj.md
+    content/projects/hooks.md
+    content/projects/kgx.md
+    content/projects/langchainx.md
+    content/projects/looprs.md
+    content/projects/maid.md
+    content/projects/mcpipe.md
+    content/projects/message-extractor.md
+    content/projects/minibox.md
+    content/projects/mlrs.md
+    content/projects/myrv.md
+    content/projects/neusym.md
+    content/projects/notfiles.md
+    content/projects/nu-libs.md
+    content/projects/numcp.md
+    content/projects/obfsck.md
+    content/projects/orca-strait.md
+    content/projects/praxis.md
+    content/projects/prefixe.md
+    content/projects/propkit.md
+    content/projects/repro.md
+    content/projects/rslm.md
+    content/projects/rx.md
+    content/projects/sanctum.md
+    content/projects/sandbox.md
+    content/projects/sparkfile.md
+    content/projects/steve.md
+    content/projects/taskit.md
+    content/projects/tracers.md
+    content/projects/updog.md
+    content/projects/warpx.md
+    content/projects/xtui.md
+    sass/style.scss
+    templates/base.html
+    templates/blog.html
+    templates/index.html
+    templates/post.html
+    templates/project.html
+    templates/projects.html
+    .ctx/HANDOFF.tools.yaml
+    .ctx/crs-stats.json
+    .ctx/godmode/sessions/
+    .markdownlint.jsonc
+    content/blog/25-projects-no-monorepo.md
+    content/blog/godmode-vs-agent-platforms.md
+    content/blog/hooks-mid-rewrite.md
+    scripts/
+  files:
+  - .ctx/godmode/session.json
+  - .ctx/godmode/traces/trace.jsonl
+  - .github/workflows/deploy.yml
+  - .gitignore
+  - .zk/config.toml
+  - .zk/templates/default.md
+  - .zk/templates/post.md
+  - .zk/templates/project.md
+  - CLAUDE.md
+  - Cruxfile
+  - README.md
+  - config.toml
+  - content/_index.md
+  - content/blog/_index.md
+  - content/blog/hello-world.md
+  - content/projects/89jobrien-github-io.md
+  - content/projects/_index.md
+  - content/projects/agentlint.md
+  - content/projects/atelier.md
+  - content/projects/bamlish.md
+  - content/projects/bazaar.md
+  - content/projects/braid.md
+  - content/projects/cannibalizer.md
+  - content/projects/cargo-promote.md
+  - content/projects/claude-code-statusline.md
+  - content/projects/coursers.md
+  - content/projects/crux.md
+  - content/projects/devkit.md
+  - content/projects/devobs.md
+  - content/projects/disyn.md
+  - content/projects/doob.md
+  - content/projects/dotfiles.md
+  - content/projects/godmode.md
+  - content/projects/hj.md
+  - content/projects/hooks.md
+  - content/projects/kgx.md
+  - content/projects/langchainx.md
+  - content/projects/looprs.md
+  - content/projects/maid.md
+  - content/projects/mcpipe.md
+  - content/projects/message-extractor.md
+  - content/projects/minibox.md
+  - content/projects/mlrs.md
+  - content/projects/myrv.md
+  - content/projects/neusym.md
+  - content/projects/notfiles.md
+  - content/projects/nu-libs.md
+  - content/projects/numcp.md
+  - content/projects/obfsck.md
+  - content/projects/orca-strait.md
+  - content/projects/praxis.md
+  - content/projects/prefixe.md
+  - content/projects/propkit.md
+  - content/projects/repro.md
+  - content/projects/rslm.md
+  - content/projects/rx.md
+  - content/projects/sanctum.md
+  - content/projects/sandbox.md
+  - content/projects/sparkfile.md
+  - content/projects/steve.md
+  - content/projects/taskit.md
+  - content/projects/tracers.md
+  - content/projects/updog.md
+  - content/projects/warpx.md
+  - content/projects/xtui.md
+  - sass/style.scss
+  - templates/base.html
+  - templates/blog.html
+  - templates/index.html
+  - templates/post.html
+  - templates/project.html
+  - templates/projects.html
+  - .ctx/HANDOFF.tools.yaml
+  - .ctx/crs-stats.json
+  - .ctx/godmode/sessions/
+  - .markdownlint.jsonc
+  - content/blog/25-projects-no-monorepo.md
+  - content/blog/godmode-vs-agent-platforms.md
+  - content/blog/hooks-mid-rewrite.md
+  - scripts/
+log:
+- date: '20260823.122452'
+  summary: done=0 running=0 pending=0 blocked=0
