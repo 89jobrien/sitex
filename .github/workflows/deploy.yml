@@ -30,6 +30,7 @@ jobs:
           path: public
 
   deploy:
+    if: ${{ vars.PAGES_ENABLED == 'true' }}
     needs: build
     runs-on: ubuntu-latest
     environment:
