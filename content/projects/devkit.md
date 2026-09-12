@@ -2,8 +2,11 @@
 title: "devkit"
 date: 2026-08-18
 description: "AI-powered dev workflow toolkit in Go that extracts a self-correcting CI/agent loop into a reusable scaffold -- parallel-role council review, single-pass diff review, log/system diagnose, freeform meta-agent tasks, and a standalone ci-agent that auto-files GitHub/Gitea issues from failed jobs."
+taxonomies:
+  tags: [agent-harness, automation, ci-cd, observability]
 extra:
   repo: "https://github.com/89jobrien/devkit"
+  related: [post:godmode-vs-agent-platforms, project:atelier, project:bamlish]
 ---
 
 # devkit

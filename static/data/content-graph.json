@@ -55,6 +55,24 @@
               "declaredBy": "project:braid"
             }
           ]
+        },
+        {
+          "id": "project:devkit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devkit"
+            }
+          ]
+        },
+        {
+          "id": "project:godmode",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:godmode"
+            }
+          ]
         }
       ],
       "backlinks": []
@@ -80,7 +98,17 @@
       "date": "2026-08-23",
       "route": "/blog/hooks-mid-rewrite/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:coursers",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:coursers"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -92,7 +120,17 @@
       "date": "2026-09-11",
       "route": "/blog/machine-readable-cli/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:doob",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:doob"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -116,7 +154,17 @@
       "date": "2026-09-11",
       "route": "/blog/policy-between-intent-and-effects/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:coursers",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:coursers"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -152,7 +200,17 @@
       "date": "2026-09-11",
       "route": "/blog/replayability-over-autonomy/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:crux",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:crux"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -164,7 +222,17 @@
       "date": "2026-09-11",
       "route": "/blog/task-graph-vs-prompt/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:godmode",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:godmode"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -248,6 +316,10 @@
             {
               "kind": "explicit",
               "declaredBy": "project:agentlint"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devobs"
             }
           ]
         },
@@ -329,6 +401,17 @@
             {
               "kind": "explicit",
               "declaredBy": "project:atelier"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devkit"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation"
+              ]
             }
           ]
         },
@@ -342,13 +425,14 @@
           ]
         },
         {
-          "id": "project:agentlint",
+          "id": "project:coursers",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
                 "agent-harness",
-                "developer-experience"
+                "automation",
+                "security"
               ]
             }
           ]
@@ -376,6 +460,10 @@
             {
               "kind": "explicit",
               "declaredBy": "project:bamlish"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devkit"
             }
           ]
         },
@@ -473,12 +561,13 @@
           ]
         },
         {
-          "id": "project:agentlint",
+          "id": "project:godmode",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
                 "agent-harness",
+                "automation",
                 "developer-experience"
               ]
             }
@@ -526,6 +615,18 @@
             {
               "kind": "explicit",
               "declaredBy": "project:braid"
+            }
+          ]
+        },
+        {
+          "id": "project:disyn",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "security"
+              ]
             }
           ]
         }
@@ -637,6 +738,30 @@
               ]
             }
           ]
+        },
+        {
+          "id": "project:devkit",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "ci-cd"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:doob",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli"
+              ]
+            }
+          ]
         }
       ],
       "backlinks": []
@@ -649,8 +774,22 @@
       "description": "Rust CLI that renders a richer Claude Code statusline -- directory, git status, file changes, model, context usage with a progress bar, and cost, all in one line. Installs with a single command and runs on macOS, Linux, WSL, and Windows.",
       "date": "2026-08-18",
       "route": "/projects/claude-code-statusline/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "developer-experience",
+        "observability",
+        "terminal-ui"
+      ],
+      "related": [
+        {
+          "id": "project:xtui",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:claude-code-statusline"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -661,8 +800,54 @@
       "description": "Claude Code hook pipeline that course-corrects AI-generated Bash commands -- the coursers tool blocks anti-pattern commands via PreToolUse/PostToolUse rules and learns from failures, backed by crs, a front controller that filters output, rewrites commands, and validates hooks.",
       "date": "2026-08-18",
       "route": "/projects/coursers/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-harness",
+        "automation",
+        "security",
+        "shell-tooling"
+      ],
+      "related": [
+        {
+          "id": "post:hooks-mid-rewrite",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:coursers"
+            }
+          ]
+        },
+        {
+          "id": "post:policy-between-intent-and-effects",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:coursers"
+            }
+          ]
+        },
+        {
+          "id": "project:prefixe",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:coursers"
+            }
+          ]
+        },
+        {
+          "id": "project:atelier",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "security"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -673,8 +858,64 @@
       "description": "Agentic Rust DSL and typed runtime for YAML pipelines -- steps, fan-out, and error recovery are traced into a replayable Crux<T> value, with a #[crux::agent] escape hatch into Rust when logic gets custom.",
       "date": "2026-08-18",
       "route": "/projects/crux/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-runtime",
+        "automation",
+        "observability",
+        "work-tracking"
+      ],
+      "related": [
+        {
+          "id": "project:devobs",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:crux"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devobs"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:replayability-over-autonomy",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:crux"
+            }
+          ]
+        },
+        {
+          "id": "project:praxis",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:crux"
+            }
+          ]
+        },
+        {
+          "id": "project:braid",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "observability"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -685,7 +926,12 @@
       "description": "AI-powered dev workflow toolkit in Go that extracts a self-correcting CI/agent loop into a reusable scaffold -- parallel-role council review, single-pass diff review, log/system diagnose, freeform meta-agent tasks, and a standalone ci-agent that auto-files GitHub/Gitea issues from failed jobs.",
       "date": "2026-08-18",
       "route": "/projects/devkit/",
-      "tags": [],
+      "tags": [
+        "agent-harness",
+        "automation",
+        "ci-cd",
+        "observability"
+      ],
       "related": [
         {
           "id": "project:atelier",
@@ -693,6 +939,26 @@
             {
               "kind": "explicit",
               "declaredBy": "project:atelier"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devkit"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:godmode-vs-agent-platforms",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devkit"
             }
           ]
         },
@@ -702,6 +968,22 @@
             {
               "kind": "explicit",
               "declaredBy": "project:bamlish"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devkit"
+            }
+          ]
+        },
+        {
+          "id": "project:devobs",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "observability"
+              ]
             }
           ]
         }
@@ -716,14 +998,63 @@
       "description": "Public Obsidian vault tracking open-source projects under 89jobrien, kept up to date by crux pipelines and populated with kgx knowledge graphs rather than edited by hand.",
       "date": "2026-08-18",
       "route": "/projects/devobs/",
-      "tags": [],
+      "tags": [
+        "automation",
+        "knowledge-systems",
+        "observability"
+      ],
       "related": [
+        {
+          "id": "project:crux",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:crux"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devobs"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "observability"
+              ]
+            }
+          ]
+        },
         {
           "id": "project:agentlint",
           "reasons": [
             {
               "kind": "explicit",
               "declaredBy": "project:agentlint"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devobs"
+            }
+          ]
+        },
+        {
+          "id": "project:kgx",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devobs"
+            }
+          ]
+        },
+        {
+          "id": "project:devkit",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "observability"
+              ]
             }
           ]
         }
@@ -738,8 +1069,34 @@
       "description": "Hybrid symbolic+neural agent pipeline in Rust: raw observations pass through a typed 7-stage flow (FactExtractor, ProposalEngine, Verifier, a bounded RepairEngine loop, ActionExecutor) so neural proposals get validated and repaired before anything executes; build orchestration delegates via xtask to taskit.",
       "date": "2026-08-18",
       "route": "/projects/disyn/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-runtime",
+        "llm",
+        "security"
+      ],
+      "related": [
+        {
+          "id": "project:taskit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:disyn"
+            }
+          ]
+        },
+        {
+          "id": "project:braid",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "security"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -750,8 +1107,42 @@
       "description": "Agent-first todo CLI in Rust with an embedded SurrealDB store -- JSON output, batch operations, and git-based project/file context detection, built to feed session and task state to handoff tooling like hj and atelier's herald agent.",
       "date": "2026-08-18",
       "route": "/projects/doob/",
-      "tags": [],
+      "tags": [
+        "automation",
+        "cli",
+        "integration",
+        "work-tracking"
+      ],
       "related": [
+        {
+          "id": "project:godmode",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:doob"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:godmode"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "work-tracking"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:machine-readable-cli",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:doob"
+            }
+          ]
+        },
         {
           "id": "project:bamlish",
           "reasons": [
@@ -781,8 +1172,21 @@
       "description": "Archived dotfiles repo, superseded by the notfiles symlink-based manager -- kept read-only for history; active shell, SSH, and TTY config now lives in ~/.notfiles and ~/.dotfiles-tools.",
       "date": "2026-08-18",
       "route": "/projects/dotfiles/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "automation",
+        "systems-config"
+      ],
+      "related": [
+        {
+          "id": "project:notfiles",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:dotfiles"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -793,8 +1197,65 @@
       "description": "Self-contained Rust-native development methodology plugin for Claude Code -- a CLI-backed task graph (skills are thin wrappers over the godmode binary) that persists tasks across sessions via causal depends_on chains, descended from the superpowers agentic skills framework.",
       "date": "2026-08-18",
       "route": "/projects/godmode/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-harness",
+        "automation",
+        "developer-experience",
+        "work-tracking"
+      ],
+      "related": [
+        {
+          "id": "project:doob",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:doob"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:godmode"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "work-tracking"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:godmode-vs-agent-platforms",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:godmode"
+            }
+          ]
+        },
+        {
+          "id": "post:task-graph-vs-prompt",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:godmode"
+            }
+          ]
+        },
+        {
+          "id": "project:atelier",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -806,7 +1267,17 @@
       "date": "2026-08-18",
       "route": "/projects/hj/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:doob",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:doob"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -830,7 +1301,17 @@
       "date": "2026-08-18",
       "route": "/projects/kgx/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:devobs",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:devobs"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -970,7 +1451,17 @@
       "date": "2026-08-18",
       "route": "/projects/notfiles/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:dotfiles",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:dotfiles"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -1040,7 +1531,17 @@
       "date": "2026-08-18",
       "route": "/projects/praxis/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:crux",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:crux"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -1052,7 +1553,17 @@
       "date": "2026-08-18",
       "route": "/projects/prefixe/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:coursers",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:coursers"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -1179,6 +1690,15 @@
               "declaredBy": "project:cargo-promote"
             }
           ]
+        },
+        {
+          "id": "project:disyn",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:disyn"
+            }
+          ]
         }
       ],
       "backlinks": []
@@ -1228,7 +1748,17 @@
       "date": "2026-08-18",
       "route": "/projects/xtui/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:claude-code-statusline",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:claude-code-statusline"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     }
   ],
@@ -1241,6 +1771,90 @@
         {
           "kind": "explicit",
           "declaredBy": "project:braid"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:godmode-vs-agent-platforms",
+      "target": "project:devkit",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:devkit"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:godmode-vs-agent-platforms",
+      "target": "project:godmode",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:godmode"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:hooks-mid-rewrite",
+      "target": "project:coursers",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:coursers"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:machine-readable-cli",
+      "target": "project:doob",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:doob"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:policy-between-intent-and-effects",
+      "target": "project:coursers",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:coursers"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:replayability-over-autonomy",
+      "target": "project:crux",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:crux"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:task-graph-vs-prompt",
+      "target": "project:godmode",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:godmode"
         }
       ],
       "tagSimilarity": 0
@@ -1321,9 +1935,28 @@
         {
           "kind": "explicit",
           "declaredBy": "project:agentlint"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:devobs"
         }
       ],
       "tagSimilarity": 0
+    },
+    {
+      "source": "project:agentlint",
+      "target": "project:godmode",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
     },
     {
       "source": "project:agentlint",
@@ -1378,15 +2011,58 @@
     },
     {
       "source": "project:atelier",
+      "target": "project:coursers",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:atelier",
       "target": "project:devkit",
       "directed": true,
       "evidence": [
         {
           "kind": "explicit",
           "declaredBy": "project:atelier"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:devkit"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
         }
       ],
-      "tagSimilarity": 0
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:godmode",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
     },
     {
       "source": "project:atelier",
@@ -1408,6 +2084,10 @@
         {
           "kind": "explicit",
           "declaredBy": "project:bamlish"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:devkit"
         }
       ],
       "tagSimilarity": 0
@@ -1456,6 +2136,82 @@
       "tagSimilarity": 0.3333333333333333
     },
     {
+      "source": "project:bazaar",
+      "target": "project:coursers",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:bazaar",
+      "target": "project:devkit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:bazaar",
+      "target": "project:godmode",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:braid",
+      "target": "project:crux",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:braid",
+      "target": "project:disyn",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
       "source": "project:braid",
       "target": "project:doob",
       "directed": true,
@@ -1495,6 +2251,66 @@
       "tagSimilarity": 0.3333333333333333
     },
     {
+      "source": "project:cannibalizer",
+      "target": "project:doob",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:cannibalizer",
+      "target": "project:godmode",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:cargo-promote",
+      "target": "project:devkit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "ci-cd"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:cargo-promote",
+      "target": "project:doob",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
       "source": "project:cargo-promote",
       "target": "project:taskit",
       "directed": true,
@@ -1502,6 +2318,241 @@
         {
           "kind": "explicit",
           "declaredBy": "project:cargo-promote"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:claude-code-statusline",
+      "target": "project:xtui",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:claude-code-statusline"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:coursers",
+      "target": "project:devkit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:coursers",
+      "target": "project:godmode",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:coursers",
+      "target": "project:prefixe",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:coursers"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:crux",
+      "target": "project:devkit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:crux",
+      "target": "project:devobs",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:crux"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:devobs"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:crux",
+      "target": "project:doob",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "work-tracking"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:crux",
+      "target": "project:godmode",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "work-tracking"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:crux",
+      "target": "project:praxis",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:crux"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:devkit",
+      "target": "project:devobs",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:devkit",
+      "target": "project:godmode",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:devobs",
+      "target": "project:kgx",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:devobs"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:disyn",
+      "target": "project:taskit",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:disyn"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:doob",
+      "target": "project:godmode",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:doob"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:godmode"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "work-tracking"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:doob",
+      "target": "project:hj",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:doob"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:dotfiles",
+      "target": "project:notfiles",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:dotfiles"
         }
       ],
       "tagSimilarity": 0

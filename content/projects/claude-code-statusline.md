@@ -2,8 +2,11 @@
 title: "claude-code-statusline"
 date: 2026-08-18
 description: "Rust CLI that renders a richer Claude Code statusline -- directory, git status, file changes, model, context usage with a progress bar, and cost, all in one line. Installs with a single command and runs on macOS, Linux, WSL, and Windows."
+taxonomies:
+  tags: [developer-experience, observability, terminal-ui]
 extra:
   repo: "https://github.com/89jobrien/claude-code-statusline"
+  related: [project:xtui]
 ---
 
 # Claude Code Statusline
