@@ -3,7 +3,7 @@ title: "braid"
 date: 2026-08-18
 description: "Rust-first personal agent platform built as a hexagonal multi-crate workspace -- core engine and provider/tool ports, a redaction and hook-gating safety layer, an MCP server over stdio, and context assembly from todo and git-diff sources, with a Ratatui session inspector."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/braid"
 ---
 
 # Braid

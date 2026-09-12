@@ -3,7 +3,7 @@ title: "atelier"
 date: 2026-08-18
 description: "Personal Claude Code dev workflow plugin bundling handoff, herald, sentinel, and forge agents for Rust quality gates, code review, CI, git safety, and multi-repo status pulses. Distributed via the bazaar marketplace and depends on sanctum for session-start secret resolution."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/atelier"
 ---
 
 # atelier

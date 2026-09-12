@@ -3,7 +3,7 @@ title: "agentlint"
 date: 2026-08-18
 description: "Linter for AI coding agent harness files -- validates agents, skills, commands, hooks, settings, MCP config, and docs frontmatter (.claude/, .cursor/, AGENTS.md, CLAUDE.md) across major coding agent platforms."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/agentlint"
 ---
 
 # agentlint

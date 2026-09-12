@@ -3,7 +3,7 @@ title: "rx"
 date: 2026-08-18
 description: "Installs scripts from local paths or remote URLs into an XDG-style command directory and tracks them in a JSON registry, using prefixe's prefix-rewrite config to prepend validated prefixes to shell commands — not a secrets or env-var tool."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/rx"
 ---
 
 # rx

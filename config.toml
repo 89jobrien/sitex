@@ -1,11 +1,15 @@
 base_url = "https://89jobrien.github.io/sitex"
 title = "Joseph O'Brien"
 description = "Projects and writing"
+author = "Joseph O'Brien"
 default_language = "en"
 compile_sass = true
+# TODO(project-search): Enable Zola search and add a client-side search interface.
 build_search_index = false
 generate_feeds = true
 feed_filenames = ["atom.xml"]
+
+# TODO(portfolio-sync): Refresh public project metadata from source repositories.
 
 [markdown]
 

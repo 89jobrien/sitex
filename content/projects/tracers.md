@@ -3,7 +3,7 @@ title: "tracers"
 date: 2026-08-18
 description: "trace:: — a language design and Rust reference implementation where reasoning provenance (Trace<T>) is first-class; four crates provide typed traces, a checkpointable task registry, and agent delegation with confidence-based escalation."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/tracers"
 ---
 
 # trace::

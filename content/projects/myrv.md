@@ -3,7 +3,7 @@ title: "myrv"
 date: 2026-08-18
 description: "A hexagonal-architecture telemetry system for a 2015 RV, reading OBD-II chassis data, house battery, and generator state through swappable manual/serial sources into an embedded sled key-value store for display and assistant queries."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/myrv"
 ---
 
 # myrv

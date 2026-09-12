@@ -3,7 +3,7 @@ title: "doob"
 date: 2026-08-18
 description: "Agent-first todo CLI in Rust with an embedded SurrealDB store -- JSON output, batch operations, and git-based project/file context detection, built to feed session and task state to handoff tooling like hj and atelier's herald agent."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/doob"
 ---
 
 # doob

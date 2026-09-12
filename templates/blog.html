@@ -1,11 +1,19 @@
-{% extends "base.html" %} {% block title %}Blog — {{ config.title }}{% endblock
-title %} {% block content %}
+{% extends "base.html" %}
+{% block title %}Blog — {{ config.title }}{% endblock title %}
+{% block description %}Essays on systems engineering, agentic tooling, and developer workflows.{% endblock description %}
+{% block social_title %}Blog — {{ config.title }}{% endblock social_title %}
+{% block social_description %}Essays on systems engineering, agentic tooling, and developer workflows.{% endblock social_description %}
+{% block content %}
 <h1>Blog</h1>
 <ul class="card-list">
   {% for page in section.pages %}
   <li class="card">
     <a href="{{ page.permalink }}">{{ page.title }}</a>
-    <time>{{ page.date | date(format="%Y-%m-%d") }}</time>
+    <div class="card-meta">
+      <time datetime="{{ page.date }}">{{ page.date | date(format="%Y-%m-%d") }}</time>
+      <span>{{ page.reading_time }} min read</span>
+    </div>
+    {% if page.description %}<p>{{ page.description }}</p>{% endif %}
   </li>
   {% endfor %}
 </ul>

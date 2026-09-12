@@ -3,7 +3,7 @@ title: "taskit"
 date: 2026-08-18
 description: "Config-driven CI pipeline runner for Rust workspaces — affected-crate detection, protocol-drift tracking, health baselines, and a git branching workflow (flow auto) with LLM-assisted conflict resolution. Several sibling repos (disyn, neusym, myrv) delegate their xtask/Cruxfile pipelines to it."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/taskit"
 ---
 
 # taskit

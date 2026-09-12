@@ -3,7 +3,7 @@ title: "bazaar"
 date: 2026-08-18
 description: "Claude Code plugin marketplace and showcase generator that indexes the author's open-source repos and plugins, including atelier, orca-strait, obfsck, minibox, coursers, godmode, and crux."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/bazaar"
 ---
 
 # Open Source

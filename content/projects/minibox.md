@@ -3,7 +3,7 @@ title: "minibox"
 date: 2026-08-18
 description: "An agent-controllable container runtime in Rust with a daemon/CLI split, OCI image pulling, Linux namespace/cgroups v2 isolation, and a hexagonal architecture with swappable adapters. Ships a built-in MCP stdio server exposing policy-gated container lifecycle operations to MCP clients."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/minibox"
 ---
 
 # minibox

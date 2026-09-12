@@ -3,7 +3,7 @@ title: "maid"
 date: 2026-08-18
 description: "A fast Rust CLI (internally named neatly) that sorts a directory's files into type-based subfolders, with dry-run preview, undo, and safe handling of hidden files."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/maid"
 ---
 
 # neatly

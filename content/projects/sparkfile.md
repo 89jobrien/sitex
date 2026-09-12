@@ -3,7 +3,7 @@ title: "sparkfile"
 date: 2026-08-18
 description: "CLI that scaffolds new projects from YAML-defined presets, generating workspace-convention skeletons (e.g. a Rust 2024 CLI) with local guidance, validation commands, and handoff context."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/sparkfile"
 ---
 
 # sparkfile

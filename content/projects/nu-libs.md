@@ -3,7 +3,7 @@ title: "nu_libs"
 date: 2026-08-18
 description: "Shared Nushell module library organized by category (git, net, fs, data, ui, std, task, rust, doob, misc), meant to be loaded whole or piecemeal into other Nu-based tooling across the workspace."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/nu_libs"
 ---
 
 # nu_libs

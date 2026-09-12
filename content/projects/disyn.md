@@ -3,7 +3,7 @@ title: "disyn"
 date: 2026-08-18
 description: "Hybrid symbolic+neural agent pipeline in Rust: raw observations pass through a typed 7-stage flow (FactExtractor, ProposalEngine, Verifier, a bounded RepairEngine loop, ActionExecutor) so neural proposals get validated and repaired before anything executes; build orchestration delegates via xtask to taskit."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/disyn"
 ---
 
 # disyn

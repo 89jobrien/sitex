@@ -3,7 +3,7 @@ title: "hj"
 date: 2026-08-18
 description: "Handoff journal CLI that tracks work-in-progress across sessions via structured per-repo YAML files -- triages open items at session start, appends a session log at close, syncs state to SQLite, and renders markdown summaries for humans and agents."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/hj"
 ---
 
 # hj

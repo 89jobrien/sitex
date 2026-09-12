@@ -3,7 +3,7 @@ title: "steve"
 date: 2026-08-18
 description: "Personal library of 377 reusable Claude Code components (agents, commands, skills, hooks, templates), with Python tooling to index, install, and publish them."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/steve"
 ---
 
 # steve

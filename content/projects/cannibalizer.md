@@ -3,7 +3,7 @@ title: "cannibalizer"
 date: 2026-08-18
 description: "Rust CLI (cnbl) built on tree-sitter that absorbs foreign repos into the Rust ecosystem -- scans a source repo, classifies each file by kind (domain logic, port, adapter, script, spec, config), and routes it to a hexagonal Rust component, an existing repo, a skill, or the archive."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/cannibalizer"
 ---
 
 # cannibalizer

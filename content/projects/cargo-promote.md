@@ -3,7 +3,7 @@ title: "cargo-promote"
 date: 2026-08-18
 description: "Crate publishing and promotion pipeline CLI for Rust projects -- pushes packages through configurable pipeline stages to private registries (Gitea, GitHub) and optionally crates.io, with per-package overrides, deferred promotions, and forge integration."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/cargo-promote"
 ---
 
 # cargo-promote

@@ -4,6 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+  <meta name="description" content="{% block description %}{{ config.description }}{% endblock description %}">
+  <meta name="theme-color" content="#0f1115">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="{{ current_url }}">
+  <meta property="og:type" content="{% block social_type %}website{% endblock social_type %}">
+  <meta property="og:title" content="{% block social_title %}{{ config.title }}{% endblock social_title %}">
+  <meta property="og:description" content="{% block social_description %}{{ config.description }}{% endblock social_description %}">
+  <meta property="og:url" content="{{ current_url }}">
+  <meta property="og:site_name" content="{{ config.title }}">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="{{ get_url(path="favicon.svg") }}" type="image/svg+xml">
   <link rel="stylesheet" href="{{ get_url(path="style.css") }}">
   {% if config.generate_feeds %}
   <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path="atom.xml") }}">
@@ -22,6 +33,9 @@
   </main>
   <footer class="site-footer">
     <span>&copy; {{ now() | date(format="%Y") }} Joseph O'Brien</span>
+    {% if config.generate_feeds %}
+    <a href="{{ get_url(path="atom.xml") }}">Atom feed</a>
+    {% endif %}
   </footer>
 </body>
 </html>
