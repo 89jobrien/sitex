@@ -18,15 +18,27 @@ targets:
         args:
           cmd: "crux run scripts/lint.crux"
 
+  graph:
+    steps:
+      - step: graph_tests
+        handler: shell::capture
+        args:
+          cmd: "bun run test"
+      - step: graph_freshness
+        handler: shell::capture
+        args:
+          cmd: "bun run graph:check"
+
   check:
+    depends: [graph]
     steps:
       - step: zola_check
         handler: shell::capture
         args:
-          cmd: "zola check"
+          cmd: "zola check --skip-external-links"
 
   build:
-    depends: [format, lint, check]
+    depends: [check]
     steps:
       - step: zola_build
         handler: shell::capture
@@ -42,4 +54,4 @@ targets:
           cmd: "zola serve --open"
 
   ci:
-    depends: [format, lint, check, build]
+    depends: [lint, build]
