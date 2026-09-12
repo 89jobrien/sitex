@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Content Graph — {{ config.title }}{% endblock title %}
+{% block description %}Explore connections between Joseph O'Brien's projects and essays.{% endblock description %}
+{% block content %}
+{% set graph = load_data(path="static/data/content-graph.json", format="json") %}
+<header class="graph-intro">
+  <p class="eyebrow">Relationship explorer</p>
+  <h1>{{ page.title }}</h1>
+  <p class="lede">Search projects and essays, then follow the ideas, tools, and evidence that connect them.</p>
+</header>
+
+<section class="graph-explorer" data-content-graph data-manifest-url="{{ get_url(path="data/content-graph.json") }}">
+  <form class="graph-controls" role="search">
+    <label for="graph-search">Find content</label>
+    <input id="graph-search" name="query" type="search" placeholder="Search titles and tags">
+    <fieldset>
+      <legend>Content type</legend>
+      <label><input type="checkbox" name="kind" value="project" checked> Projects</label>
+      <label><input type="checkbox" name="kind" value="post" checked> Essays</label>
+    </fieldset>
+  </form>
+
+  <div class="graph-canvas" data-graph-canvas aria-label="Interactive content relationship graph"></div>
+
+  <div class="graph-fallback" data-graph-fallback>
+    <h2>All connected content</h2>
+    <ul class="graph-node-list">
+      {% for node in graph.nodes %}
+      <li data-node-kind="{{ node.kind }}" data-node-tags="{{ node.tags | join(sep=" ") }}">
+        <span class="related-kind">{{ node.kind }}</span>
+        <a href="{{ get_url(path=node.route) }}">{{ node.title }}</a>
+        {% if node.tags | length > 0 %}<span class="card-meta">{{ node.tags | join(sep=", ") }}</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endblock content %}
