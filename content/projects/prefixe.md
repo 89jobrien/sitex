@@ -2,8 +2,11 @@
 title: "prefixe"
 date: 2026-08-18
 description: "Rust library and CLI that rewrites shell commands by prepending validated prefixes (e.g. `op plugin run --`) from a TOML config, with speculative candidate-prefix learning; the core prefix-rewrite engine behind coursers and rx."
+taxonomies:
+  tags: [automation, cli, shell-tooling]
 extra:
   repo: "https://github.com/89jobrien/prefixe"
+  related: [project:coursers, project:rx]
 ---
 
 # prefixe

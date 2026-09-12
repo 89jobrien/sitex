@@ -2,8 +2,11 @@
 title: "notfiles"
 date: 2026-08-18
 description: "A pure-Rust dotfiles manager, superseding the older dotfiles repo, that replaces GNU Stow with symlink/copy management, status checks, CI-friendly validation, and adoption of existing files — growing into a full new-machine bootstrap system across an 8-crate workspace including notforge."
+taxonomies:
+  tags: [automation, cli, security, systems-config]
 extra:
   repo: "https://github.com/89jobrien/notfiles"
+  related: [project:dotfiles]
 ---
 
 # notfiles

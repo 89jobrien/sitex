@@ -10,7 +10,17 @@
       "date": "2026-08-23",
       "route": "/blog/25-projects-no-monorepo/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:rx",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:rx"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -227,7 +237,17 @@
       "date": "2026-09-11",
       "route": "/blog/redaction-system-boundary/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:obfsck",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:obfsck"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -304,6 +324,15 @@
               "declaredBy": "project:mcpipe"
             }
           ]
+        },
+        {
+          "id": "project:rslm",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:rslm"
+            }
+          ]
         }
       ],
       "backlinks": []
@@ -360,6 +389,23 @@
       ],
       "related": [
         {
+          "id": "project:propkit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:propkit"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "cli",
+                "developer-experience",
+                "testing"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:looprs",
           "reasons": [
             {
@@ -399,18 +445,6 @@
               "kind": "tag",
               "sharedTags": [
                 "cli",
-                "developer-experience"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:atelier",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-harness",
                 "developer-experience"
               ]
             }
@@ -652,6 +686,43 @@
       ],
       "related": [
         {
+          "id": "project:obfsck",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:braid"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:obfsck"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "mcp",
+                "observability",
+                "security"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:praxis",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:praxis"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
           "id": "post:godmode-vs-agent-platforms",
           "reasons": [
             {
@@ -662,24 +733,6 @@
         },
         {
           "id": "project:doob",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:braid"
-            }
-          ]
-        },
-        {
-          "id": "project:looprs",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:looprs"
-            }
-          ]
-        },
-        {
-          "id": "project:obfsck",
           "reasons": [
             {
               "kind": "explicit",
@@ -735,6 +788,19 @@
           ]
         },
         {
+          "id": "project:rx",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:hj",
           "reasons": [
             {
@@ -742,18 +808,6 @@
               "sharedTags": [
                 "automation",
                 "cli"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:hooks",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "automation",
-                "developer-experience"
               ]
             }
           ]
@@ -866,6 +920,26 @@
       ],
       "related": [
         {
+          "id": "project:prefixe",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:coursers"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:prefixe"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "shell-tooling"
+              ]
+            }
+          ]
+        },
+        {
           "id": "post:hooks-mid-rewrite",
           "reasons": [
             {
@@ -876,15 +950,6 @@
         },
         {
           "id": "post:policy-between-intent-and-effects",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:coursers"
-            }
-          ]
-        },
-        {
-          "id": "project:prefixe",
           "reasons": [
             {
               "kind": "explicit",
@@ -924,6 +989,27 @@
       ],
       "related": [
         {
+          "id": "project:praxis",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:crux"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:praxis"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "automation",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:devobs",
           "reasons": [
             {
@@ -944,32 +1030,27 @@
           ]
         },
         {
+          "id": "project:neusym",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:neusym"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "observability",
+                "work-tracking"
+              ]
+            }
+          ]
+        },
+        {
           "id": "post:replayability-over-autonomy",
           "reasons": [
             {
               "kind": "explicit",
               "declaredBy": "project:crux"
-            }
-          ]
-        },
-        {
-          "id": "project:praxis",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:crux"
-            }
-          ]
-        },
-        {
-          "id": "project:hj",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "automation",
-                "work-tracking"
-              ]
             }
           ]
         }
@@ -1170,6 +1251,19 @@
           ]
         },
         {
+          "id": "project:rslm",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "llm",
+                "security"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:mlrs",
           "reasons": [
             {
@@ -1177,18 +1271,6 @@
               "sharedTags": [
                 "agent-runtime",
                 "llm"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:braid",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-runtime",
-                "security"
               ]
             }
           ]
@@ -1292,6 +1374,17 @@
             {
               "kind": "explicit",
               "declaredBy": "project:dotfiles"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:notfiles"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "systems-config"
+              ]
             }
           ]
         }
@@ -1313,6 +1406,23 @@
         "work-tracking"
       ],
       "related": [
+        {
+          "id": "project:orca-strait",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:orca-strait"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "work-tracking"
+              ]
+            }
+          ]
+        },
         {
           "id": "project:hj",
           "reasons": [
@@ -1351,15 +1461,6 @@
         },
         {
           "id": "post:godmode-vs-agent-platforms",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:godmode"
-            }
-          ]
-        },
-        {
-          "id": "post:task-graph-vs-prompt",
           "reasons": [
             {
               "kind": "explicit",
@@ -1472,6 +1573,18 @@
           ]
         },
         {
+          "id": "project:nu-libs",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:atelier",
           "reasons": [
             {
@@ -1485,18 +1598,6 @@
         },
         {
           "id": "project:bazaar",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "automation",
-                "developer-experience"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:cannibalizer",
           "reasons": [
             {
               "kind": "tag",
@@ -1555,6 +1656,18 @@
               ]
             }
           ]
+        },
+        {
+          "id": "project:obfsck",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "cli",
+                "observability"
+              ]
+            }
+          ]
         }
       ],
       "backlinks": []
@@ -1607,6 +1720,18 @@
         },
         {
           "id": "project:mlrs",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "llm"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:rslm",
           "reasons": [
             {
               "kind": "tag",
@@ -1724,6 +1849,19 @@
           ]
         },
         {
+          "id": "project:rx",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:hj",
           "reasons": [
             {
@@ -1742,18 +1880,6 @@
               "kind": "tag",
               "sharedTags": [
                 "automation",
-                "developer-experience"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:agentlint",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "cli",
                 "developer-experience"
               ]
             }
@@ -1777,6 +1903,26 @@
       ],
       "related": [
         {
+          "id": "project:numcp",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:mcpipe"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:numcp"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "integration",
+                "mcp"
+              ]
+            }
+          ]
+        },
+        {
           "id": "post:one-cli-many-protocols",
           "reasons": [
             {
@@ -1787,15 +1933,6 @@
         },
         {
           "id": "post:tools-that-change-behavior",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:mcpipe"
-            }
-          ]
-        },
-        {
-          "id": "project:numcp",
           "reasons": [
             {
               "kind": "explicit",
@@ -1869,6 +2006,18 @@
               ]
             }
           ]
+        },
+        {
+          "id": "project:neusym",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "integration",
+                "observability"
+              ]
+            }
+          ]
         }
       ],
       "backlinks": []
@@ -1888,6 +2037,22 @@
         "systems-software"
       ],
       "related": [
+        {
+          "id": "project:repro",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:repro"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "containers",
+                "systems-software"
+              ]
+            }
+          ]
+        },
         {
           "id": "post:agent-safe-container-runtime",
           "reasons": [
@@ -1912,18 +2077,6 @@
             {
               "kind": "explicit",
               "declaredBy": "project:minibox"
-            }
-          ]
-        },
-        {
-          "id": "project:braid",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "mcp",
-                "security"
-              ]
             }
           ]
         }
@@ -1980,6 +2133,18 @@
               ]
             }
           ]
+        },
+        {
+          "id": "project:rslm",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "llm"
+              ]
+            }
+          ]
         }
       ],
       "backlinks": []
@@ -2018,8 +2183,71 @@
       "description": "An MCP server and CLI bridging Jira and Linear for bidirectional issue sync, built on rmcp/stdio and the crux runtime-trace model — every sync returns an auditable Crux<T> envelope with a step-by-step execution trace. Hexagonal five-crate layout, gated by cargo xtask pre-commit.",
       "date": "2026-08-18",
       "route": "/projects/neusym/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "integration",
+        "mcp",
+        "observability",
+        "work-tracking"
+      ],
+      "related": [
+        {
+          "id": "project:crux",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:neusym"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "observability",
+                "work-tracking"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:obfsck",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:neusym"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:obfsck"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "mcp",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:taskit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:neusym"
+            }
+          ]
+        },
+        {
+          "id": "project:mcpipe",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "integration",
+                "mcp"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -2030,7 +2258,12 @@
       "description": "A pure-Rust dotfiles manager, superseding the older dotfiles repo, that replaces GNU Stow with symlink/copy management, status checks, CI-friendly validation, and adoption of existing files — growing into a full new-machine bootstrap system across an 8-crate workspace including notforge.",
       "date": "2026-08-18",
       "route": "/projects/notfiles/",
-      "tags": [],
+      "tags": [
+        "automation",
+        "cli",
+        "security",
+        "systems-config"
+      ],
       "related": [
         {
           "id": "project:dotfiles",
@@ -2038,6 +2271,53 @@
             {
               "kind": "explicit",
               "declaredBy": "project:dotfiles"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:notfiles"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "systems-config"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:hj",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:maid",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:prefixe",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli"
+              ]
             }
           ]
         }
@@ -2052,8 +2332,57 @@
       "description": "Shared Nushell module library organized by category (git, net, fs, data, ui, std, task, rust, doob, misc), meant to be loaded whole or piecemeal into other Nu-based tooling across the workspace.",
       "date": "2026-08-18",
       "route": "/projects/nu-libs/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "automation",
+        "developer-experience",
+        "shell-tooling"
+      ],
+      "related": [
+        {
+          "id": "project:doob",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:nu-libs"
+            }
+          ]
+        },
+        {
+          "id": "project:numcp",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:nu-libs"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:numcp"
+            }
+          ]
+        },
+        {
+          "id": "project:taskit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:nu-libs"
+            }
+          ]
+        },
+        {
+          "id": "project:rx",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "developer-experience",
+                "shell-tooling"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -2064,7 +2393,12 @@
       "description": "Pre-alpha MCP server that bridges Nushell-defined tool closures (kubectl, web search, knowledge-base queries) into the Model Context Protocol, so any MCP client or LLM agent daemon can invoke Nu scripts as callable tools.",
       "date": "2026-08-18",
       "route": "/projects/numcp/",
-      "tags": [],
+      "tags": [
+        "agent-runtime",
+        "integration",
+        "mcp",
+        "shell-tooling"
+      ],
       "related": [
         {
           "id": "project:mcpipe",
@@ -2072,6 +2406,54 @@
             {
               "kind": "explicit",
               "declaredBy": "project:mcpipe"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:numcp"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "integration",
+                "mcp"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:nu-libs",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:nu-libs"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:numcp"
+            }
+          ]
+        },
+        {
+          "id": "project:braid",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "mcp"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:neusym",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "integration",
+                "mcp"
+              ]
             }
           ]
         }
@@ -2086,7 +2468,12 @@
       "description": "CLI that redacts secrets and PII from logs and structured text, with tiered Minimal/Standard/Paranoid obfuscation levels and stable identifier mapping; used elsewhere in the workspace as a pre-commit secrets-audit gate.",
       "date": "2026-08-18",
       "route": "/projects/obfsck/",
-      "tags": [],
+      "tags": [
+        "cli",
+        "mcp",
+        "observability",
+        "security"
+      ],
       "related": [
         {
           "id": "project:braid",
@@ -2094,6 +2481,59 @@
             {
               "kind": "explicit",
               "declaredBy": "project:braid"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:obfsck"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "mcp",
+                "observability",
+                "security"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:neusym",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:neusym"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:obfsck"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "mcp",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:redaction-system-boundary",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:obfsck"
+            }
+          ]
+        },
+        {
+          "id": "project:kgx",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "cli",
+                "observability"
+              ]
             }
           ]
         }
@@ -2108,8 +2548,64 @@
       "description": "Claude Code plugin that reads GitHub issues, HANDOFF files, and an implementation plan, decomposes work by crate, and spawns parallel test-first sub-agents with hexagonal-architecture enforcement before integrating their results.",
       "date": "2026-08-18",
       "route": "/projects/orca-strait/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-harness",
+        "automation",
+        "testing",
+        "work-tracking"
+      ],
+      "related": [
+        {
+          "id": "project:godmode",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:orca-strait"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "work-tracking"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:tracers",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:orca-strait"
+            }
+          ]
+        },
+        {
+          "id": "project:hj",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "work-tracking"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:agentlint",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "testing"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -2120,7 +2616,12 @@
       "description": "Self-improving agent runtime for the cruxx agentic DSL: closes the loop between execution traces, evaluation, and strategy evolution by scoring runs, proposing evidence-backed strategy changes, and rolling back regressions.",
       "date": "2026-08-18",
       "route": "/projects/praxis/",
-      "tags": [],
+      "tags": [
+        "agent-runtime",
+        "automation",
+        "observability",
+        "testing"
+      ],
       "related": [
         {
           "id": "project:crux",
@@ -2128,6 +2629,55 @@
             {
               "kind": "explicit",
               "declaredBy": "project:crux"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:praxis"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "automation",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:braid",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:praxis"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:updog",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:praxis"
+            }
+          ]
+        },
+        {
+          "id": "project:devobs",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "observability"
+              ]
             }
           ]
         }
@@ -2142,14 +2692,74 @@
       "description": "Rust library and CLI that rewrites shell commands by prepending validated prefixes (e.g. `op plugin run --`) from a TOML config, with speculative candidate-prefix learning; the core prefix-rewrite engine behind coursers and rx.",
       "date": "2026-08-18",
       "route": "/projects/prefixe/",
-      "tags": [],
+      "tags": [
+        "automation",
+        "cli",
+        "shell-tooling"
+      ],
       "related": [
+        {
+          "id": "project:rx",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:prefixe"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:rx"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli",
+                "shell-tooling"
+              ]
+            }
+          ]
+        },
         {
           "id": "project:coursers",
           "reasons": [
             {
               "kind": "explicit",
               "declaredBy": "project:coursers"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:prefixe"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "shell-tooling"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:hj",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:maid",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli"
+              ]
             }
           ]
         }
@@ -2164,8 +2774,60 @@
       "description": "Rust property-based testing toolkit: a library of proptest strategies across a dozen domains (floats, collections, regex, etc.) plus a CLI that scans source code, recommends property tests, and scaffolds test infrastructure.",
       "date": "2026-08-18",
       "route": "/projects/propkit/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "cli",
+        "developer-experience",
+        "testing"
+      ],
+      "related": [
+        {
+          "id": "project:agentlint",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:propkit"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "cli",
+                "developer-experience",
+                "testing"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:repro",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:repro"
+            }
+          ]
+        },
+        {
+          "id": "project:taskit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:propkit"
+            }
+          ]
+        },
+        {
+          "id": "project:maid",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "cli",
+                "developer-experience"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -2176,8 +2838,39 @@
       "description": "Reproducible container image builder and OCI tarball analyzer, driving Docker Buildx or Podman/BuildKit with SOURCE_DATE_EPOCH pinning to produce deterministic images, plus a standalone tarball digest verifier and Kani-based model checking.",
       "date": "2026-08-18",
       "route": "/projects/repro/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "containers",
+        "release-engineering",
+        "systems-software",
+        "testing"
+      ],
+      "related": [
+        {
+          "id": "project:minibox",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:repro"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "containers",
+                "systems-software"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:propkit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:repro"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -2188,8 +2881,56 @@
       "description": "Recursive Language Model inference engine in Rust: instead of sending context directly to an LLM, the model writes Rhai scripts that a sandboxed engine executes, with pluggable OpenAI/Anthropic providers across a multi-crate workspace (core, providers, cli).",
       "date": "2026-08-18",
       "route": "/projects/rslm/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-runtime",
+        "llm",
+        "security"
+      ],
+      "related": [
+        {
+          "id": "post:tools-that-change-behavior",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:rslm"
+            }
+          ]
+        },
+        {
+          "id": "project:sandbox",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:sandbox"
+            }
+          ]
+        },
+        {
+          "id": "project:disyn",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "llm",
+                "security"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:langchainx",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "llm"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -2200,8 +2941,70 @@
       "description": "Installs scripts from local paths or remote URLs into an XDG-style command directory and tracks them in a JSON registry, using prefixe's prefix-rewrite config to prepend validated prefixes to shell commands — not a secrets or env-var tool.",
       "date": "2026-08-18",
       "route": "/projects/rx/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "automation",
+        "cli",
+        "developer-experience",
+        "shell-tooling"
+      ],
+      "related": [
+        {
+          "id": "project:prefixe",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:prefixe"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:rx"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli",
+                "shell-tooling"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:25-projects-no-monorepo",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:rx"
+            }
+          ]
+        },
+        {
+          "id": "project:maid",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:nu-libs",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "developer-experience",
+                "shell-tooling"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -2234,8 +3037,46 @@
       "description": "Rust workspace implementing a virtual bash interpreter over an in-memory VFS, with capability-based permissions and hard execution limits, for safely embedding shell-script evaluation in applications.",
       "date": "2026-08-18",
       "route": "/projects/sandbox/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "security",
+        "shell-tooling",
+        "systems-software"
+      ],
+      "related": [
+        {
+          "id": "project:rslm",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:sandbox"
+            }
+          ]
+        },
+        {
+          "id": "project:coursers",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "security",
+                "shell-tooling"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:minibox",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "security",
+                "systems-software"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -2298,6 +3139,15 @@
               "declaredBy": "project:myrv"
             }
           ]
+        },
+        {
+          "id": "project:neusym",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:neusym"
+            }
+          ]
         }
       ],
       "backlinks": []
@@ -2311,7 +3161,17 @@
       "date": "2026-08-18",
       "route": "/projects/tracers/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:orca-strait",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:orca-strait"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -2323,7 +3183,17 @@
       "date": "2026-08-18",
       "route": "/projects/updog/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:praxis",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:praxis"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -2362,6 +3232,18 @@
     }
   ],
   "edges": [
+    {
+      "source": "post:25-projects-no-monorepo",
+      "target": "project:rx",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:rx"
+        }
+      ],
+      "tagSimilarity": 0
+    },
     {
       "source": "post:agent-safe-container-runtime",
       "target": "project:minibox",
@@ -2483,6 +3365,18 @@
       "tagSimilarity": 0
     },
     {
+      "source": "post:redaction-system-boundary",
+      "target": "project:obfsck",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:obfsck"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
       "source": "post:replayability-over-autonomy",
       "target": "project:crux",
       "directed": true,
@@ -2514,6 +3408,18 @@
         {
           "kind": "explicit",
           "declaredBy": "project:mcpipe"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:tools-that-change-behavior",
+      "target": "project:rslm",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:rslm"
         }
       ],
       "tagSimilarity": 0
@@ -2656,6 +3562,56 @@
       "tagSimilarity": 0.4
     },
     {
+      "source": "project:agentlint",
+      "target": "project:orca-strait",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:agentlint",
+      "target": "project:propkit",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:propkit"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "developer-experience",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
+      "source": "project:agentlint",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
       "source": "project:atelier",
       "target": "project:bazaar",
       "directed": true,
@@ -2790,6 +3746,66 @@
         }
       ],
       "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:notfiles",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:nu-libs",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:orca-strait",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
     },
     {
       "source": "project:atelier",
@@ -2943,6 +3959,51 @@
       "tagSimilarity": 0.4
     },
     {
+      "source": "project:bazaar",
+      "target": "project:nu-libs",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:bazaar",
+      "target": "project:orca-strait",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:bazaar",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
       "source": "project:braid",
       "target": "project:crux",
       "directed": false,
@@ -3013,15 +4074,91 @@
     },
     {
       "source": "project:braid",
+      "target": "project:neusym",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "mcp",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:braid",
+      "target": "project:numcp",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "mcp"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:braid",
       "target": "project:obfsck",
       "directed": true,
       "evidence": [
         {
           "kind": "explicit",
           "declaredBy": "project:braid"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:obfsck"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "mcp",
+            "observability",
+            "security"
+          ]
         }
       ],
-      "tagSimilarity": 0
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:braid",
+      "target": "project:praxis",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:praxis"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:braid",
+      "target": "project:rslm",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
     },
     {
       "source": "project:cannibalizer",
@@ -3115,6 +4252,82 @@
       "tagSimilarity": 0.75
     },
     {
+      "source": "project:cannibalizer",
+      "target": "project:notfiles",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:cannibalizer",
+      "target": "project:nu-libs",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:cannibalizer",
+      "target": "project:prefixe",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:cannibalizer",
+      "target": "project:propkit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:cannibalizer",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
       "source": "project:cargo-promote",
       "target": "project:devkit",
       "directed": false,
@@ -3191,6 +4404,51 @@
     },
     {
       "source": "project:cargo-promote",
+      "target": "project:notfiles",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:cargo-promote",
+      "target": "project:prefixe",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:cargo-promote",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:cargo-promote",
       "target": "project:taskit",
       "directed": true,
       "evidence": [
@@ -3245,15 +4503,101 @@
     },
     {
       "source": "project:coursers",
+      "target": "project:notfiles",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:coursers",
+      "target": "project:nu-libs",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "shell-tooling"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:coursers",
+      "target": "project:orca-strait",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:coursers",
       "target": "project:prefixe",
       "directed": true,
       "evidence": [
         {
           "kind": "explicit",
           "declaredBy": "project:coursers"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:prefixe"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "shell-tooling"
+          ]
         }
       ],
-      "tagSimilarity": 0
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:coursers",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "shell-tooling"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:coursers",
+      "target": "project:sandbox",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "security",
+            "shell-tooling"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
     },
     {
       "source": "project:crux",
@@ -3340,15 +4684,61 @@
     },
     {
       "source": "project:crux",
+      "target": "project:neusym",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:neusym"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "observability",
+            "work-tracking"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:crux",
+      "target": "project:orca-strait",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "work-tracking"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:crux",
       "target": "project:praxis",
       "directed": true,
       "evidence": [
         {
           "kind": "explicit",
           "declaredBy": "project:crux"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:praxis"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "automation",
+            "observability"
+          ]
         }
       ],
-      "tagSimilarity": 0
+      "tagSimilarity": 0.6
     },
     {
       "source": "project:devkit",
@@ -3396,6 +4786,36 @@
       "tagSimilarity": 0.4
     },
     {
+      "source": "project:devkit",
+      "target": "project:orca-strait",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:devkit",
+      "target": "project:praxis",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
       "source": "project:devobs",
       "target": "project:kgx",
       "directed": true,
@@ -3427,6 +4847,21 @@
           "kind": "tag",
           "sharedTags": [
             "knowledge-systems",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:devobs",
+      "target": "project:praxis",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
             "observability"
           ]
         }
@@ -3481,6 +4916,22 @@
         }
       ],
       "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:disyn",
+      "target": "project:rslm",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "llm",
+            "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 1
     },
     {
       "source": "project:disyn",
@@ -3572,6 +5023,93 @@
       "tagSimilarity": 0.4
     },
     {
+      "source": "project:doob",
+      "target": "project:neusym",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "integration",
+            "work-tracking"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:doob",
+      "target": "project:notfiles",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:doob",
+      "target": "project:nu-libs",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:nu-libs"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:doob",
+      "target": "project:orca-strait",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "work-tracking"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:doob",
+      "target": "project:prefixe",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:doob",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
       "source": "project:dotfiles",
       "target": "project:notfiles",
       "directed": true,
@@ -3579,9 +5117,20 @@
         {
           "kind": "explicit",
           "declaredBy": "project:dotfiles"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:notfiles"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "systems-config"
+          ]
         }
       ],
-      "tagSimilarity": 0
+      "tagSimilarity": 0.5
     },
     {
       "source": "project:godmode",
@@ -3633,6 +5182,56 @@
       "tagSimilarity": 0.4
     },
     {
+      "source": "project:godmode",
+      "target": "project:nu-libs",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:godmode",
+      "target": "project:orca-strait",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:orca-strait"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "work-tracking"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:godmode",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
       "source": "project:hj",
       "target": "project:maid",
       "directed": false,
@@ -3646,6 +5245,66 @@
         }
       ],
       "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:hj",
+      "target": "project:notfiles",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:hj",
+      "target": "project:orca-strait",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "work-tracking"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:hj",
+      "target": "project:prefixe",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:hj",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
     },
     {
       "source": "project:hooks",
@@ -3663,6 +5322,36 @@
       "tagSimilarity": 0.5
     },
     {
+      "source": "project:hooks",
+      "target": "project:nu-libs",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:hooks",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
       "source": "project:kgx",
       "target": "project:message-extractor",
       "directed": false,
@@ -3671,6 +5360,21 @@
           "kind": "tag",
           "sharedTags": [
             "knowledge-systems",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:kgx",
+      "target": "project:obfsck",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
             "observability"
           ]
         }
@@ -3712,6 +5416,36 @@
       "tagSimilarity": 0.5
     },
     {
+      "source": "project:langchainx",
+      "target": "project:praxis",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:langchainx",
+      "target": "project:rslm",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "llm"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
       "source": "project:looprs",
       "target": "project:mlrs",
       "directed": false,
@@ -3728,6 +5462,112 @@
       "tagSimilarity": 0.75
     },
     {
+      "source": "project:looprs",
+      "target": "project:rslm",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "llm"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:maid",
+      "target": "project:notfiles",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:maid",
+      "target": "project:nu-libs",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:maid",
+      "target": "project:prefixe",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:maid",
+      "target": "project:propkit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:maid",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
+      "source": "project:mcpipe",
+      "target": "project:neusym",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "integration",
+            "mcp"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
       "source": "project:mcpipe",
       "target": "project:numcp",
       "directed": true,
@@ -3735,9 +5575,114 @@
         {
           "kind": "explicit",
           "declaredBy": "project:mcpipe"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:numcp"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "integration",
+            "mcp"
+          ]
         }
       ],
-      "tagSimilarity": 0
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:mcpipe",
+      "target": "project:obfsck",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "mcp"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:message-extractor",
+      "target": "project:neusym",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "integration",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:minibox",
+      "target": "project:obfsck",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "mcp",
+            "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:minibox",
+      "target": "project:repro",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:repro"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "containers",
+            "systems-software"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:minibox",
+      "target": "project:sandbox",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "security",
+            "systems-software"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:mlrs",
+      "target": "project:rslm",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "llm"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
     },
     {
       "source": "project:myrv",
@@ -3747,6 +5692,274 @@
         {
           "kind": "explicit",
           "declaredBy": "project:myrv"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:neusym",
+      "target": "project:numcp",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "integration",
+            "mcp"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:neusym",
+      "target": "project:obfsck",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:neusym"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:obfsck"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "mcp",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:neusym",
+      "target": "project:taskit",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:neusym"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:notfiles",
+      "target": "project:obfsck",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:notfiles",
+      "target": "project:prefixe",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:notfiles",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:nu-libs",
+      "target": "project:numcp",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:nu-libs"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:numcp"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:nu-libs",
+      "target": "project:prefixe",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "shell-tooling"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:nu-libs",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience",
+            "shell-tooling"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
+      "source": "project:nu-libs",
+      "target": "project:taskit",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:nu-libs"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:orca-strait",
+      "target": "project:praxis",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:orca-strait",
+      "target": "project:tracers",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:orca-strait"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:praxis",
+      "target": "project:updog",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:praxis"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:prefixe",
+      "target": "project:rx",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:prefixe"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:rx"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli",
+            "shell-tooling"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
+      "source": "project:propkit",
+      "target": "project:repro",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:repro"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:propkit",
+      "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:propkit",
+      "target": "project:taskit",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:propkit"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:rslm",
+      "target": "project:sandbox",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:sandbox"
         }
       ],
       "tagSimilarity": 0
