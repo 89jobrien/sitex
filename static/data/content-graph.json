@@ -22,7 +22,17 @@
       "date": "2026-08-23",
       "route": "/blog/godmode-vs-agent-platforms/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:braid",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:braid"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -45,8 +55,32 @@
       "description": "Personal portfolio site built with GitHub Pages, syncing generated content from the bazaar plugin marketplace.",
       "date": "2026-08-18",
       "route": "/projects/89jobrien-github-io/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "automation",
+        "web"
+      ],
+      "related": [
+        {
+          "id": "project:bazaar",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:89jobrien-github-io"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:bazaar"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "web"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -57,8 +91,56 @@
       "description": "Linter for AI coding agent harness files -- validates agents, skills, commands, hooks, settings, MCP config, and docs frontmatter (.claude/, .cursor/, AGENTS.md, CLAUDE.md) across major coding agent platforms.",
       "date": "2026-08-18",
       "route": "/projects/agentlint/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-harness",
+        "cli",
+        "developer-experience",
+        "testing"
+      ],
+      "related": [
+        {
+          "id": "project:devobs",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:agentlint"
+            }
+          ]
+        },
+        {
+          "id": "project:looprs",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:agentlint"
+            }
+          ]
+        },
+        {
+          "id": "project:atelier",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:bazaar",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "developer-experience"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -69,8 +151,65 @@
       "description": "Personal Claude Code dev workflow plugin bundling handoff, herald, sentinel, and forge agents for Rust quality gates, code review, CI, git safety, and multi-repo status pulses. Distributed via the bazaar marketplace and depends on sanctum for session-start secret resolution.",
       "date": "2026-08-18",
       "route": "/projects/atelier/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-harness",
+        "automation",
+        "developer-experience",
+        "security"
+      ],
+      "related": [
+        {
+          "id": "project:bazaar",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:atelier"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:bazaar"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:devkit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:atelier"
+            }
+          ]
+        },
+        {
+          "id": "project:sanctum",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:atelier"
+            }
+          ]
+        },
+        {
+          "id": "project:agentlint",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "developer-experience"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -81,8 +220,40 @@
       "description": "Structured LLM output library for the dev workspace -- defines BAML schemas and exposes a generated, type-safe Rust client (baml_client) for AI functions covering git branch analysis, multi-role council synthesis, Claude session parsing, doob task analysis, maestro session analysis, and devloop agent planning.",
       "date": "2026-08-18",
       "route": "/projects/bamlish/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "developer-experience",
+        "integration",
+        "llm"
+      ],
+      "related": [
+        {
+          "id": "project:devkit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:bamlish"
+            }
+          ]
+        },
+        {
+          "id": "project:doob",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:bamlish"
+            }
+          ]
+        },
+        {
+          "id": "project:message-extractor",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:bamlish"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -93,8 +264,83 @@
       "description": "Claude Code plugin marketplace and showcase generator that indexes the author's open-source repos and plugins, including atelier, orca-strait, obfsck, minibox, coursers, godmode, and crux.",
       "date": "2026-08-18",
       "route": "/projects/bazaar/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-harness",
+        "automation",
+        "developer-experience",
+        "web"
+      ],
+      "related": [
+        {
+          "id": "project:atelier",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:atelier"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:bazaar"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:89jobrien-github-io",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:89jobrien-github-io"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:bazaar"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "web"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:cannibalizer",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:cannibalizer"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:agentlint",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "developer-experience"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -105,8 +351,41 @@
       "description": "Rust-first personal agent platform built as a hexagonal multi-crate workspace -- core engine and provider/tool ports, a redaction and hook-gating safety layer, an MCP server over stdio, and context assembly from todo and git-diff sources, with a Ratatui session inspector.",
       "date": "2026-08-18",
       "route": "/projects/braid/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-runtime",
+        "mcp",
+        "observability",
+        "security"
+      ],
+      "related": [
+        {
+          "id": "post:godmode-vs-agent-platforms",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:braid"
+            }
+          ]
+        },
+        {
+          "id": "project:doob",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:braid"
+            }
+          ]
+        },
+        {
+          "id": "project:obfsck",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:braid"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -117,8 +396,66 @@
       "description": "Rust CLI (cnbl) built on tree-sitter that absorbs foreign repos into the Rust ecosystem -- scans a source repo, classifies each file by kind (domain logic, port, adapter, script, spec, config), and routes it to a hexagonal Rust component, an existing repo, a skill, or the archive.",
       "date": "2026-08-18",
       "route": "/projects/cannibalizer/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "automation",
+        "cli",
+        "developer-experience",
+        "systems-software"
+      ],
+      "related": [
+        {
+          "id": "project:bazaar",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:cannibalizer"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:agentlint",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "cli",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:atelier",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:cargo-promote",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -129,8 +466,35 @@
       "description": "Crate publishing and promotion pipeline CLI for Rust projects -- pushes packages through configurable pipeline stages to private registries (Gitea, GitHub) and optionally crates.io, with per-package overrides, deferred promotions, and forge integration.",
       "date": "2026-08-18",
       "route": "/projects/cargo-promote/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "automation",
+        "ci-cd",
+        "cli",
+        "release-engineering"
+      ],
+      "related": [
+        {
+          "id": "project:taskit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:cargo-promote"
+            }
+          ]
+        },
+        {
+          "id": "project:cannibalizer",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -178,7 +542,26 @@
       "date": "2026-08-18",
       "route": "/projects/devkit/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:atelier",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:atelier"
+            }
+          ]
+        },
+        {
+          "id": "project:bamlish",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:bamlish"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -190,7 +573,17 @@
       "date": "2026-08-18",
       "route": "/projects/devobs/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:agentlint",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:agentlint"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -214,7 +607,26 @@
       "date": "2026-08-18",
       "route": "/projects/doob/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:bamlish",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:bamlish"
+            }
+          ]
+        },
+        {
+          "id": "project:braid",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:braid"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -298,7 +710,17 @@
       "date": "2026-08-18",
       "route": "/projects/looprs/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:agentlint",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:agentlint"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -334,7 +756,17 @@
       "date": "2026-08-18",
       "route": "/projects/message-extractor/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:bamlish",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:bamlish"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -430,7 +862,17 @@
       "date": "2026-08-18",
       "route": "/projects/obfsck/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:braid",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:braid"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -526,7 +968,17 @@
       "date": "2026-08-18",
       "route": "/projects/sanctum/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:atelier",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:atelier"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -574,7 +1026,17 @@
       "date": "2026-08-18",
       "route": "/projects/taskit/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:cargo-promote",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:cargo-promote"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -626,5 +1088,279 @@
       "backlinks": []
     }
   ],
-  "edges": []
+  "edges": [
+    {
+      "source": "post:godmode-vs-agent-platforms",
+      "target": "project:braid",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:braid"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:89jobrien-github-io",
+      "target": "project:bazaar",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:89jobrien-github-io"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:bazaar"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "web"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:agentlint",
+      "target": "project:atelier",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:agentlint",
+      "target": "project:bazaar",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:agentlint",
+      "target": "project:cannibalizer",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:agentlint",
+      "target": "project:devobs",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:agentlint"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:agentlint",
+      "target": "project:looprs",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:agentlint"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:bazaar",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:atelier"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:bazaar"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:cannibalizer",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:devkit",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:atelier"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:sanctum",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:atelier"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:bamlish",
+      "target": "project:devkit",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:bamlish"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:bamlish",
+      "target": "project:doob",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:bamlish"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:bamlish",
+      "target": "project:message-extractor",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:bamlish"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:bazaar",
+      "target": "project:cannibalizer",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:cannibalizer"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:braid",
+      "target": "project:doob",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:braid"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:braid",
+      "target": "project:obfsck",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:braid"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:cannibalizer",
+      "target": "project:cargo-promote",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:cargo-promote",
+      "target": "project:taskit",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:cargo-promote"
+        }
+      ],
+      "tagSimilarity": 0
+    }
+  ]
 }

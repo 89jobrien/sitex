@@ -2,8 +2,11 @@
 title: "bamlish"
 date: 2026-08-18
 description: "Structured LLM output library for the dev workspace -- defines BAML schemas and exposes a generated, type-safe Rust client (baml_client) for AI functions covering git branch analysis, multi-role council synthesis, Claude session parsing, doob task analysis, maestro session analysis, and devloop agent planning."
+taxonomies:
+  tags: [developer-experience, integration, llm]
 extra:
   repo: ""
+  related: [project:devkit, project:doob, project:message-extractor]
 ---
 
 # bamlish
