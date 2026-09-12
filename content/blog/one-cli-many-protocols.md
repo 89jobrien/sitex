@@ -2,6 +2,10 @@
 title: One CLI Surface Across MCP, OpenAPI, GraphQL, and Shell
 date: 2026-09-11
 description: "What mcpipe can normalize across tool protocols, and what an honest abstraction has to leave different."
+taxonomies:
+  tags: [cli, developer-experience, integration, mcp]
+extra:
+  related: [project:mcpipe, post:machine-readable-cli]
 ---
 
 I kept meeting the same capability through different front doors. An MCP

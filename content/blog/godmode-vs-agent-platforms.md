@@ -2,6 +2,11 @@
 title: godmode, atelier, and braid are not competing tools
 date: 2026-08-23
 description: "A practical map of godmode, atelier, and braid as complementary layers in an agent-development stack."
+taxonomies:
+  tags:
+    [agent-harness, agent-runtime, developer-experience, software-architecture]
+extra:
+  related: [project:godmode, project:atelier, project:braid]
 ---
 
 I have three things in my workspace that all get called an agent platform.

@@ -2,6 +2,10 @@
 title: Replayability Matters More Than Agent Autonomy
 date: 2026-09-11
 description: "Why Crux is designed around inspectable traces and recovery instead of treating uninterrupted autonomy as the main goal."
+taxonomies:
+  tags: [agent-runtime, observability, testing, work-tracking]
+extra:
+  related: [project:crux, post:task-graph-vs-prompt]
 ---
 
 Agent systems are often presented as a contest in how long they can run

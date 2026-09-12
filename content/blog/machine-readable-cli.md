@@ -2,6 +2,10 @@
 title: Machine-Readable Output Changes Who a CLI Is For
 date: 2026-09-11
 description: "What Doob's JSON listing, batch command inputs, and exit behavior taught me about CLIs becoming APIs."
+taxonomies:
+  tags: [automation, cli, developer-experience, integration]
+extra:
+  related: [project:doob, project:godmode, post:contract-drift-as-migration]
 ---
 
 Adding `--json` to a CLI looks like a formatting option. The first time another

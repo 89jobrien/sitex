@@ -2,6 +2,11 @@
 title: Policy Gates Belong Between Intent and Side Effects
 date: 2026-09-11
 description: "What Minibox and Coursers taught me about placing safety checks after an action is understood but before it runs."
+taxonomies:
+  tags: [agent-harness, automation, security, software-architecture]
+extra:
+  related:
+    [project:minibox, project:coursers, post:agent-safe-container-runtime]
 ---
 
 I kept seeing safety guidance placed at one of two useless extremes. It appears in

@@ -2,6 +2,10 @@
 title: 125+ Projects, No Monorepo
 date: 2026-08-23
 description: "How 125+ independent repositories behave like one workspace through shared conventions, tooling, and cross-repo observability."
+taxonomies:
+  tags: [automation, developer-experience, observability, release-engineering]
+extra:
+  related: [project:minibox, post:contract-drift-as-migration]
 ---
 
 I keep 125+ independent projects under `~/dev`. Rust, Go, Nushell, and a few

@@ -2,6 +2,11 @@
 title: Designing a Container Runtime an Agent Can Safely Operate
 date: 2026-09-11
 description: "What changed when Minibox stopped treating agent access as ordinary shell access with a different client."
+taxonomies:
+  tags: [agent-runtime, containers, security, software-architecture]
+extra:
+  related:
+    [project:minibox, project:crux, post:policy-between-intent-and-effects]
 ---
 
 The shortest path to an agent-controlled container runtime is to give the

@@ -2,6 +2,11 @@
 title: Make Contract Drift Fail Before It Becomes Migration Work
 date: 2026-09-11
 description: "How Taskit turns quiet changes to shared files into visible review points before downstream users discover them."
+taxonomies:
+  tags: [ci-cd, developer-experience, integration, release-engineering]
+extra:
+  related:
+    [project:taskit, post:machine-readable-cli, post:25-projects-no-monorepo]
 ---
 
 A file can change cleanly in its own repository and still break everything

@@ -2,6 +2,10 @@
 title: Technical Depth Is Evidence, Not the Story
 date: 2026-09-11
 description: "How I explain systems work without making architecture detail do the job of a decision, constraint, and outcome."
+taxonomies:
+  tags: [observability, software-architecture, technical-writing]
+extra:
+  related: [project:minibox, project:coursers, project:taskit]
 ---
 
 I can describe a system accurately and still fail to explain why the work

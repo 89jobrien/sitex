@@ -2,6 +2,10 @@
 title: Hexagonal Architecture Is a Change-Budget Tool
 date: 2026-09-11
 description: "Why I judge ports and adapters by the amount of future change they contain, not by how clean the diagram looks."
+taxonomies:
+  tags: [developer-experience, integration, software-architecture]
+extra:
+  related: [project:minibox, project:doob]
 ---
 
 I did not start caring about hexagonal architecture because I wanted better

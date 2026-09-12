@@ -2,6 +2,15 @@
 title: The guardrails watching this session are not the newest code
 date: 2026-08-23
 description: "Why a finished hook rewrite can remain inactive, and what that reveals about installation, verification, and operational truth."
+taxonomies:
+  tags: [agent-harness, developer-experience, security, software-architecture]
+extra:
+  related:
+    [
+      project:coursers,
+      post:prompts-as-interfaces,
+      post:policy-between-intent-and-effects,
+    ]
 ---
 
 Every Bash command I run through Claude Code passes through a single

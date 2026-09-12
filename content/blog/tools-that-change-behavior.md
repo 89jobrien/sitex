@@ -2,6 +2,10 @@
 title: A Tool Starts Paying Rent When It Changes Your Behavior
 date: 2026-09-11
 description: "How I decide whether a developer tool is worth maintaining by looking for changed habits instead of more features."
+taxonomies:
+  tags: [automation, developer-experience, work-tracking]
+extra:
+  related: [project:godmode, project:coursers, project:obfsck]
 ---
 
 I have built plenty of tools that worked and still did not matter.
