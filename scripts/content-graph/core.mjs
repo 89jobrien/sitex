@@ -138,7 +138,10 @@ export function normalizeDocument(input) {
     sourcePath,
     kind,
     title: requireNonEmptyString(frontmatter.title, "title"),
-    description: requireNonEmptyString(frontmatter.description, "description"),
+    description:
+      frontmatter.description === undefined
+        ? ""
+        : requireNonEmptyString(frontmatter.description, "description"),
     date: normalizeDate(frontmatter.date),
     route: `/${section}/${stem}/`,
     tags: normalizeTags(taxonomies.tags),

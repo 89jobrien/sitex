@@ -62,9 +62,9 @@ test("rejects invalid graph metadata", () => {
     () =>
       normalizeDocument({
         ...projectInput,
-        frontmatter: { ...projectInput.frontmatter, description: "" },
+        frontmatter: { ...projectInput.frontmatter, title: "" },
       }),
-    /description must be a non-empty string/,
+    /title must be a non-empty string/,
   );
 
   assert.throws(
@@ -98,6 +98,15 @@ test("rejects invalid graph metadata", () => {
         },
       }),
     /tags must use lowercase kebab-case/,
+  );
+});
+
+test("normalizes a missing description to an empty string", () => {
+  const { description: _description, ...frontmatter } =
+    projectInput.frontmatter;
+  assert.equal(
+    normalizeDocument({ ...projectInput, frontmatter }).description,
+    "",
   );
 });
 

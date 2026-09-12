@@ -1,12 +1,17 @@
-import { readFile, readdir } from "node:fs/promises";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import remarkParse from "remark-parse";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";
 import { parse as parseYaml } from "yaml";
 
-import { buildContentGraph, normalizeDocument } from "./core.mjs";
+import {
+  buildContentGraph,
+  normalizeDocument,
+  serializeContentGraph,
+} from "./core.mjs";
 
 const CONTENT_ROUTE = /^\/(projects|blog)\/([a-z0-9]+(?:-[a-z0-9]+)*)\/?$/;
 const CONTENT_FILE =
@@ -94,11 +99,83 @@ export async function generateContentGraph({ rootDir = process.cwd() } = {}) {
   const documents = [];
   for (const sourcePath of await contentFiles(rootDir)) {
     const markdown = await readFile(path.join(rootDir, sourcePath), "utf8");
-    const document = normalizeDocument(parseMarkdown(markdown, sourcePath));
+    let document;
+    try {
+      document = normalizeDocument(parseMarkdown(markdown, sourcePath));
+    } catch (error) {
+      throw new Error(`${sourcePath}: ${error.message}`, { cause: error });
+    }
     if (document) {
       documents.push(document);
     }
   }
 
   return buildContentGraph(documents);
+}
+
+function artifactOptions(options = {}) {
+  const rootDir = options.rootDir ?? process.cwd();
+  return {
+    rootDir,
+    outputPath:
+      options.outputPath ??
+      path.join(rootDir, "static", "data", "content-graph.json"),
+  };
+}
+
+/**
+ * @param {{rootDir?: string, outputPath?: string}} [options]
+ */
+export async function writeContentGraph(options = {}) {
+  const { rootDir, outputPath } = artifactOptions(options);
+  const graph = await generateContentGraph({ rootDir });
+  await mkdir(path.dirname(outputPath), { recursive: true });
+  await writeFile(outputPath, serializeContentGraph(graph));
+}
+
+/**
+ * @param {{rootDir?: string, outputPath?: string}} [options]
+ */
+export async function checkContentGraph(options = {}) {
+  const { rootDir, outputPath } = artifactOptions(options);
+  const expected = serializeContentGraph(
+    await generateContentGraph({ rootDir }),
+  );
+  let actual;
+  try {
+    actual = await readFile(outputPath, "utf8");
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      throw error;
+    }
+  }
+
+  if (actual !== expected) {
+    throw new Error(
+      "stale content graph manifest; run bun run graph:data:write",
+    );
+  }
+}
+
+async function main() {
+  const [mode, ...rest] = process.argv.slice(2);
+  if (rest.length > 0 || !["--write", "--check"].includes(mode)) {
+    throw new Error("usage: generate.mjs --write|--check");
+  }
+
+  if (mode === "--write") {
+    await writeContentGraph();
+  } else {
+    await checkContentGraph();
+  }
+}
+
+if (
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
+  main().catch((error) => {
+    console.error(error.message);
+    process.exitCode = 1;
+  });
 }

@@ -1,8 +1,14 @@
 import assert from "node:assert/strict";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 
-import { extractGraphLinks, generateContentGraph } from "./generate.mjs";
+import {
+  checkContentGraph,
+  extractGraphLinks,
+  generateContentGraph,
+  writeContentGraph,
+} from "./generate.mjs";
 
 const fixturesRoot = fileURLToPath(new URL("./fixtures/", import.meta.url));
 
@@ -49,5 +55,26 @@ test("rejects unresolved content-shaped links", async () => {
       rootDir: `${fixturesRoot}/invalid`,
     }),
     /unknown link target \/blog\/missing\//,
+  );
+});
+
+test("writes and checks canonical artifacts", async (context) => {
+  const scratchRoot = `.ctx/_WORKING_DIR/content-graph-${process.pid}`;
+  const outputPath = `${scratchRoot}/content-graph.json`;
+  await mkdir(scratchRoot, { recursive: true });
+  context.after(() => rm(scratchRoot, { recursive: true, force: true }));
+
+  await writeContentGraph({ rootDir: fixturesRoot, outputPath });
+  const firstWrite = await readFile(outputPath, "utf8");
+  assert.match(firstWrite, /\n$/);
+  await checkContentGraph({ rootDir: fixturesRoot, outputPath });
+
+  await writeContentGraph({ rootDir: fixturesRoot, outputPath });
+  assert.equal(await readFile(outputPath, "utf8"), firstWrite);
+
+  await writeFile(outputPath, `${firstWrite} `);
+  await assert.rejects(
+    checkContentGraph({ rootDir: fixturesRoot, outputPath }),
+    /stale content graph manifest; run bun run graph:data:write/,
   );
 });
