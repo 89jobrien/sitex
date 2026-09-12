@@ -8,12 +8,19 @@ tags), Zola builds it as pages. Kept intentionally separate from
 
 ## Writing
 
-```
+```text
 zk new-project --title "Some Project"   # content/projects/some-project.md
 zk new-post --title "Some Post"         # content/blog/some-post.md
+zk new-idea --title "Some Idea"         # ideas/queue/some-idea.md
 zk list-projects
 zk list-posts
+zk list-ideas
 ```
+
+Blog ideas are private editorial notes: zk indexes them, Git versions them, and Zola does
+not publish them because they live outside `content/`. Keep at most 12 active pitches in
+`ideas/queue/`. When a pitch becomes a post, set its status to `published` and move it to
+`ideas/published/`.
 
 Fill in `extra.repo` in a project note to link to its GitHub repo.
 

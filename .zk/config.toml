@@ -30,6 +30,8 @@ multiword-tags = false
 colon-tags = false
 
 [tool]
+# zk aliases use POSIX syntax even when the interactive shell is Nushell.
+shell = "/bin/sh"
 editor = "$EDITOR"
 
 [lsp]
