@@ -2,8 +2,11 @@
 title: "xtui"
 date: 2026-08-18
 description: "Terminal UI that discovers and runs project commands from 8 sources (xtask, cargo, just, nu, npm, make, mise, cargo-bin) with live streaming output, a dependency graph view, and sequential pipeline execution."
+taxonomies:
+  tags: [automation, cli, developer-experience, terminal-ui]
 extra:
   repo: "https://github.com/89jobrien/xtui"
+  related: [project:nu-libs, project:taskit]
 ---
 
 # xtui

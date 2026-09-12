@@ -2,8 +2,11 @@
 title: "sanctum"
 date: 2026-08-18
 description: "Claude Code plugin that validates 1Password auth and traces direnv/op:// secret chains on session start, with an on-demand op-resolver skill."
+taxonomies:
+  tags: [agent-harness, automation, security, systems-config]
 extra:
   repo: "https://github.com/89jobrien/sanctum"
+  related: [project:atelier]
 ---
 
 # sanctum

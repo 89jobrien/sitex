@@ -2,8 +2,11 @@
 title: "steve"
 date: 2026-08-18
 description: "Personal library of 377 reusable Claude Code components (agents, commands, skills, hooks, templates), with Python tooling to index, install, and publish them."
+taxonomies:
+  tags: [agent-harness, automation, developer-experience]
 extra:
   repo: "https://github.com/89jobrien/steve"
+  related: [project:agentlint, project:atelier]
 ---
 
 # steve

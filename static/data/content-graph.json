@@ -54,7 +54,17 @@
       "date": "2026-09-11",
       "route": "/blog/contract-drift-as-migration/",
       "tags": [],
-      "related": [],
+      "related": [
+        {
+          "id": "project:taskit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:taskit"
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -406,6 +416,22 @@
           ]
         },
         {
+          "id": "project:steve",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:steve"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:looprs",
           "reasons": [
             {
@@ -437,18 +463,6 @@
               "declaredBy": "project:devobs"
             }
           ]
-        },
-        {
-          "id": "project:maid",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "cli",
-                "developer-experience"
-              ]
-            }
-          ]
         }
       ],
       "backlinks": []
@@ -468,6 +482,23 @@
         "security"
       ],
       "related": [
+        {
+          "id": "project:steve",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:steve"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
         {
           "id": "project:bazaar",
           "reasons": [
@@ -490,6 +521,27 @@
           ]
         },
         {
+          "id": "project:sanctum",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:atelier"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:sanctum"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "security"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:devkit",
           "reasons": [
             {
@@ -506,24 +558,6 @@
                 "agent-harness",
                 "automation"
               ]
-            }
-          ]
-        },
-        {
-          "id": "project:hj",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:hj"
-            }
-          ]
-        },
-        {
-          "id": "project:sanctum",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:atelier"
             }
           ]
         }
@@ -655,7 +689,7 @@
           ]
         },
         {
-          "id": "project:godmode",
+          "id": "project:steve",
           "reasons": [
             {
               "kind": "tag",
@@ -788,7 +822,7 @@
           ]
         },
         {
-          "id": "project:rx",
+          "id": "project:sparkfile",
           "reasons": [
             {
               "kind": "tag",
@@ -801,13 +835,14 @@
           ]
         },
         {
-          "id": "project:hj",
+          "id": "project:rx",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
                 "automation",
-                "cli"
+                "cli",
+                "developer-experience"
               ]
             }
           ]
@@ -836,6 +871,14 @@
             {
               "kind": "explicit",
               "declaredBy": "project:cargo-promote"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "ci-cd",
+                "release-engineering"
+              ]
             }
           ]
         },
@@ -898,6 +941,25 @@
             {
               "kind": "explicit",
               "declaredBy": "project:claude-code-statusline"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "developer-experience",
+                "terminal-ui"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:warpx",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "developer-experience",
+                "terminal-ui"
+              ]
             }
           ]
         }
@@ -940,6 +1002,22 @@
           ]
         },
         {
+          "id": "project:updog",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:updog"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation"
+              ]
+            }
+          ]
+        },
+        {
           "id": "post:hooks-mid-rewrite",
           "reasons": [
             {
@@ -954,19 +1032,6 @@
             {
               "kind": "explicit",
               "declaredBy": "project:coursers"
-            }
-          ]
-        },
-        {
-          "id": "project:atelier",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-harness",
-                "automation",
-                "security"
-              ]
             }
           ]
         }
@@ -1010,6 +1075,23 @@
           ]
         },
         {
+          "id": "project:tracers",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:tracers"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "observability",
+                "work-tracking"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:devobs",
           "reasons": [
             {
@@ -1042,15 +1124,6 @@
                 "observability",
                 "work-tracking"
               ]
-            }
-          ]
-        },
-        {
-          "id": "post:replayability-over-autonomy",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:crux"
             }
           ]
         }
@@ -1115,11 +1188,12 @@
           ]
         },
         {
-          "id": "project:devobs",
+          "id": "project:updog",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
+                "agent-harness",
                 "automation",
                 "observability"
               ]
@@ -1247,6 +1321,10 @@
             {
               "kind": "explicit",
               "declaredBy": "project:disyn"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:taskit"
             }
           ]
         },
@@ -1379,6 +1457,18 @@
               "kind": "explicit",
               "declaredBy": "project:notfiles"
             },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "systems-config"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:sanctum",
+          "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
@@ -1585,7 +1675,7 @@
           ]
         },
         {
-          "id": "project:atelier",
+          "id": "project:sparkfile",
           "reasons": [
             {
               "kind": "tag",
@@ -1597,7 +1687,7 @@
           ]
         },
         {
-          "id": "project:bazaar",
+          "id": "project:steve",
           "reasons": [
             {
               "kind": "tag",
@@ -1836,6 +1926,19 @@
       ],
       "related": [
         {
+          "id": "project:sparkfile",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:cannibalizer",
           "reasons": [
             {
@@ -1862,24 +1965,13 @@
           ]
         },
         {
-          "id": "project:hj",
+          "id": "project:xtui",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
                 "automation",
-                "cli"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:hooks",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "automation",
+                "cli",
                 "developer-experience"
               ]
             }
@@ -2171,6 +2263,18 @@
               "declaredBy": "project:myrv"
             }
           ]
+        },
+        {
+          "id": "project:tracers",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "observability",
+                "systems-software"
+              ]
+            }
+          ]
         }
       ],
       "backlinks": []
@@ -2232,6 +2336,10 @@
             {
               "kind": "explicit",
               "declaredBy": "project:neusym"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:taskit"
             }
           ]
         },
@@ -2286,6 +2394,19 @@
           ]
         },
         {
+          "id": "project:sanctum",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "security",
+                "systems-config"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:hj",
           "reasons": [
             {
@@ -2299,18 +2420,6 @@
         },
         {
           "id": "project:maid",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "automation",
-                "cli"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:prefixe",
           "reasons": [
             {
               "kind": "tag",
@@ -2339,6 +2448,22 @@
       ],
       "related": [
         {
+          "id": "project:xtui",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:xtui"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:doob",
           "reasons": [
             {
@@ -2366,19 +2491,6 @@
             {
               "kind": "explicit",
               "declaredBy": "project:nu-libs"
-            }
-          ]
-        },
-        {
-          "id": "project:rx",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "automation",
-                "developer-experience",
-                "shell-tooling"
-              ]
             }
           ]
         }
@@ -2578,6 +2690,23 @@
             {
               "kind": "explicit",
               "declaredBy": "project:orca-strait"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:tracers"
+            }
+          ]
+        },
+        {
+          "id": "project:updog",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "testing"
+              ]
             }
           ]
         },
@@ -2589,18 +2718,6 @@
               "sharedTags": [
                 "automation",
                 "work-tracking"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:agentlint",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-harness",
-                "testing"
               ]
             }
           ]
@@ -2645,6 +2762,27 @@
           ]
         },
         {
+          "id": "project:updog",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:praxis"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:updog"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "observability",
+                "testing"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:braid",
           "reasons": [
             {
@@ -2657,15 +2795,6 @@
                 "agent-runtime",
                 "observability"
               ]
-            }
-          ]
-        },
-        {
-          "id": "project:updog",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:praxis"
             }
           ]
         },
@@ -2869,6 +2998,18 @@
               "declaredBy": "project:repro"
             }
           ]
+        },
+        {
+          "id": "project:taskit",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "release-engineering",
+                "testing"
+              ]
+            }
+          ]
         }
       ],
       "backlinks": []
@@ -3015,7 +3156,12 @@
       "description": "Claude Code plugin that validates 1Password auth and traces direnv/op:// secret chains on session start, with an on-demand op-resolver skill.",
       "date": "2026-08-18",
       "route": "/projects/sanctum/",
-      "tags": [],
+      "tags": [
+        "agent-harness",
+        "automation",
+        "security",
+        "systems-config"
+      ],
       "related": [
         {
           "id": "project:atelier",
@@ -3023,6 +3169,56 @@
             {
               "kind": "explicit",
               "declaredBy": "project:atelier"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:sanctum"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "security"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:coursers",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "security"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:notfiles",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "security",
+                "systems-config"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:dotfiles",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "systems-config"
+              ]
             }
           ]
         }
@@ -3087,8 +3283,65 @@
       "description": "CLI that scaffolds new projects from YAML-defined presets, generating workspace-convention skeletons (e.g. a Rust 2024 CLI) with local guidance, validation commands, and handoff context.",
       "date": "2026-08-18",
       "route": "/projects/sparkfile/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "automation",
+        "cli",
+        "developer-experience"
+      ],
+      "related": [
+        {
+          "id": "project:maid",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:cannibalizer",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:rx",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:xtui",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli",
+                "developer-experience"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -3099,8 +3352,72 @@
       "description": "Personal library of 377 reusable Claude Code components (agents, commands, skills, hooks, templates), with Python tooling to index, install, and publish them.",
       "date": "2026-08-18",
       "route": "/projects/steve/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-harness",
+        "automation",
+        "developer-experience"
+      ],
+      "related": [
+        {
+          "id": "project:atelier",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:steve"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:agentlint",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:steve"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:bazaar",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:godmode",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -3111,7 +3428,12 @@
       "description": "Config-driven CI pipeline runner for Rust workspaces — affected-crate detection, protocol-drift tracking, health baselines, and a git branching workflow (flow auto) with LLM-assisted conflict resolution. Several sibling repos (disyn, neusym, myrv) delegate their xtask/Cruxfile pipelines to it.",
       "date": "2026-08-18",
       "route": "/projects/taskit/",
-      "tags": [],
+      "tags": [
+        "automation",
+        "ci-cd",
+        "release-engineering",
+        "testing"
+      ],
       "related": [
         {
           "id": "project:cargo-promote",
@@ -3119,6 +3441,23 @@
             {
               "kind": "explicit",
               "declaredBy": "project:cargo-promote"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "ci-cd",
+                "release-engineering"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:contract-drift-as-migration",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:taskit"
             }
           ]
         },
@@ -3128,6 +3467,10 @@
             {
               "kind": "explicit",
               "declaredBy": "project:disyn"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:taskit"
             }
           ]
         },
@@ -3137,15 +3480,6 @@
             {
               "kind": "explicit",
               "declaredBy": "project:myrv"
-            }
-          ]
-        },
-        {
-          "id": "project:neusym",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:neusym"
             }
           ]
         }
@@ -3160,14 +3494,61 @@
       "description": "trace:: — a language design and Rust reference implementation where reasoning provenance (Trace<T>) is first-class; four crates provide typed traces, a checkpointable task registry, and agent delegation with confidence-based escalation.",
       "date": "2026-08-18",
       "route": "/projects/tracers/",
-      "tags": [],
+      "tags": [
+        "agent-runtime",
+        "observability",
+        "systems-software",
+        "work-tracking"
+      ],
       "related": [
+        {
+          "id": "project:crux",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:tracers"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "observability",
+                "work-tracking"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:doob",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:tracers"
+            }
+          ]
+        },
         {
           "id": "project:orca-strait",
           "reasons": [
             {
               "kind": "explicit",
               "declaredBy": "project:orca-strait"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:tracers"
+            }
+          ]
+        },
+        {
+          "id": "project:myrv",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "observability",
+                "systems-software"
+              ]
             }
           ]
         }
@@ -3182,7 +3563,12 @@
       "description": "Rust workspace implementing \"ail,\" a 7-phase Agent Improvement Loop that collects shell-command traces, gathers human+LLM feedback, generates promptfoo evals, scores findings via HALO, and produces a handoff doc for updating an agent's harness.",
       "date": "2026-08-18",
       "route": "/projects/updog/",
-      "tags": [],
+      "tags": [
+        "agent-harness",
+        "automation",
+        "observability",
+        "testing"
+      ],
       "related": [
         {
           "id": "project:praxis",
@@ -3190,6 +3576,60 @@
             {
               "kind": "explicit",
               "declaredBy": "project:praxis"
+            },
+            {
+              "kind": "explicit",
+              "declaredBy": "project:updog"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "observability",
+                "testing"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:coursers",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:updog"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:devkit",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:orca-strait",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "testing"
+              ]
             }
           ]
         }
@@ -3204,8 +3644,37 @@
       "description": "Local fork of Warp, an agentic terminal/dev environment with a built-in coding agent and support for external CLI agents (Claude Code, Codex, Gemini CLI); Rust client with a custom UI framework (warpui), MIT-licensed apart from the AGPLv3 core.",
       "date": "2026-08-18",
       "route": "/projects/warpx/",
-      "tags": [],
-      "related": [],
+      "tags": [
+        "agent-runtime",
+        "developer-experience",
+        "terminal-ui"
+      ],
+      "related": [
+        {
+          "id": "project:claude-code-statusline",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "developer-experience",
+                "terminal-ui"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:xtui",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "developer-experience",
+                "terminal-ui"
+              ]
+            }
+          ]
+        }
+      ],
       "backlinks": []
     },
     {
@@ -3216,7 +3685,12 @@
       "description": "Terminal UI that discovers and runs project commands from 8 sources (xtask, cargo, just, nu, npm, make, mise, cargo-bin) with live streaming output, a dependency graph view, and sequential pipeline execution.",
       "date": "2026-08-18",
       "route": "/projects/xtui/",
-      "tags": [],
+      "tags": [
+        "automation",
+        "cli",
+        "developer-experience",
+        "terminal-ui"
+      ],
       "related": [
         {
           "id": "project:claude-code-statusline",
@@ -3224,6 +3698,51 @@
             {
               "kind": "explicit",
               "declaredBy": "project:claude-code-statusline"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "developer-experience",
+                "terminal-ui"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:nu-libs",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:xtui"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "developer-experience"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:taskit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:xtui"
+            }
+          ]
+        },
+        {
+          "id": "project:maid",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "automation",
+                "cli",
+                "developer-experience"
+              ]
             }
           ]
         }
@@ -3252,6 +3771,18 @@
         {
           "kind": "explicit",
           "declaredBy": "project:minibox"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:contract-drift-as-migration",
+      "target": "project:taskit",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:taskit"
         }
       ],
       "tagSimilarity": 0
@@ -3612,6 +4143,70 @@
       "tagSimilarity": 0.3333333333333333
     },
     {
+      "source": "project:agentlint",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:agentlint",
+      "target": "project:steve",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:steve"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:agentlint",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:agentlint",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
       "source": "project:atelier",
       "target": "project:bazaar",
       "directed": true,
@@ -3815,9 +4410,86 @@
         {
           "kind": "explicit",
           "declaredBy": "project:atelier"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:sanctum"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "security"
+          ]
         }
       ],
-      "tagSimilarity": 0
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:steve",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:steve"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:atelier",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
     },
     {
       "source": "project:bamlish",
@@ -4004,6 +4676,82 @@
       "tagSimilarity": 0.3333333333333333
     },
     {
+      "source": "project:bazaar",
+      "target": "project:sanctum",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:bazaar",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:bazaar",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
+      "source": "project:bazaar",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:bazaar",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
       "source": "project:braid",
       "target": "project:crux",
       "directed": false,
@@ -4159,6 +4907,21 @@
         }
       ],
       "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:braid",
+      "target": "project:tracers",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
     },
     {
       "source": "project:cannibalizer",
@@ -4328,6 +5091,53 @@
       "tagSimilarity": 0.6
     },
     {
+      "source": "project:cannibalizer",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
+      "source": "project:cannibalizer",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:cannibalizer",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
       "source": "project:cargo-promote",
       "target": "project:devkit",
       "directed": false,
@@ -4449,15 +5259,68 @@
     },
     {
       "source": "project:cargo-promote",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:cargo-promote",
       "target": "project:taskit",
       "directed": true,
       "evidence": [
         {
           "kind": "explicit",
           "declaredBy": "project:cargo-promote"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "ci-cd",
+            "release-engineering"
+          ]
         }
       ],
-      "tagSimilarity": 0
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:cargo-promote",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:claude-code-statusline",
+      "target": "project:warpx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "developer-experience",
+            "terminal-ui"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
     },
     {
       "source": "project:claude-code-statusline",
@@ -4467,9 +5330,16 @@
         {
           "kind": "explicit",
           "declaredBy": "project:claude-code-statusline"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "developer-experience",
+            "terminal-ui"
+          ]
         }
       ],
-      "tagSimilarity": 0
+      "tagSimilarity": 0.4
     },
     {
       "source": "project:coursers",
@@ -4586,6 +5456,22 @@
     },
     {
       "source": "project:coursers",
+      "target": "project:sanctum",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:coursers",
       "target": "project:sandbox",
       "directed": false,
       "evidence": [
@@ -4598,6 +5484,40 @@
         }
       ],
       "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:coursers",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:coursers",
+      "target": "project:updog",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:updog"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
     },
     {
       "source": "project:crux",
@@ -4741,6 +5661,41 @@
       "tagSimilarity": 0.6
     },
     {
+      "source": "project:crux",
+      "target": "project:tracers",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:tracers"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "observability",
+            "work-tracking"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:crux",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
       "source": "project:devkit",
       "target": "project:devobs",
       "directed": false,
@@ -4816,6 +5771,67 @@
       "tagSimilarity": 0.3333333333333333
     },
     {
+      "source": "project:devkit",
+      "target": "project:sanctum",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:devkit",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:devkit",
+      "target": "project:taskit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "ci-cd"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:devkit",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
       "source": "project:devobs",
       "target": "project:kgx",
       "directed": true,
@@ -4856,6 +5872,21 @@
     {
       "source": "project:devobs",
       "target": "project:praxis",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:devobs",
+      "target": "project:updog",
       "directed": false,
       "evidence": [
         {
@@ -4941,6 +5972,10 @@
         {
           "kind": "explicit",
           "declaredBy": "project:disyn"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:taskit"
         }
       ],
       "tagSimilarity": 0
@@ -5110,6 +6145,48 @@
       "tagSimilarity": 0.3333333333333333
     },
     {
+      "source": "project:doob",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:doob",
+      "target": "project:tracers",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:tracers"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:doob",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
       "source": "project:dotfiles",
       "target": "project:notfiles",
       "directed": true,
@@ -5122,6 +6199,21 @@
           "kind": "explicit",
           "declaredBy": "project:notfiles"
         },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "systems-config"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:dotfiles",
+      "target": "project:sanctum",
+      "directed": false,
+      "evidence": [
         {
           "kind": "tag",
           "sharedTags": [
@@ -5232,6 +6324,82 @@
       "tagSimilarity": 0.3333333333333333
     },
     {
+      "source": "project:godmode",
+      "target": "project:sanctum",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:godmode",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:godmode",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
+      "source": "project:godmode",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:godmode",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
       "source": "project:hj",
       "target": "project:maid",
       "directed": false,
@@ -5307,6 +6475,36 @@
       "tagSimilarity": 0.4
     },
     {
+      "source": "project:hj",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:hj",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
       "source": "project:hooks",
       "target": "project:maid",
       "directed": false,
@@ -5339,6 +6537,66 @@
     {
       "source": "project:hooks",
       "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:hooks",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:hooks",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:hooks",
+      "target": "project:taskit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "ci-cd"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:hooks",
+      "target": "project:xtui",
       "directed": false,
       "evidence": [
         {
@@ -5553,6 +6811,53 @@
       "tagSimilarity": 0.75
     },
     {
+      "source": "project:maid",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 1
+    },
+    {
+      "source": "project:maid",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:maid",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
       "source": "project:mcpipe",
       "target": "project:neusym",
       "directed": false,
@@ -5697,6 +7002,21 @@
       "tagSimilarity": 0
     },
     {
+      "source": "project:myrv",
+      "target": "project:tracers",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "observability",
+            "systems-software"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
       "source": "project:neusym",
       "target": "project:numcp",
       "directed": false,
@@ -5742,9 +7062,28 @@
         {
           "kind": "explicit",
           "declaredBy": "project:neusym"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:taskit"
         }
       ],
       "tagSimilarity": 0
+    },
+    {
+      "source": "project:neusym",
+      "target": "project:tracers",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "observability",
+            "work-tracking"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
     },
     {
       "source": "project:notfiles",
@@ -5779,6 +7118,52 @@
     {
       "source": "project:notfiles",
       "target": "project:rx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:notfiles",
+      "target": "project:sanctum",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "security",
+            "systems-config"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:notfiles",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:notfiles",
+      "target": "project:xtui",
       "directed": false,
       "evidence": [
         {
@@ -5840,6 +7225,36 @@
     },
     {
       "source": "project:nu-libs",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:nu-libs",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:nu-libs",
       "target": "project:taskit",
       "directed": true,
       "evidence": [
@@ -5851,8 +7266,72 @@
       "tagSimilarity": 0
     },
     {
+      "source": "project:nu-libs",
+      "target": "project:xtui",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:xtui"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
       "source": "project:orca-strait",
       "target": "project:praxis",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:orca-strait",
+      "target": "project:sanctum",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:orca-strait",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:orca-strait",
+      "target": "project:taskit",
       "directed": false,
       "evidence": [
         {
@@ -5873,9 +7352,59 @@
         {
           "kind": "explicit",
           "declaredBy": "project:orca-strait"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:tracers"
         }
       ],
       "tagSimilarity": 0
+    },
+    {
+      "source": "project:orca-strait",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:praxis",
+      "target": "project:taskit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:praxis",
+      "target": "project:tracers",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
     },
     {
       "source": "project:praxis",
@@ -5885,9 +7414,21 @@
         {
           "kind": "explicit",
           "declaredBy": "project:praxis"
+        },
+        {
+          "kind": "explicit",
+          "declaredBy": "project:updog"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "observability",
+            "testing"
+          ]
         }
       ],
-      "tagSimilarity": 0
+      "tagSimilarity": 0.6
     },
     {
       "source": "project:prefixe",
@@ -5912,6 +7453,36 @@
         }
       ],
       "tagSimilarity": 0.75
+    },
+    {
+      "source": "project:prefixe",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:prefixe",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
     },
     {
       "source": "project:propkit",
@@ -5942,6 +7513,21 @@
     },
     {
       "source": "project:propkit",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:propkit",
       "target": "project:taskit",
       "directed": true,
       "evidence": [
@@ -5951,6 +7537,36 @@
         }
       ],
       "tagSimilarity": 0
+    },
+    {
+      "source": "project:propkit",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:repro",
+      "target": "project:taskit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "release-engineering",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
     },
     {
       "source": "project:rslm",
@@ -5963,6 +7579,186 @@
         }
       ],
       "tagSimilarity": 0
+    },
+    {
+      "source": "project:rx",
+      "target": "project:sparkfile",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
+      "source": "project:rx",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:rx",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "project:sanctum",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:sanctum",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:sparkfile",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:sparkfile",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "cli",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
+      "source": "project:steve",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:steve",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:taskit",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "project:taskit",
+      "target": "project:xtui",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:xtui"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "project:warpx",
+      "target": "project:xtui",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "developer-experience",
+            "terminal-ui"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
     }
   ]
 }
