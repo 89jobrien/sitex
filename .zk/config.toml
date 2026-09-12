@@ -19,6 +19,11 @@ paths = ["content/blog"]
 [group.blog.note]
 template = "post.md"
 
+[group.ideas]
+paths = ["ideas/queue"]
+[group.ideas.note]
+template = "idea.md"
+
 [format.markdown]
 hashtags = true
 multiword-tags = false
@@ -37,4 +42,6 @@ new-project = 'zk new --group projects content/projects "$@"'
 new-post = 'zk new --group blog content/blog "$@"'
 list-projects = 'zk list content/projects -x content/projects/_index.md --format "{{title}}" "$@"'
 list-posts = 'zk list content/blog -x content/blog/_index.md --format "{{title}} ({{format-date created \"short\"}})" --sort created- "$@"'
+new-idea = 'zk new --group ideas ideas/queue "$@"'
+list-ideas = 'zk list ideas/queue --format "{{metadata.priority}} [{{metadata.status}}] {{title}}" --sort modified- "$@"'
 # NOTE: notes use YAML frontmatter (---) so both zk (YAML-only) and Zola (YAML/TOML) can read the same files.
