@@ -1,7 +1,7 @@
 ---
 title: "bamlish"
 date: 2026-08-18
-description: "Structured LLM output library for the dev workspace -- defines BAML schemas and exposes a generated, type-safe Rust client (baml_client) for AI functions covering git branch analysis, multi-role council synthesis, Claude session parsing, doob task analysis, maestro session analysis, and devloop agent planning."
+description: "Structured LLM output library for the dev workspace -- defines BAML schemas and exposes a generated, type-safe Rust client (baml_client) for AI functions covering git branch analysis, multi-role council synthesis, Claude session parsing, doob task analysis, cross-session analysis, and devloop agent planning."
 taxonomies:
   tags: [developer-experience, integration, llm]
 extra:
@@ -15,7 +15,7 @@ Structured LLM output library for the dev workspace. Defines BAML schemas and ex
 Rust client (`baml_client`) for calling AI functions with type-safe return values.
 
 Covers: git branch analysis, multi-role council synthesis, Claude session parsing, doob task
-analysis, maestro session analysis, devloop agent planning, and meta-schema generation.
+analysis, cross-session analysis, devloop agent planning, and meta-schema generation.
 
 ## Usage
 
@@ -62,7 +62,6 @@ let council: CouncilInsight = B.SynthesizeCouncilInsights.call(...).await?;
 | Conversation    | `SummarizeConversation`, `AnalyzeToolUsage`, `AnalyzeTaskProgression`, `QuickSummarize`, `GenerateSessionTitle`                               |
 | Session logs    | `AnalyzeSession`, `AnalyzeErrorPatterns`, `SummarizeProductivity`, `ParseLogEntry`                                                            |
 | Doob            | `SummarizeProjectTodos`, `TriageOpenTodos`, `GenerateStandup`, `SummarizeHandoff`                                                             |
-| Maestro         | `AnalyzeMaestroSession`, `AnalyzeMultiSession`, `RecommendIsolationMode`, `AnalyzeTaskExecution`                                              |
 | DevLoop         | `BuildAgentSystem`, `AnalyzeCode`, `CreatePlan`                                                                                               |
 | Meta            | `GetMetaBamlFunctions`, `GetMetaBamlClasses`, `GetMetaBamlEnums`                                                                              |
 
