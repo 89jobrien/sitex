@@ -10,7 +10,7 @@
 </header>
 
 <section class="graph-explorer" data-content-graph data-manifest-url="{{ get_url(path="data/content-graph.json") }}">
-  <form class="graph-controls" role="search">
+  <form class="graph-controls" data-graph-controls role="search">
     <label for="graph-search">Find content</label>
     <input id="graph-search" name="query" type="search" placeholder="Search titles and tags">
     <fieldset>
@@ -18,9 +18,25 @@
       <label><input type="checkbox" name="kind" value="project" checked> Projects</label>
       <label><input type="checkbox" name="kind" value="post" checked> Essays</label>
     </fieldset>
+    <fieldset>
+      <legend>Tags</legend>
+      <div data-tag-filters></div>
+    </fieldset>
+    <fieldset>
+      <legend>Relationships</legend>
+      <label><input type="checkbox" name="edge" value="explicit" checked> Curated</label>
+      <label><input type="checkbox" name="edge" value="link" checked> Links</label>
+      <label><input type="checkbox" name="edge" value="tag"> Shared tags</label>
+    </fieldset>
   </form>
 
+  <div class="graph-zoom-controls" aria-label="Graph view controls">
+    <button type="button" data-graph-zoom="in">Zoom in</button>
+    <button type="button" data-graph-zoom="out">Zoom out</button>
+    <button type="button" data-graph-zoom="reset">Reset view</button>
+  </div>
   <div class="graph-canvas" data-graph-canvas aria-label="Interactive content relationship graph"></div>
+  <aside class="graph-details" data-graph-details aria-live="polite" hidden></aside>
 
   <div class="graph-fallback" data-graph-fallback>
     <h2>All connected content</h2>
@@ -36,3 +52,6 @@
   </div>
 </section>
 {% endblock content %}
+{% block scripts %}
+<script src="{{ get_url(path="js/content-graph.js") }}" defer></script>
+{% endblock scripts %}
