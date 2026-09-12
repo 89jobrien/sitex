@@ -2,8 +2,16 @@
 title: "minibox"
 date: 2026-08-18
 description: "An agent-controllable container runtime in Rust with a daemon/CLI split, OCI image pulling, Linux namespace/cgroups v2 isolation, and a hexagonal architecture with swappable adapters. Ships a built-in MCP stdio server exposing policy-gated container lifecycle operations to MCP clients."
+taxonomies:
+  tags: [containers, mcp, security, systems-software]
 extra:
   repo: "https://github.com/89jobrien/minibox"
+  related:
+    [
+      post:agent-safe-container-runtime,
+      post:hexagonal-change-budget,
+      post:policy-between-intent-and-effects,
+    ]
 ---
 
 # minibox
