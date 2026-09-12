@@ -17,9 +17,11 @@ zk list-posts
 zk list-ideas
 ```
 
-Blog ideas are private editorial notes: zk indexes them, Git versions them, and Zola does
-not publish them because they live outside `content/`. Keep at most 12 active pitches in
-`ideas/queue/`. When a pitch becomes a post, set its status to `published` and move it to
+The private editorial queue stores pitches that zk indexes, Git versions, and Zola does
+not publish because they live outside `content/`. Each pitch has `title`, `date`, `status`,
+`priority`, `theme`, and `effort` metadata plus Hook, Thesis, Reader Value, Evidence,
+Mini Outline, and Readiness sections. Keep at most 12 active pitches in `ideas/queue/`.
+When a pitch becomes a post, set its status to `published` and move it to
 `ideas/published/`.
 
 Fill in `extra.repo` in a project note to link to its GitHub repo.

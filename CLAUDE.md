@@ -39,17 +39,21 @@ zk list-ideas                          # list active pitches with priority and s
 <architecture>
 - **Frontmatter format is YAML (`---`), not TOML (`+++`)**, chosen deliberately: zk only parses
   YAML frontmatter, while Zola supports both. Using YAML lets one file serve both tools. Do not
-  introduce TOML frontmatter into `content/` — zk will fail to read title/date on those notes.
-- `.zk/config.toml` defines two note groups, each with its own template:
+  introduce TOML frontmatter into `content/` or `ideas/` — zk will fail to read metadata on
+  those notes.
+- `.zk/config.toml` defines three note groups, each with its own template:
   - `group.projects` → `content/projects`, template `.zk/templates/project.md` (adds an
     `extra.repo` field for linking to the project's GitHub repo)
   - `group.blog` → `content/blog`, template `.zk/templates/post.md`
+  - `group.ideas` → `ideas/queue`, template `.zk/templates/idea.md`
   - `note.filename = "{{slug title}}"` — filenames are derived from the note title, not zk's
     default ID scheme.
 - The private `ideas` zk group writes pitch cards to `ideas/queue/`, outside Zola's
   `content/` tree. Active notes use `seed`, `researching`, or `ready`; published pitch
-  history moves to `ideas/published/` with `status: published`. Never place unpublished
-  pitch notes under `content/`.
+  history moves to `ideas/published/` with `status: published`. Pitch metadata is `title`,
+  `date`, `status`, `priority`, `theme`, and `effort`; each body contains Hook, Thesis, Reader
+  Value, Evidence, Mini Outline, and Readiness sections. Never place unpublished pitch notes
+  under `content/`.
 - Zola side mirrors this with `content/projects/_index.md` and `content/blog/_index.md`, each
   setting `page_template` so section listing pages and individual pages render differently
   (`projects.html`/`project.html` vs `blog.html`/`post.html`).
