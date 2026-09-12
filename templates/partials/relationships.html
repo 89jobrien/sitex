@@ -1,17 +1,48 @@
 {% set graph = load_data(path="static/data/content-graph.json", format="json") %}
 {% for node in graph.nodes %}
-  {% if node.route == page.path and node.related | length > 0 %}
-  <aside class="relationships" aria-labelledby="related-content">
-    <h2 id="related-content">Related content</h2>
-    <ul>
+  {% if node.route == page.path %}
+  <footer class="content-connections">
+    {% if node.tags | length > 0 %}
+    <nav class="content-tags" aria-label="Tags">
+      <ul class="tag-list">
+        {% for tag in node.tags %}
+        <li><a href="{{ get_taxonomy_url(kind="tags", term=tag) }}">{{ tag }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+    {% endif %}
+    {% if node.related | length > 0 %}
+    <section class="relationships" aria-labelledby="related-content">
+      <h2 id="related-content">Related content</h2>
+      <ul class="related-card-list">
       {% for relationship in node.related %}
         {% for target in graph.nodes %}
           {% if target.id == relationship.id %}
-          <li><a href="{{ get_url(path=target.route) }}">{{ target.title }}</a></li>
+          <li class="related-card">
+            <span class="related-kind">{{ target.kind }}</span>
+            <a href="{{ get_url(path=target.route) }}">{{ target.title }}</a>
+            {% if target.description %}<p>{{ target.description }}</p>{% endif %}
+          </li>
           {% endif %}
         {% endfor %}
       {% endfor %}
-    </ul>
-  </aside>
+      </ul>
+    </section>
+    {% endif %}
+    {% if node.backlinks | length > 0 %}
+    <section class="backlinks" aria-labelledby="referenced-by">
+      <h2 id="referenced-by">Referenced by</h2>
+      <ul>
+        {% for backlink in node.backlinks %}
+          {% for source in graph.nodes %}
+            {% if source.id == backlink.id %}
+            <li><a href="{{ get_url(path=source.route) }}">{{ source.title }}</a></li>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+  </footer>
   {% endif %}
 {% endfor %}
