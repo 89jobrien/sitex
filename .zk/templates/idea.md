@@ -1,6 +1,6 @@
 ---
 title: "{{title}}"
-date: { { format-date now "%Y-%m-%d" } }
+date: {{ format-date now "%Y-%m-%d" }}
 status: seed
 priority: P3
 theme: general
