@@ -5,7 +5,7 @@ description: "Crate publishing and promotion pipeline CLI for Rust projects -- p
 taxonomies:
   tags: [automation, ci-cd, cli, release-engineering]
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/cargo-promote"
   related: [project:taskit]
 ---
 

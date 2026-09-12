@@ -3,7 +3,7 @@ title: "devobs"
 date: 2026-08-18
 description: "Public Obsidian vault tracking open-source projects under 89jobrien, kept up to date by crux pipelines and populated with kgx knowledge graphs rather than edited by hand."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/devobs"
 ---
 
 # devobs

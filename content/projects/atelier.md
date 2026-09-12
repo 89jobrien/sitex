@@ -5,7 +5,7 @@ description: "Personal Claude Code dev workflow plugin bundling handoff, herald,
 taxonomies:
   tags: [agent-harness, automation, developer-experience, security]
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/atelier"
   related: [project:bazaar, project:devkit, project:sanctum]
 ---
 

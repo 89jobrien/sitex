@@ -3,7 +3,7 @@ title: "godmode"
 date: 2026-08-18
 description: "Self-contained Rust-native development methodology plugin for Claude Code -- a CLI-backed task graph (skills are thin wrappers over the godmode binary) that persists tasks across sessions via causal depends_on chains, descended from the superpowers agentic skills framework."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/godmode"
 ---
 
 # godmode

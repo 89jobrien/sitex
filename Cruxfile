@@ -12,6 +12,7 @@ targets:
 
   lint:
     steps:
+      # TODO(content-contracts): Validate frontmatter, duplicate H1s, assets, and links.
       - step: lint_run
         handler: shell::capture
         args:

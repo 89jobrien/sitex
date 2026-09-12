@@ -3,7 +3,7 @@ title: "looprs"
 date: 2026-08-18
 description: "A Rust CLI for running multi-turn LLM agent loops with tools and conditions, without a markdown-parsing prompt system. Supports Anthropic, OpenAI, and local Ollama providers."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/looprs"
 ---
 
 # looprs

@@ -2,3 +2,4 @@ public/
 .zk/notebook.db
 .DS_Store
 node_modules/
+.ctx/

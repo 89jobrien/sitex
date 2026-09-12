@@ -3,7 +3,7 @@ title: "obfsck"
 date: 2026-08-18
 description: "CLI that redacts secrets and PII from logs and structured text, with tiered Minimal/Standard/Paranoid obfuscation levels and stable identifier mapping; used elsewhere in the workspace as a pre-commit secrets-audit gate."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/obfsck"
 ---
 
 # obfsck

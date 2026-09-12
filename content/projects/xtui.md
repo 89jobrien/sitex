@@ -3,7 +3,7 @@ title: "xtui"
 date: 2026-08-18
 description: "Terminal UI that discovers and runs project commands from 8 sources (xtask, cargo, just, nu, npm, make, mise, cargo-bin) with live streaming output, a dependency graph view, and sequential pipeline execution."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/xtui"
 ---
 
 # xtui

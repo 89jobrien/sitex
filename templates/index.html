@@ -1,4 +1,7 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block description %}{{ config.description }}{% endblock description %}
+{% block social_description %}{{ config.description }}{% endblock social_description %}
+{% block content %}
 <section class="profile">
   <h1>{{ section.title }}</h1>
   {% if section.extra.role %}
@@ -11,5 +14,46 @@
   </ul>
   {% endif %}
   <div class="bio">{{ section.content | safe }}</div>
+</section>
+
+<section class="home-section" aria-labelledby="featured-projects">
+  <div class="section-heading">
+    <h2 id="featured-projects">Featured projects</h2>
+    <a href="{{ get_url(path="/projects/") }}">View all</a>
+  </div>
+  <ul class="card-list card-grid">
+    {% for slug in section.extra.featured_projects %}
+    {% set project = get_page(path="projects/" ~ slug ~ ".md") %}
+    <li class="card">
+      <div class="card-heading">
+        <a href="{{ project.permalink }}">{{ project.title }}</a>
+        {% if project.extra.repo %}<a class="repo-link" href="{{ project.extra.repo }}" rel="noreferrer" aria-label="View {{ project.title }} on GitHub">GitHub</a>{% endif %}
+      </div>
+      {% if project.description %}<p>{{ project.description }}</p>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% set blog = get_section(path="blog/_index.md") %}
+<section class="home-section" aria-labelledby="latest-writing">
+  <div class="section-heading">
+    <h2 id="latest-writing">Latest writing</h2>
+    <a href="{{ get_url(path="/blog/") }}">View all</a>
+  </div>
+  <ul class="card-list">
+    {% for post in blog.pages %}
+    {% if loop.index <= 3 %}
+    <li class="card">
+      <a href="{{ post.permalink }}">{{ post.title }}</a>
+      <div class="card-meta">
+        <time datetime="{{ post.date }}">{{ post.date | date(format="%Y-%m-%d") }}</time>
+        <span>{{ post.reading_time }} min read</span>
+      </div>
+      {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
 </section>
 {% endblock content %}

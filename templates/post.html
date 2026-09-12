@@ -1,8 +1,18 @@
-{% extends "base.html" %} {% block title %}{{ page.title }} — {{ config.title
-}}{% endblock title %} {% block content %}
+{% extends "base.html" %}
+{% block title %}{{ page.title }} — {{ config.title }}{% endblock title %}
+{% block description %}{{ page.description | default(value=config.description) }}{% endblock description %}
+{% block social_type %}article{% endblock social_type %}
+{% block social_title %}{{ page.title }} — {{ config.title }}{% endblock social_title %}
+{% block social_description %}{{ page.description | default(value=config.description) }}{% endblock social_description %}
+{% block content %}
 <article>
   <h1>{{ page.title }}</h1>
-  <time>{{ page.date | date(format="%Y-%m-%d") }}</time>
+  <div class="post-meta">
+    <time datetime="{{ page.date }}">{{ page.date | date(format="%Y-%m-%d") }}</time>
+    {% if page.updated %}<span>Updated {{ page.updated | date(format="%Y-%m-%d") }}</span>{% endif %}
+    <span>{{ page.reading_time }} min read</span>
+  </div>
+  {% if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
   {{ page.content | safe }}
 </article>
 {% endblock content %}

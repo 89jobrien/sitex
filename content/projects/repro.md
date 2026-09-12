@@ -3,7 +3,7 @@ title: "repro"
 date: 2026-08-18
 description: "Reproducible container image builder and OCI tarball analyzer, driving Docker Buildx or Podman/BuildKit with SOURCE_DATE_EPOCH pinning to produce deterministic images, plus a standalone tarball digest verifier and Kani-based model checking."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/repro"
 ---
 
 # repro

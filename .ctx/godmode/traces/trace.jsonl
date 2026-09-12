@@ -10,3 +10,7 @@
 {"agent_id":"unknown","event":"agent.start","reason":"policy_resolution_failed","session_id":"unknown-1787476552491","ts":"2026-08-23T13:49:03.887250+00:00"}
 {"agent_id":"unknown","event":"agent.start","reason":"policy_resolution_failed","session_id":"unknown-1787476552491","ts":"2026-08-23T13:49:07.163318+00:00"}
 {"agent_id":"unknown","event":"agent.start","reason":"policy_resolution_failed","session_id":"unknown-1787476552491","ts":"2026-08-23T13:49:09.928062+00:00"}
+{"cwd":"/Users/joe/dev/sitex","event":"skill.start","trace_id":"writing-plans.new-plan.nu#1789003236432","skill":"writing-plans","helper":"new-plan.nu","args":["blog-idea-backlog"],"session_id":"unknown-1787476552491","ts":"2026-09-09T21:20:36.442955-04:00"}
+{"cwd":"/Users/joe/dev/sitex","event":"skill.complete","trace_id":"writing-plans.new-plan.nu#1789003236432","skill":"writing-plans","duration_ms":23,"session_id":"unknown-1787476552491","ts":"2026-09-09T21:20:36.464367-04:00"}
+{"cwd":"/Users/joe/dev/sitex","event":"skill.start","trace_id":"writing-plans.new-plan.nu#1789182865902","skill":"writing-plans","helper":"new-plan.nu","args":["standalone-crux-pipelines"],"session_id":"unknown-1787476552491","ts":"2026-09-11T23:14:25.911240-04:00"}
+{"cwd":"/Users/joe/dev/sitex","event":"skill.complete","trace_id":"writing-plans.new-plan.nu#1789182865902","skill":"writing-plans","duration_ms":21,"session_id":"unknown-1787476552491","ts":"2026-09-11T23:14:25.931082-04:00"}

@@ -3,7 +3,7 @@ title: "orca-strait"
 date: 2026-08-18
 description: "Claude Code plugin that reads GitHub issues, HANDOFF files, and an implementation plan, decomposes work by crate, and spawns parallel test-first sub-agents with hexagonal-architecture enforcement before integrating their results."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/orca-strait"
 ---
 
 # orca-strait

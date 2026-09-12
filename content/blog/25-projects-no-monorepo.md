@@ -1,14 +1,15 @@
 ---
-title: 70 Projects, No Monorepo
+title: 125+ Projects, No Monorepo
 date: 2026-08-23
+description: "How 125+ independent repositories behave like one workspace through shared conventions, tooling, and cross-repo observability."
 ---
 
-I keep 70+ independent projects under `~/dev`. Rust, Go, Nushell, and a few
+I keep 125+ independent projects under `~/dev`. Rust, Go, Nushell, and a few
 prototypes that never left "prototype." Each one has its own git repo, its
 own history, and its own remote or no remote at all. No monorepo, no shared
 `.git`, no Bazel/Nx-style build graph tying them together.
 
-And yet they do not feel like 70 unrelated things. They feel like one
+And yet they do not feel like 125+ unrelated things. They feel like one
 workspace. Here is how that holds together without the tooling that usually
 makes it hold together.
 
@@ -96,7 +97,7 @@ convention. Check the root table first, then descend.
 ## Conventions travel as prose, not as package versions
 
 A monorepo enforces consistency by construction. One lockfile, one CI
-config, one place to bump a shared dependency. Across 70 separate repos I
+config, one place to bump a shared dependency. Across 125+ separate repos I
 do not get that for free, so the consistency has to travel some other way.
 Mostly it travels as _written convention_, re-applied per repo rather than
 inherited.
@@ -143,7 +144,7 @@ run to confirm nothing downstream broke. If I rename a crate, `linuxbox`
 to `mbx` was a recent one, every reference outside that repo goes stale
 until someone or some agent greps for it. There is no single `git log`
 across the workspace. Understanding what happened this week means walking
-70 repos, which is exactly the itch that led to building `devloop` and
+125+ repos, which is exactly the itch that led to building `devloop` and
 `herald` as workspace-level observability layers on top of independent git
 histories, rather than as an alternative to them.
 

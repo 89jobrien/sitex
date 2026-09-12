@@ -5,7 +5,7 @@ description: "Linter for AI coding agent harness files -- validates agents, skil
 taxonomies:
   tags: [agent-harness, cli, developer-experience, testing]
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/agentlint"
   related: [project:devobs, project:looprs]
 ---
 

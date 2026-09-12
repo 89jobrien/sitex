@@ -5,7 +5,7 @@ description: "Claude Code plugin marketplace and showcase generator that indexes
 taxonomies:
   tags: [agent-harness, automation, developer-experience, web]
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/bazaar"
   related: [project:89jobrien-github-io, project:atelier]
 ---
 

@@ -3,7 +3,7 @@ title: "sandbox"
 date: 2026-08-18
 description: "Rust workspace implementing a virtual bash interpreter over an in-memory VFS, with capability-based permissions and hard execution limits, for safely embedding shell-script evaluation in applications."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/sandbox"
 ---
 
 # sandbox

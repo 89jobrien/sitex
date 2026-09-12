@@ -5,7 +5,7 @@ description: "Personal portfolio site built with GitHub Pages, syncing generated
 taxonomies:
   tags: [automation, web]
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/89jobrien.github.io"
   related: [project:bazaar]
 ---
 

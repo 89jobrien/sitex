@@ -3,7 +3,7 @@ title: "dotfiles"
 date: 2026-08-18
 description: "Archived dotfiles repo, superseded by the notfiles symlink-based manager -- kept read-only for history; active shell, SSH, and TTY config now lives in ~/.notfiles and ~/.dotfiles-tools."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/dotfiles"
 ---
 
 # Archived

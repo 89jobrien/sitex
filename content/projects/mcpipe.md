@@ -3,7 +3,7 @@ title: "mcpipe"
 date: 2026-08-18
 description: "Turns any MCP server (stdio or HTTP/SSE), OpenAPI spec, GraphQL endpoint, or existing shell CLI into a unified shell command, bridging disparate tool interfaces into one consistent CLI surface."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/mcpipe"
 ---
 
 # mcpipe

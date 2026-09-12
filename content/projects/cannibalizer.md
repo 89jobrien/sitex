@@ -5,7 +5,7 @@ description: "Rust CLI (cnbl) built on tree-sitter that absorbs foreign repos in
 taxonomies:
   tags: [automation, cli, developer-experience, systems-software]
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/cannibalizer"
   related: [project:bazaar]
 ---
 

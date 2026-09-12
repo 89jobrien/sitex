@@ -1,11 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Projects — {{ config.title }}{% endblock title %}
+{% block description %}Project write-ups by Joseph O'Brien.{% endblock description %}
+{% block social_title %}Projects — {{ config.title }}{% endblock social_title %}
+{% block social_description %}Project write-ups by Joseph O'Brien.{% endblock social_description %}
 {% block content %}
+{# TODO(project-filters): Add status, technology, category, and featured metadata filters. #}
+{# TODO(project-relationships): Add thematic and architectural relationship navigation. #}
 <h1>Projects</h1>
 <ul class="card-list">
   {% for page in section.pages %}
   <li class="card">
-    <a href="{{ page.permalink }}">{{ page.title }}</a>
+    <div class="card-heading">
+      <a href="{{ page.permalink }}">{{ page.title }}</a>
+      {% if page.extra.repo %}<a class="repo-link" href="{{ page.extra.repo }}" rel="noreferrer" aria-label="View {{ page.title }} on GitHub">GitHub</a>{% endif %}
+    </div>
     {% if page.description %}<p>{{ page.description }}</p>{% endif %}
   </li>
   {% endfor %}

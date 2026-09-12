@@ -5,7 +5,7 @@ description: "Rust-first personal agent platform built as a hexagonal multi-crat
 taxonomies:
   tags: [agent-runtime, mcp, observability, security]
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/braid"
   related: [post:godmode-vs-agent-platforms, project:doob, project:obfsck]
 ---
 

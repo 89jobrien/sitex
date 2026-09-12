@@ -3,7 +3,7 @@ title: "warpx"
 date: 2026-08-18
 description: "Local fork of Warp, an agentic terminal/dev environment with a built-in coding agent and support for external CLI agents (Claude Code, Codex, Gemini CLI); Rust client with a custom UI framework (warpui), MIT-licensed apart from the AGPLv3 core."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/warpx"
 ---
 
 ## About

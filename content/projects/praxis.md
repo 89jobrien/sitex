@@ -3,7 +3,7 @@ title: "praxis"
 date: 2026-08-18
 description: "Self-improving agent runtime for the cruxx agentic DSL: closes the loop between execution traces, evaluation, and strategy evolution by scoring runs, proposing evidence-backed strategy changes, and rolling back regressions."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/praxis"
 ---
 
 # praxis

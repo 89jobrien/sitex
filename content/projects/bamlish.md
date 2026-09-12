@@ -5,7 +5,7 @@ description: "Structured LLM output library for the dev workspace -- defines BAM
 taxonomies:
   tags: [developer-experience, integration, llm]
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/bamlish"
   related: [project:devkit, project:doob, project:message-extractor]
 ---
 

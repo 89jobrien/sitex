@@ -3,7 +3,7 @@ title: "numcp"
 date: 2026-08-18
 description: "Pre-alpha MCP server that bridges Nushell-defined tool closures (kubectl, web search, knowledge-base queries) into the Model Context Protocol, so any MCP client or LLM agent daemon can invoke Nu scripts as callable tools."
 extra:
-  repo: ""
+  repo: "https://github.com/89jobrien/numcp"
 ---
 
 # numcp

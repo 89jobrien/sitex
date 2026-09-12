@@ -10,6 +10,10 @@ extra:
     - Agentic dev workflows
     - CI/CD & health gates
     - Nushell
+  featured_projects:
+    - minibox
+    - godmode
+    - crux
 ---
 
 I build the infrastructure that makes autonomous dev workflows observable, safe,
