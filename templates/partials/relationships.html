@@ -1,0 +1,17 @@
+{% set graph = load_data(path="static/data/content-graph.json", format="json") %}
+{% for node in graph.nodes %}
+  {% if node.route == page.path and node.related | length > 0 %}
+  <aside class="relationships" aria-labelledby="related-content">
+    <h2 id="related-content">Related content</h2>
+    <ul>
+      {% for relationship in node.related %}
+        {% for target in graph.nodes %}
+          {% if target.id == relationship.id %}
+          <li><a href="{{ get_url(path=target.route) }}">{{ target.title }}</a></li>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  </aside>
+  {% endif %}
+{% endfor %}
