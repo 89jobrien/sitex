@@ -5,7 +5,7 @@ steps:
   - step: markdownlint_check
     handler: shell::capture
     args:
-      cmd: "markdownlint-cli2 'content/**/*.md'"
+      cmd: "bun run lint:markdown"
 
   - step: log_result
     handler: ctrl::log

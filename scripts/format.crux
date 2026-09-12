@@ -6,7 +6,7 @@ steps:
     handler: shell::capture
     args:
       # templates/*.html excluded: prettier's HTML parser can't parse Tera syntax ({{ }}, {% %})
-      cmd: "prettier --write 'content/**/*.md' 'sass/**/*.scss'"
+      cmd: "bun run format"
 
   - step: log_result
     handler: ctrl::log
