@@ -1,6 +1,7 @@
 ---
 title: godmode, atelier, and braid are not competing tools
 date: 2026-08-23
+description: "A practical map of godmode, atelier, and braid as complementary layers in an agent-development stack."
 ---
 
 I have three things in my workspace that all get called an agent platform.

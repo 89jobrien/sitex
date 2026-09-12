@@ -1,6 +1,7 @@
 ---
 title: The guardrails watching this session are not the newest code
 date: 2026-08-23
+description: "Why a finished hook rewrite can remain inactive, and what that reveals about installation, verification, and operational truth."
 ---
 
 Every Bash command I run through Claude Code passes through a single
