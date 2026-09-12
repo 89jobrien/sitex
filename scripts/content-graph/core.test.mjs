@@ -4,6 +4,8 @@ import test from "node:test";
 import {
   buildContentGraph,
   normalizeDocument,
+  rankRelated,
+  serializeContentGraph,
   validateContentGraph,
 } from "./core.mjs";
 
@@ -99,7 +101,13 @@ test("rejects invalid graph metadata", () => {
   );
 });
 
-function graphDocument({ id, kind = "project", relatedIds = [], links = [] }) {
+function graphDocument({
+  id,
+  kind = "project",
+  tags = [],
+  relatedIds = [],
+  links = [],
+}) {
   const stem = id.split(":")[1];
   const section = kind === "project" ? "projects" : "blog";
   return {
@@ -110,7 +118,7 @@ function graphDocument({ id, kind = "project", relatedIds = [], links = [] }) {
     description: `${stem} description`,
     date: "2026-09-12",
     route: `/${section}/${stem}/`,
-    tags: [],
+    tags,
     relatedIds,
     links,
   };
@@ -210,5 +218,77 @@ test("validates graph structure", () => {
         message: "edge target project:missing does not exist",
       },
     ],
+  );
+});
+
+test("ranks and serializes relationships", () => {
+  const documents = [
+    graphDocument({
+      id: "project:alpha",
+      tags: ["agent-runtime", "automation", "observability"],
+      relatedIds: ["project:bravo"],
+      links: ["/projects/charlie/"],
+    }),
+    graphDocument({ id: "project:bravo", tags: ["security"] }),
+    graphDocument({ id: "project:charlie", tags: ["testing"] }),
+    graphDocument({
+      id: "project:delta",
+      tags: ["automation", "observability"],
+    }),
+    graphDocument({
+      id: "project:echo",
+      tags: ["agent-runtime", "automation"],
+    }),
+  ];
+  const graph = buildContentGraph(documents);
+
+  assert.deepEqual(
+    rankRelated("project:alpha", graph, 4).map(({ id }) => id),
+    ["project:bravo", "project:charlie", "project:delta", "project:echo"],
+  );
+
+  const tagEdge = graph.edges.find(
+    (edge) =>
+      edge.source === "project:alpha" && edge.target === "project:delta",
+  );
+  assert.equal(tagEdge.directed, false);
+  assert.equal(tagEdge.tagSimilarity, 2 / 3);
+  assert.deepEqual(tagEdge.evidence, [
+    {
+      kind: "tag",
+      sharedTags: ["automation", "observability"],
+    },
+  ]);
+
+  assert.equal(
+    serializeContentGraph(graph),
+    serializeContentGraph(buildContentGraph(documents.toReversed())),
+  );
+  assert.match(serializeContentGraph(graph), /\n$/);
+});
+
+test("limits display-ready related nodes to four", () => {
+  const graph = buildContentGraph([
+    graphDocument({
+      id: "project:alpha",
+      tags: ["automation"],
+      relatedIds: [
+        "project:bravo",
+        "project:charlie",
+        "project:delta",
+        "project:echo",
+        "project:foxtrot",
+      ],
+    }),
+    ...["bravo", "charlie", "delta", "echo", "foxtrot"].map((stem) =>
+      graphDocument({ id: `project:${stem}`, tags: ["automation"] }),
+    ),
+  ]);
+
+  const alpha = graph.nodes.find((node) => node.id === "project:alpha");
+  assert.equal(alpha.related.length, 4);
+  assert.deepEqual(
+    alpha.related.map(({ id }) => id),
+    ["project:bravo", "project:charlie", "project:delta", "project:echo"],
   );
 });

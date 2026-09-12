@@ -189,7 +189,7 @@ export function buildContentGraph(documents) {
     content.map((document) => [document.id, new Set()]),
   );
 
-  const addEvidence = (sourceId, targetId, evidence) => {
+  const addEvidence = (sourceId, targetId, evidence, tagSimilarity = 0) => {
     if (sourceId === targetId) {
       throw new TypeError(`self relationship ${sourceId}`);
     }
@@ -210,6 +210,7 @@ export function buildContentGraph(documents) {
       edge.evidence.sort(compareEvidence);
     }
     edge.directed ||= evidence.kind !== "tag";
+    edge.tagSimilarity = Math.max(edge.tagSimilarity, tagSimilarity);
     edgeMap.set(key, edge);
   };
 
@@ -234,6 +235,23 @@ export function buildContentGraph(documents) {
         declaredBy: document.id,
       });
       backlinkMap.get(targetId).add(document.id);
+    }
+  }
+
+  for (let leftIndex = 0; leftIndex < content.length; leftIndex += 1) {
+    for (
+      let rightIndex = leftIndex + 1;
+      rightIndex < content.length;
+      rightIndex += 1
+    ) {
+      const left = content[leftIndex];
+      const right = content[rightIndex];
+      const sharedTags = left.tags.filter((tag) => right.tags.includes(tag));
+      const unionSize = new Set([...left.tags, ...right.tags]).size;
+      const similarity = unionSize === 0 ? 0 : sharedTags.length / unionSize;
+      if (sharedTags.length >= 2 || similarity >= 0.5) {
+        addEvidence(left.id, right.id, { kind: "tag", sharedTags }, similarity);
+      }
     }
   }
 
@@ -266,7 +284,61 @@ export function buildContentGraph(documents) {
     }))
     .toSorted((left, right) => left.id.localeCompare(right.id));
 
-  return { schemaVersion: 1, nodes, edges };
+  const graph = { schemaVersion: 1, nodes, edges };
+  for (const node of graph.nodes) {
+    node.related = rankRelated(node.id, graph, 4);
+  }
+
+  return graph;
+}
+
+/**
+ * @param {string} nodeId
+ * @param {ContentGraph} graph
+ * @param {number} limit
+ * @returns {{id: string, reasons: EdgeEvidence[]}[]}
+ */
+export function rankRelated(nodeId, graph, limit) {
+  const node = graph.nodes.find((candidate) => candidate.id === nodeId);
+  if (!node) {
+    throw new TypeError(`unknown node ${nodeId}`);
+  }
+  if (!Number.isInteger(limit) || limit < 0) {
+    throw new TypeError("related limit must be a non-negative integer");
+  }
+
+  const edgeMap = new Map(
+    graph.edges.map((edge) => [pairKey(edge.source, edge.target), edge]),
+  );
+  const priority = (related) => {
+    if (related.reasons.some(({ kind }) => kind === "explicit")) {
+      return 0;
+    }
+    if (related.reasons.some(({ kind }) => kind === "link")) {
+      return 1;
+    }
+    return 2;
+  };
+
+  return node.related
+    .toSorted((left, right) => {
+      const leftEdge = edgeMap.get(pairKey(nodeId, left.id));
+      const rightEdge = edgeMap.get(pairKey(nodeId, right.id));
+      return (
+        priority(left) - priority(right) ||
+        rightEdge.tagSimilarity - leftEdge.tagSimilarity ||
+        left.id.localeCompare(right.id)
+      );
+    })
+    .slice(0, limit);
+}
+
+/**
+ * @param {ContentGraph} graph
+ * @returns {string}
+ */
+export function serializeContentGraph(graph) {
+  return `${JSON.stringify(graph, null, 2)}\n`;
 }
 
 /**
