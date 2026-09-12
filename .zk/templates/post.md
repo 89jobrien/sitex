@@ -1,4 +1,9 @@
 ---
 title: "{{title}}"
-date: { { format-date now "%Y-%m-%d" } }
+date: {{format-date now "%Y-%m-%d"}}
+description: "{{extra.description}}"
+taxonomies:
+  tags: []
+extra:
+  related: []
 ---
