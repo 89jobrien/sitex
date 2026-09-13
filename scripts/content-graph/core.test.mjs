@@ -99,6 +99,21 @@ test("rejects invalid graph metadata", () => {
       }),
     /tags must use lowercase kebab-case/,
   );
+
+  assert.throws(
+    () =>
+      normalizeDocument({
+        ...projectInput,
+        frontmatter: {
+          ...projectInput.frontmatter,
+          extra: {
+            ...projectInput.frontmatter.extra,
+            repo: "http://example.com",
+          },
+        },
+      }),
+    /extra.repo must use an https:\/\/ URL/,
+  );
 });
 
 test("normalizes a missing description to an empty string", () => {
@@ -182,6 +197,11 @@ test("derives explicit and link relationships", () => {
     { id: "project:alpha" },
     { id: "project:charlie" },
   ]);
+  assert.equal(
+    Object.hasOwn(graph.nodes[0], "sourcePath"),
+    false,
+    "the public manifest must not expose repository source paths",
+  );
 });
 
 test("rejects invalid relationship targets", () => {
@@ -274,6 +294,23 @@ test("ranks and serializes relationships", () => {
     serializeContentGraph(buildContentGraph(documents.toReversed())),
   );
   assert.match(serializeContentGraph(graph), /\n$/);
+});
+
+test("ranks combined explicit and link evidence above explicit evidence alone", () => {
+  const graph = buildContentGraph([
+    graphDocument({
+      id: "project:alpha",
+      relatedIds: ["project:bravo", "project:charlie"],
+      links: ["/projects/charlie/"],
+    }),
+    graphDocument({ id: "project:bravo" }),
+    graphDocument({ id: "project:charlie" }),
+  ]);
+
+  assert.deepEqual(
+    rankRelated("project:alpha", graph, 2).map(({ id }) => id),
+    ["project:charlie", "project:bravo"],
+  );
 });
 
 test("limits display-ready related nodes to four", () => {

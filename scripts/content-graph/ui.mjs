@@ -8,6 +8,133 @@ import { select } from "d3-selection";
 import { zoom, zoomIdentity } from "d3-zoom";
 
 export const DEFAULT_EDGE_KINDS = Object.freeze(["explicit", "link"]);
+const MAX_MANIFEST_BYTES = 2_000_000;
+const MAX_NODES = 1_000;
+const MAX_EDGES = 10_000;
+const NODE_ID = /^(project|post):([a-z0-9]+(?:-[a-z0-9]+)*)$/;
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const TAG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+function invalidManifest() {
+  throw new TypeError("invalid content graph manifest");
+}
+
+function isBoundedString(value, maxLength) {
+  return typeof value === "string" && value.length <= maxLength;
+}
+
+function hasValidEvidence(evidence, nodeIds) {
+  return (
+    Array.isArray(evidence) &&
+    evidence.length <= 5 &&
+    evidence.every(
+      (item) =>
+        item &&
+        ["explicit", "link", "tag"].includes(item.kind) &&
+        (item.declaredBy === undefined || nodeIds.has(item.declaredBy)) &&
+        (item.sharedTags === undefined ||
+          (Array.isArray(item.sharedTags) &&
+            item.sharedTags.length <= 64 &&
+            item.sharedTags.every(
+              (tag) => isBoundedString(tag, 64) && TAG.test(tag),
+            ))),
+    )
+  );
+}
+
+export function validateContentGraphManifest(graph) {
+  if (
+    !graph ||
+    graph.schemaVersion !== 1 ||
+    !Array.isArray(graph.nodes) ||
+    !Array.isArray(graph.edges) ||
+    graph.nodes.length > MAX_NODES ||
+    graph.edges.length > MAX_EDGES
+  ) {
+    invalidManifest();
+  }
+
+  const nodeIds = new Set();
+  for (const node of graph.nodes) {
+    const match = isBoundedString(node?.id, 128) && NODE_ID.exec(node.id);
+    if (
+      !match ||
+      node.kind !== match[1] ||
+      nodeIds.has(node.id) ||
+      !isBoundedString(node.title, 200) ||
+      !isBoundedString(node.description, 2_000) ||
+      !isBoundedString(node.date, 10) ||
+      !ISO_DATE.test(node.date) ||
+      !Array.isArray(node.tags) ||
+      node.tags.length > 64 ||
+      node.tags.some((tag) => !isBoundedString(tag, 64) || !TAG.test(tag)) ||
+      new Set(node.tags).size !== node.tags.length ||
+      !Array.isArray(node.related) ||
+      node.related.length > 4 ||
+      !Array.isArray(node.backlinks) ||
+      node.backlinks.length > MAX_NODES ||
+      Object.hasOwn(node, "sourcePath") ||
+      node.route !==
+        `/${node.kind === "project" ? "projects" : "blog"}/${match[2]}/`
+    ) {
+      invalidManifest();
+    }
+    nodeIds.add(node.id);
+  }
+
+  for (const node of graph.nodes) {
+    if (
+      node.related.some(
+        (related) =>
+          !related ||
+          !nodeIds.has(related.id) ||
+          related.id === node.id ||
+          !hasValidEvidence(related.reasons, nodeIds),
+      ) ||
+      node.backlinks.some(
+        (backlink) =>
+          !backlink || !nodeIds.has(backlink.id) || backlink.id === node.id,
+      )
+    ) {
+      invalidManifest();
+    }
+  }
+
+  for (const edge of graph.edges) {
+    if (
+      !edge ||
+      !nodeIds.has(edge.source) ||
+      !nodeIds.has(edge.target) ||
+      edge.source === edge.target ||
+      typeof edge.directed !== "boolean" ||
+      !hasValidEvidence(edge.evidence, nodeIds) ||
+      !Number.isFinite(edge.tagSimilarity) ||
+      edge.tagSimilarity < 0 ||
+      edge.tagSimilarity > 1
+    ) {
+      invalidManifest();
+    }
+  }
+
+  return graph;
+}
+
+async function readManifest(response) {
+  const contentLength = Number(response.headers?.get?.("content-length"));
+  if (Number.isFinite(contentLength) && contentLength > MAX_MANIFEST_BYTES) {
+    invalidManifest();
+  }
+
+  if (typeof response.text === "function") {
+    const text = await response.text();
+    if (text.length > MAX_MANIFEST_BYTES) invalidManifest();
+    return validateContentGraphManifest(JSON.parse(text));
+  }
+
+  const graph = await response.json();
+  if (JSON.stringify(graph).length > MAX_MANIFEST_BYTES) invalidManifest();
+  return validateContentGraphManifest(graph);
+}
 
 function checkedValues(root, name) {
   return new Set(
@@ -128,7 +255,7 @@ function installZoom(root, svg, viewport) {
   }
 }
 
-function renderGraph(root, graph, state, manifestUrl) {
+function renderGraph(root, graph, state, manifestUrl, reduceMotion) {
   const canvas = root.querySelector("[data-graph-canvas]");
   if (!canvas) return;
 
@@ -137,7 +264,7 @@ function renderGraph(root, graph, state, manifestUrl) {
   const svg = select(canvas)
     .append("svg")
     .attr("viewBox", `0 0 ${width} ${height}`)
-    .attr("role", "img")
+    .attr("role", "group")
     .attr("aria-label", "Interactive content relationship graph");
   const viewport = svg.append("g");
   const edges = graph.edges.map((edge) => ({ ...edge }));
@@ -164,7 +291,7 @@ function renderGraph(root, graph, state, manifestUrl) {
     .attr("r", 9)
     .attr("class", (node) => `graph-node graph-node-${node.kind}`)
     .attr("data-graph-node", ({ id }) => id)
-    .attr("role", "link")
+    .attr("role", "button")
     .attr("tabindex", 0)
     .attr("aria-label", (node) => `${node.title}, ${node.kind}`)
     .on("click", (_, node) => selectNode(node))
@@ -180,6 +307,14 @@ function renderGraph(root, graph, state, manifestUrl) {
     renderDetails(root, node, manifestUrl);
   }
 
+  const updatePositions = () => {
+    lines
+      .attr("x1", ({ source }) => source.x)
+      .attr("y1", ({ source }) => source.y)
+      .attr("x2", ({ target }) => target.x)
+      .attr("y2", ({ target }) => target.y);
+    circles.attr("cx", ({ x }) => x).attr("cy", ({ y }) => y);
+  };
   const simulation = forceSimulation(nodes)
     .force("charge", forceManyBody().strength(-90))
     .force("center", forceCenter(width / 2, height / 2))
@@ -189,14 +324,13 @@ function renderGraph(root, graph, state, manifestUrl) {
         .id(({ id }) => id)
         .distance(72),
     )
-    .on("tick", () => {
-      lines
-        .attr("x1", ({ source }) => source.x)
-        .attr("y1", ({ source }) => source.y)
-        .attr("x2", ({ target }) => target.x)
-        .attr("y2", ({ target }) => target.y);
-      circles.attr("cx", ({ x }) => x).attr("cy", ({ y }) => y);
-    });
+    .on("tick", updatePositions);
+
+  if (reduceMotion) {
+    simulation.stop();
+    simulation.tick(300);
+    updatePositions();
+  }
 
   installZoom(root, svg, viewport);
   return simulation;
@@ -219,7 +353,11 @@ function updateFallback(root, state) {
 
 export async function initializeContentGraph(
   root,
-  { fetchImpl = globalThis.fetch } = {},
+  {
+    fetchImpl = globalThis.fetch,
+    matchMediaImpl = globalThis.matchMedia,
+    warnImpl = console.warn,
+  } = {},
 ) {
   if (!root || typeof fetchImpl !== "function") return false;
   const manifestUrl = root.dataset.manifestUrl;
@@ -228,8 +366,11 @@ export async function initializeContentGraph(
     const response = await fetchImpl(manifestUrl);
     if (!response.ok)
       throw new Error(`manifest request failed: ${response.status}`);
-    const graph = await response.json();
+    const graph = await readManifest(response);
     addTagFilters(root, graph);
+    const reduceMotion =
+      typeof matchMediaImpl === "function" &&
+      matchMediaImpl("(prefers-reduced-motion: reduce)").matches;
 
     let simulation;
     const update = () => {
@@ -243,12 +384,12 @@ export async function initializeContentGraph(
         filterGraph(graph, state),
         state,
         manifestUrl,
+        reduceMotion,
       );
       updateFallback(root, state);
     };
     const controls = root.querySelector("[data-graph-controls]");
     controls?.addEventListener("input", update);
-    controls?.addEventListener("change", update);
     controls?.addEventListener("submit", (event) => event.preventDefault());
     update();
     root.dataset.enhanced = "true";
@@ -256,6 +397,7 @@ export async function initializeContentGraph(
   } catch {
     root.querySelector("[data-graph-canvas]")?.replaceChildren();
     delete root.dataset.enhanced;
+    warnImpl("Content graph enhancement unavailable.");
     return false;
   }
 }

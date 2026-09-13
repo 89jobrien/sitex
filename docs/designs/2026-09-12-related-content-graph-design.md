@@ -121,7 +121,6 @@ interface ContentGraph {
 
 interface ContentNode {
   id: string;
-  sourcePath: string;
   kind: "project" | "post";
   title: string;
   description: string;
@@ -156,7 +155,7 @@ interface BacklinkNode {
 }
 ```
 
-The manifest contains no generation timestamp. Nodes, edges, evidence, tags, related lists, and backlinks use canonical sorting so identical inputs produce byte-identical output.
+The manifest contains no generation timestamp or repository source paths. Source paths remain internal generation metadata. Nodes, edges, evidence, tags, related lists, and backlinks use canonical code-unit sorting so identical inputs produce byte-identical output across environments.
 
 ## Module API
 

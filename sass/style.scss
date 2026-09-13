@@ -478,7 +478,25 @@ blockquote {
   }
 
   .graph-controls {
+    order: 1;
     grid-row: auto;
+  }
+
+  .graph-fallback {
+    order: 2;
+    margin-top: 0;
+  }
+
+  .graph-zoom-controls {
+    order: 3;
+  }
+
+  .graph-canvas {
+    order: 4;
+  }
+
+  .graph-details {
+    order: 5;
   }
 
   .graph-canvas,

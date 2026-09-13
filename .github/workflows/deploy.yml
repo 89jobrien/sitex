@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -29,6 +27,8 @@ jobs:
           bun-version: 1.3.10
       - name: Install dependencies
         run: bun install --frozen-lockfile
+      - name: Audit dependencies
+        run: bun audit
       - name: Install Zola
         uses: taiki-e/install-action@v2
         with:
@@ -53,6 +53,9 @@ jobs:
     if: ${{ vars.PAGES_ENABLED == 'true' }}
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

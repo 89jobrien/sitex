@@ -32,7 +32,6 @@
  *
  * @typedef {object} ContentNode
  * @property {string} id
- * @property {string} sourcePath
  * @property {ContentKind} kind
  * @property {string} title
  * @property {string} description
@@ -57,6 +56,10 @@ const CONTENT_PATH =
 const KEBAB_CASE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const NODE_ID = /^(?:project|post):[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+function compareCodeUnits(left, right) {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
 
 function requireNonEmptyString(value, field) {
   if (typeof value !== "string" || value.trim() === "") {
@@ -95,7 +98,7 @@ function normalizeTags(value) {
     throw new TypeError("tags must use lowercase kebab-case");
   }
 
-  return tags.toSorted();
+  return tags.toSorted(compareCodeUnits);
 }
 
 function normalizeRelatedIds(value) {
@@ -107,7 +110,21 @@ function normalizeRelatedIds(value) {
     throw new TypeError("extra.related IDs must be namespaced node IDs");
   }
 
-  return relatedIds.toSorted();
+  return relatedIds.toSorted(compareCodeUnits);
+}
+
+function validateRepositoryUrl(value) {
+  if (value === undefined || value === "") return;
+  if (typeof value !== "string") {
+    throw new TypeError("extra.repo must use an https:// URL");
+  }
+
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" || !url.hostname) throw new TypeError();
+  } catch {
+    throw new TypeError("extra.repo must use an https:// URL");
+  }
 }
 
 /**
@@ -132,6 +149,7 @@ export function normalizeDocument(input) {
   const kind = section === "projects" ? "project" : "post";
   const taxonomies = frontmatter.taxonomies ?? {};
   const extra = frontmatter.extra ?? {};
+  validateRepositoryUrl(extra.repo);
 
   return {
     id: `${kind}:${stem}`,
@@ -146,12 +164,12 @@ export function normalizeDocument(input) {
     route: `/${section}/${stem}/`,
     tags: normalizeTags(taxonomies.tags),
     relatedIds: normalizeRelatedIds(extra.related),
-    links: requireStringArray(links, "links").toSorted(),
+    links: requireStringArray(links, "links").toSorted(compareCodeUnits),
   };
 }
 
 function pairKey(left, right) {
-  return [left, right].toSorted().join("\0");
+  return [left, right].toSorted(compareCodeUnits).join("\0");
 }
 
 function evidenceKey(evidence) {
@@ -166,7 +184,7 @@ function compareEvidence(left, right) {
   const priority = { explicit: 0, link: 1, tag: 2 };
   return (
     priority[left.kind] - priority[right.kind] ||
-    evidenceKey(left).localeCompare(evidenceKey(right))
+    compareCodeUnits(evidenceKey(left), evidenceKey(right))
   );
 }
 
@@ -197,7 +215,7 @@ export function buildContentGraph(documents) {
       throw new TypeError(`self relationship ${sourceId}`);
     }
 
-    const [source, target] = [sourceId, targetId].toSorted();
+    const [source, target] = [sourceId, targetId].toSorted(compareCodeUnits);
     const key = pairKey(source, target);
     const edge = edgeMap.get(key) ?? {
       source,
@@ -260,8 +278,8 @@ export function buildContentGraph(documents) {
 
   const edges = [...edgeMap.values()].toSorted(
     (left, right) =>
-      left.source.localeCompare(right.source) ||
-      left.target.localeCompare(right.target),
+      compareCodeUnits(left.source, right.source) ||
+      compareCodeUnits(left.target, right.target),
   );
   const relatedMap = new Map(content.map((document) => [document.id, []]));
   for (const edge of edges) {
@@ -276,16 +294,23 @@ export function buildContentGraph(documents) {
   }
 
   const nodes = content
-    .map(({ relatedIds: _relatedIds, links: _links, ...document }) => ({
-      ...document,
-      related: relatedMap
-        .get(document.id)
-        .toSorted((left, right) => left.id.localeCompare(right.id)),
-      backlinks: [...backlinkMap.get(document.id)]
-        .toSorted()
-        .map((id) => ({ id })),
-    }))
-    .toSorted((left, right) => left.id.localeCompare(right.id));
+    .map(
+      ({
+        relatedIds: _relatedIds,
+        links: _links,
+        sourcePath: _sourcePath,
+        ...document
+      }) => ({
+        ...document,
+        related: relatedMap
+          .get(document.id)
+          .toSorted((left, right) => compareCodeUnits(left.id, right.id)),
+        backlinks: [...backlinkMap.get(document.id)]
+          .toSorted(compareCodeUnits)
+          .map((id) => ({ id })),
+      }),
+    )
+    .toSorted((left, right) => compareCodeUnits(left.id, right.id));
 
   const graph = { schemaVersion: 1, nodes, edges };
   for (const node of graph.nodes) {
@@ -313,24 +338,19 @@ export function rankRelated(nodeId, graph, limit) {
   const edgeMap = new Map(
     graph.edges.map((edge) => [pairKey(edge.source, edge.target), edge]),
   );
-  const priority = (related) => {
-    if (related.reasons.some(({ kind }) => kind === "explicit")) {
-      return 0;
-    }
-    if (related.reasons.some(({ kind }) => kind === "link")) {
-      return 1;
-    }
-    return 2;
-  };
+  const hasReason = (related, kind) =>
+    related.reasons.some((reason) => reason.kind === kind);
 
   return node.related
     .toSorted((left, right) => {
       const leftEdge = edgeMap.get(pairKey(nodeId, left.id));
       const rightEdge = edgeMap.get(pairKey(nodeId, right.id));
       return (
-        priority(left) - priority(right) ||
+        Number(hasReason(right, "explicit")) -
+          Number(hasReason(left, "explicit")) ||
+        Number(hasReason(right, "link")) - Number(hasReason(left, "link")) ||
         rightEdge.tagSimilarity - leftEdge.tagSimilarity ||
-        left.id.localeCompare(right.id)
+        compareCodeUnits(left.id, right.id)
       );
     })
     .slice(0, limit);
