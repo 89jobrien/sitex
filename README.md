@@ -26,6 +26,49 @@ When a pitch becomes a post, set its status to `published` and move it to
 
 Fill in `extra.repo` in a project note to link to its GitHub repo.
 
+## Relationships
+
+Projects and posts participate in one generated relationship graph. Author tags with Zola's
+taxonomy metadata and curated links with namespaced IDs:
+
+```yaml
+taxonomies:
+  tags: [agent-workflows, rust]
+extra:
+  related: [project:minibox, post:policy-between-intent-and-effects]
+```
+
+Node IDs are `project:<file-stem>` or `post:<file-stem>`. Tags must be unique lowercase
+kebab-case values. `extra.related` is optional, must contain unique valid node IDs, and must
+not target the current page. Curated relationships appear on both pages; only incoming
+Markdown links appear under **Referenced by**. Shared tags can also create related-content
+edges when two pages share at least two tags or have tag similarity of at least 0.5.
+
+Drafts and section indexes are excluded. Links to known `/projects/` and `/blog/` routes and
+relative Markdown files under those content sections are inferred. Copied README-relative
+links such as `README.md`, `docs/...`, and asset links are ignored rather than rewritten.
+Custom Zola `slug` or `path` frontmatter is not supported for graph participants and causes
+generation to fail.
+
+The committed generated artifacts are `static/data/content-graph.json` and
+`static/js/content-graph.js`. Use the data-only commands while editing metadata, or the
+combined commands when either generated artifact may change:
+
+```text
+bun run graph:data:write  # regenerate the manifest only
+bun run graph:data:check  # check manifest freshness
+bun run graph:write       # regenerate the manifest and browser bundle
+bun run graph:check       # check both committed artifacts
+```
+
+The site exposes tag pages under `/tags/` and the explorer at `/graph/`. The graph route is
+server-rendered with a complete content list; JavaScript adds filtering and an SVG view. If
+the manifest cannot load or enhancement fails, the list remains available and no SVG is
+shown.
+
+The pinned tools are Bun `1.3.10` and Zola `0.23.3` (see `.mise.toml`). Install JavaScript
+dependencies with `bun install --frozen-lockfile`.
+
 ## Preview
 
 ```

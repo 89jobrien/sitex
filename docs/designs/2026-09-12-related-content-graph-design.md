@@ -6,42 +6,42 @@ Add one shared relationship model that powers related-content cards, incoming ba
 
 ## Approved Approach
 
-Use a pinned Node build step to generate one deterministic, committed graph manifest from hybrid Markdown relationships: curated frontmatter, internal content links, and shared tags.
+Use a pinned JavaScript build step, with Bun as the package manager and task runner, to generate one deterministic, committed graph manifest from hybrid Markdown relationships: curated frontmatter, internal content links, and shared tags.
 
 ## Context Map
 
 ### Files to Modify
 
-| File or path                          | Purpose                            | Changes needed                                                                                         |
-| ------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `.mise.toml`                          | Project toolchain contract         | Pin Node `22.22.1`, Bun `1.3.10`, and Zola `0.23.3` for local and CI parity.                           |
-| `package.json`                        | Node tooling contract              | Pin graph generation, parsing, bundling, formatting, linting, and test commands.                       |
-| `bun.lock`                            | Reproducible dependency resolution | Lock every Node dependency used locally and in CI.                                                     |
-| `scripts/content-graph/core.mjs`      | Pure graph domain                  | Normalize documents, derive edges and backlinks, rank related nodes, and validate graph invariants.    |
-| `scripts/content-graph/generate.mjs`  | Filesystem and parser adapter      | Read Markdown, parse YAML and links, invoke the domain, and write or check generated artifacts.        |
-| `scripts/content-graph/ui.mjs`        | Browser adapter                    | Progressively enhance the server-rendered graph list with the interactive SVG graph.                   |
-| `scripts/content-graph/core.test.mjs` | Domain tests                       | Cover normalization, edge semantics, ranking, determinism, and validation failures.                    |
-| `scripts/content-graph/fixtures/`     | Integration fixtures               | Represent projects, posts, links, tags, drafts, and invalid relationship targets.                      |
-| `static/data/content-graph.json`      | Shared generated manifest          | Supply display-ready graph data to Tera and browser JavaScript.                                        |
-| `static/js/content-graph.js`          | Generated browser bundle           | Render graph search, filters, selection, zoom, and relationship details without a CDN.                 |
-| `config.toml`                         | Zola site configuration            | Register the `tags` taxonomy.                                                                          |
-| `.zk/templates/project.md`            | Project authoring contract         | Add empty tags and curated relationship fields to new notes.                                           |
-| `.zk/templates/post.md`               | Post authoring contract            | Add empty tags and curated relationship fields to new notes.                                           |
-| `content/projects/*.md`               | Project metadata                   | Add normalized tags and selected curated relationships.                                                |
-| `content/blog/*.md`                   | Post metadata                      | Add normalized tags and selected curated relationships.                                                |
-| `content/graph.md`                    | Graph route                        | Create the `/graph/` page using the graph template.                                                    |
-| `templates/macros/relationships.html` | Shared server rendering            | Render tags, related cards, and incoming backlinks from precomputed node views.                        |
-| `templates/project.html`              | Project detail integration         | Invoke the relationships macro after project content.                                                  |
-| `templates/post.html`                 | Blog detail integration            | Invoke the relationships macro after post content.                                                     |
-| `templates/graph.html`                | Graph experience                   | Render the accessible list fallback and progressive-enhancement hooks.                                 |
-| `templates/tags/list.html`            | Taxonomy index                     | List available tags.                                                                                   |
-| `templates/tags/single.html`          | Taxonomy detail                    | List projects and posts for one tag.                                                                   |
-| `templates/base.html`                 | Site navigation                    | Add graph and tag discovery links and load graph JavaScript only on the graph page.                    |
-| `sass/style.scss`                     | Presentation                       | Style cards, backlinks, tags, graph controls, SVG states, and mobile fallback.                         |
-| `Cruxfile`                            | Local quality orchestration        | Run graph tests and freshness checks before Zola checks and builds.                                    |
-| `scripts/lint.crux`                   | Content lint pipeline              | Include graph validation in the existing lint target.                                                  |
-| `.github/workflows/deploy.yml`        | Deployment gate                    | Use Zola `0.23.3`, install pinned Node dependencies, and verify generated artifacts before deployment. |
-| `.github/workflows/ci.yml`            | Pull-request gate                  | Run graph tests, freshness checks, `zola check`, and `zola build`.                                     |
+| File or path                            | Purpose                            | Changes needed                                                                                             |
+| --------------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `.mise.toml`                            | Project toolchain contract         | Pin Node `22.22.1`, Bun `1.3.10`, and Zola `0.23.3` for local and CI parity.                               |
+| `package.json`                          | JavaScript tooling contract        | Pin graph generation, parsing, bundling, formatting, linting, and test commands run through Bun.           |
+| `bun.lock`                              | Reproducible dependency resolution | Lock every JavaScript dependency installed with Bun locally and in CI.                                     |
+| `scripts/content-graph/core.mjs`        | Pure graph domain                  | Normalize documents, derive edges and backlinks, rank related nodes, and validate graph invariants.        |
+| `scripts/content-graph/generate.mjs`    | Filesystem and parser adapter      | Read Markdown, parse YAML and links, invoke the domain, and write or check generated artifacts.            |
+| `scripts/content-graph/ui.mjs`          | Browser adapter                    | Progressively enhance the server-rendered graph list with the interactive SVG graph.                       |
+| `scripts/content-graph/core.test.mjs`   | Domain tests                       | Cover normalization, edge semantics, ranking, determinism, and validation failures.                        |
+| `scripts/content-graph/fixtures/`       | Integration fixtures               | Represent projects, posts, links, tags, drafts, and invalid relationship targets.                          |
+| `static/data/content-graph.json`        | Shared generated manifest          | Supply display-ready graph data to Tera and browser JavaScript.                                            |
+| `static/js/content-graph.js`            | Generated browser bundle           | Render graph search, filters, selection, zoom, and relationship details without a CDN.                     |
+| `config.toml`                           | Zola site configuration            | Register the `tags` taxonomy.                                                                              |
+| `.zk/templates/project.md`              | Project authoring contract         | Add empty tags and curated relationship fields to new notes.                                               |
+| `.zk/templates/post.md`                 | Post authoring contract            | Add empty tags and curated relationship fields to new notes.                                               |
+| `content/projects/*.md`                 | Project metadata                   | Add normalized tags and selected curated relationships.                                                    |
+| `content/blog/*.md`                     | Post metadata                      | Add normalized tags and selected curated relationships.                                                    |
+| `content/graph.md`                      | Graph route                        | Create the `/graph/` page using the graph template.                                                        |
+| `templates/partials/relationships.html` | Shared server rendering            | Render tags, related cards, and incoming backlinks from precomputed node views.                            |
+| `templates/project.html`                | Project detail integration         | Include the relationships partial after project content.                                                   |
+| `templates/post.html`                   | Blog detail integration            | Include the relationships partial after post content.                                                      |
+| `templates/graph.html`                  | Graph experience                   | Render the accessible list fallback and progressive-enhancement hooks.                                     |
+| `templates/taxonomy_list.html`          | Taxonomy index                     | List available tags.                                                                                       |
+| `templates/taxonomy_single.html`        | Taxonomy detail                    | List projects and posts for one tag.                                                                       |
+| `templates/base.html`                   | Site navigation                    | Add graph and tag discovery links and load graph JavaScript only on the graph page.                        |
+| `sass/style.scss`                       | Presentation                       | Style cards, backlinks, tags, graph controls, SVG states, and mobile fallback.                             |
+| `Cruxfile`                              | Local quality orchestration        | Run graph tests and freshness checks before Zola checks and builds.                                        |
+| `scripts/lint.crux`                     | Content lint pipeline              | Include graph validation in the existing lint target.                                                      |
+| `.github/workflows/deploy.yml`          | Deployment gate                    | Use Zola `0.23.3`, install pinned dependencies with Bun, and verify generated artifacts before deployment. |
+| `.github/workflows/ci.yml`              | Pull-request gate                  | Run graph tests, freshness checks, `zola check`, and `zola build`.                                         |
 
 ### Dependencies
 
@@ -77,6 +77,12 @@ This repository has no Rust crate or `Cargo.toml`. The feature is owned by three
 - `ui.mjs` is the browser adapter. It renders the manifest but never infers, ranks, or mutates relationships.
 
 Tera templates are presentation adapters. They consume precomputed node views and must not reimplement relationship rules.
+
+Zola `0.23.3` rejects the macro declarations originally planned for relationship rendering.
+The implementation therefore uses `{% include "partials/relationships.html" %}` from the
+project and post templates. Zola's taxonomy template lookup also uses the root-level
+`templates/taxonomy_list.html` and `templates/taxonomy_single.html` files rather than a
+`templates/tags/` directory.
 
 ## Content Contract
 
@@ -241,9 +247,9 @@ Explicit and link edges are enabled initially; tag edges are opt-in. On narrow v
 
 ## Dependencies
 
-Pinned Node dependencies are `yaml`, `unified`, `remark-parse`, `unist-util-visit`, `d3-force`, `d3-selection`, `d3-zoom`, `linkedom`, `esbuild`, `prettier`, and `markdownlint-cli2`.
+Pinned JavaScript dependencies installed with Bun are `yaml`, `unified`, `remark-parse`, `unist-util-visit`, `d3-force`, `d3-selection`, `d3-zoom`, `linkedom`, `esbuild`, `prettier`, and `markdownlint-cli2`.
 
-Project tooling uses Node `22.22.1`, Bun `1.3.10`, and Zola `0.23.3` from `.mise.toml`; GitHub Actions installs the same versions explicitly. Runtime page loads use no CDN or third-party service. The dependencies cover:
+Project tooling uses Node `22.22.1`, Bun `1.3.10`, and Zola `0.23.3` from `.mise.toml`; Bun is the package manager and task runner, and the scripts use the pinned Node runtime. GitHub Actions installs the same versions explicitly. Runtime page loads use no CDN or third-party service. The dependencies cover:
 
 - YAML frontmatter parsing.
 - Markdown AST parsing and link traversal.

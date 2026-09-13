@@ -23,6 +23,10 @@ currently connected.
 zola serve                # local preview with live reload
 zola serve --open         # same, opens it in the default browser
 zola build                # build to public/ (gitignored)
+bun run graph:data:write  # regenerate static/data/content-graph.json only
+bun run graph:data:check  # check manifest freshness
+bun run graph:write       # regenerate manifest and browser bundle
+bun run graph:check       # check both committed graph artifacts
 zk new-project --title "Some Project"   # creates content/projects/<slug>.md
 zk new-post --title "Some Post"         # creates content/blog/<slug>.md
 zk list-projects          # list notes in content/projects (excludes _index.md)
@@ -57,9 +61,34 @@ zk list-ideas                          # list active pitches with priority and s
 - Zola side mirrors this with `content/projects/_index.md` and `content/blog/_index.md`, each
   setting `page_template` so section listing pages and individual pages render differently
   (`projects.html`/`project.html` vs `blog.html`/`post.html`).
+- Project and post relationship metadata uses Zola taxonomies plus custom YAML metadata:
+  ```yaml
+  taxonomies:
+    tags: [agent-workflows, rust]
+  extra:
+    related: [project:minibox, post:policy-between-intent-and-effects]
+  ```
+  Graph IDs are `project:<file-stem>` and `post:<file-stem>`. Tags must be unique lowercase
+  kebab-case values; `extra.related` is optional and contains unique existing IDs other than
+  the current page. Curated relationships render reciprocally, while **Referenced by** is
+  derived only from incoming Markdown links. Shared tags qualify when pages share at least
+  two tags or have tag similarity of at least `0.5`. Related cards are limited to four.
+- Drafts and section indexes are excluded from the graph. The generator infers known
+  `/projects/` and `/blog/` routes and relative Markdown links into those sections. Copied
+  README-relative links such as `README.md`, `docs/...`, and assets are ignored, not rewritten.
+  Custom Zola `slug` or `path` frontmatter is unsupported for graph participants and fails
+  generation.
+- `static/data/content-graph.json` and `static/js/content-graph.js` are committed generated
+  artifacts. Run the `graph:data:*` commands for manifest-only work and `graph:write` or
+  `graph:check` when validating both artifacts. Bun `1.3.10` is the package manager and task
+  runner; Zola `0.23.3` builds the site. Versions are pinned in `.mise.toml`.
+- `/tags/` provides taxonomy browsing. `/graph/` starts with a complete server-rendered content
+  list and progressively adds filters and an SVG graph. If the manifest request or enhancement
+  fails, the list remains available and the SVG is left empty.
 - `templates/base.html` is the shared shell (nav, footer); all other templates `{% extends %}`
   it and override the `title`/`content` blocks.
-- `config.toml`'s `base_url` is a placeholder (`https://example.com`) — update before deploying.
+- `config.toml` sets `base_url` to the GitHub Pages `/sitex` deployment URL; keep generated
+  links prefix-safe with Zola's `get_url` helpers.
 </architecture>
 
 ## Deployment
