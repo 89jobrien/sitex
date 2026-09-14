@@ -1,14 +1,14 @@
 ---
 title: "praxis"
 date: 2026-08-18
-description: "Self-improving agent runtime for the cruxx agentic DSL: closes the loop between execution traces, evaluation, and strategy evolution by scoring runs, proposing evidence-backed strategy changes, and rolling back regressions."
+description: "Self-improving agent runtime for the crux agentic DSL: closes the loop between execution traces, evaluation, and strategy evolution by scoring runs, proposing evidence-backed strategy changes, and rolling back regressions."
 extra:
   repo: "https://github.com/89jobrien/praxis"
 ---
 
 # praxis
 
-Self-improving agent runtime for the [cruxx](https://github.com/89jobrien/cruxx) agentic DSL.
+Self-improving agent runtime for the [crux](https://github.com/89jobrien/crux) agentic DSL.
 Closes the loop between execution traces, evaluation, and strategy evolution so agents get better at their job across sessions.
 
 ```text
@@ -19,7 +19,7 @@ RUN -> TRACE -> EVALUATE -> PROPOSE -> VALIDATE -> APPLY
 
 ## What it does
 
-Every time an agent runs, cruxx captures a `Crux<T>` trace — a full causal record of every step, delegation, and speculation. Praxis takes that trace and:
+Every time an agent runs, crux captures a `Crux<T>` trace — a full causal record of every step, delegation, and speculation. Praxis takes that trace and:
 
 1. **Evaluates** it — extracts metrics (success rate, confidence, error distribution, delegation depth, speculation hit rate) and generates findings
 2. **Records** the reward score and computes trend direction over time
@@ -146,10 +146,10 @@ praxis/
 ### Dependency direction
 
 ```
-praxis -> cruxx-improve -> cruxx-core, cruxx-types, cruxx-planner
+praxis -> crux-improve -> crux-runtime, crux-types, crux-planner
 ```
 
-Praxis never imports cruxx internals directly. `cruxx-improve` is the single bridge crate providing:
+Praxis never imports crux internals directly. `crux-improve` is the single bridge crate providing:
 
 - Re-exports: `Crux<T>`, `Step`, `CruxId`, `SafetyPolicy`, `HarnessDiff`
 - `TraceMetrics` — structured extraction from traces (crux-domain knowledge)
@@ -190,7 +190,7 @@ application:
 use praxis::ImprovementLoop;
 use praxis_eval::{MetricsEvaluator, DeterministicStrategyPlanner};
 use praxis_store::{InMemoryRewardStore, FileStrategyStore};
-use cruxx_improve::DefaultStrategyPolicy;
+use crux_improve::DefaultStrategyPolicy;
 
 let loop_runner = ImprovementLoop::new(
     Box::new(MetricsEvaluator),
@@ -251,13 +251,13 @@ Requires Rust 1.85+ (edition 2024).
 
 ## Related projects
 
-| Project                                         | Role                                                 |
-| ----------------------------------------------- | ---------------------------------------------------- |
-| [cruxx](https://github.com/89jobrien/cruxx)     | Agentic DSL: traces, replay, evolution, safety       |
-| cruxx-improve                                   | Bridge crate: shared vocabulary + trace metrics      |
-| [devloop](https://github.com/89jobrien/devloop) | Council analysis (future `CouncilEvaluator` adapter) |
-| [magi](https://github.com/89jobrien/magi)       | Two-tier RL (future `RLEvaluator` adapter)           |
-| [braid](https://github.com/89jobrien/braid)     | Agent engine (consumes strategy from praxis)         |
+| Project                                     | Role                                                 |
+| ------------------------------------------- | ---------------------------------------------------- |
+| [crux](https://github.com/89jobrien/crux)   | Agentic DSL: traces, replay, evolution, safety       |
+| crux-improve                                | Bridge crate: shared vocabulary + trace metrics      |
+| devloop                                     | Council analysis (future `CouncilEvaluator` adapter) |
+| magi                                        | Two-tier RL (future `RLEvaluator` adapter)           |
+| [braid](https://github.com/89jobrien/braid) | Agent engine (consumes strategy from praxis)         |
 
 ## License
 

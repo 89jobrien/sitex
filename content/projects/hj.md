@@ -121,6 +121,7 @@ hj update
 | `hj audit`      | Report handoff items not covered by doob, without mutating state                         |
 | `hj install`    | Install binaries from the current checkout into `~/.local/bin`                           |
 | `hj update`     | Update installed binaries to the latest published `hjx` release                          |
+| `hj update-all` | Update all installed hj binaries under the selected installation root                    |
 
 ### Key flags
 
@@ -210,7 +211,7 @@ Run a single test by name:
 env RUSTC_WRAPPER= cargo test --workspace --locked -- test_name
 ```
 
-Runnable command demos live under [`examples/`](./examples/README.md). They use disposable
+Runnable command demos live under [`examples/`](https://github.com/89jobrien/hj/blob/main/examples/README.md). They use disposable
 temp repos and an isolated `HOME`, so they do not touch your real handoff DB or `~/.local`.
 
 ```bash

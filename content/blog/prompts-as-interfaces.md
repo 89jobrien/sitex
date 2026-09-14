@@ -102,5 +102,5 @@ spell and more like maintaining a real interface.
 - [Godmode verification skill](https://github.com/89jobrien/godmode/blob/main/skills/verification-before-completion/SKILL.md)
 - [Coursers front-controller path](https://github.com/89jobrien/coursers/blob/main/crates/coursers/src/crs_commands.rs)
 - [Coursers pipeline actions](https://github.com/89jobrien/coursers/blob/main/crates/core/src/hook/pipeline.rs)
-- [This site's repository instructions](https://github.com/89jobrien/sitex/blob/main/CLAUDE.md)
+- **This site's repository instructions:** `CLAUDE.md` in the local Sitex checkout; the repository is private.
 - **Global instruction layer:** local `$HOME/.claude/CLAUDE.md`; it is intentionally not published with the site.

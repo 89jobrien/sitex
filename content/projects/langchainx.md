@@ -47,71 +47,71 @@ can be used directly for smaller dependency footprints.
 
 ### LLMs
 
-- [OpenAI](examples/llm_openai.rs) /
-  [Azure OpenAI](examples/llm_azure_open_ai.rs)
-- [Anthropic Claude](examples/llm_anthropic_claude.rs)
-- [DeepSeek](examples/llm_deepseek.rs) — OpenAI-compatible, streaming +
+- [OpenAI](https://github.com/89jobrien/langchainx/blob/main/examples/llm_openai.rs) /
+  [Azure OpenAI](https://github.com/89jobrien/langchainx/blob/main/examples/llm_azure_open_ai.rs)
+- [Anthropic Claude](https://github.com/89jobrien/langchainx/blob/main/examples/llm_anthropic_claude.rs)
+- [DeepSeek](https://github.com/89jobrien/langchainx/blob/main/examples/llm_deepseek.rs) — OpenAI-compatible, streaming +
   reasoning_content support
-  ([advanced](examples/llm_deepseek_advanced.rs))
-- [Qwen / Alibaba Cloud](examples/llm_alibaba_qwen.rs) — OpenAI-compatible
-  ([advanced](examples/llm_qwen_advanced.rs))
-- [Ollama](examples/llm_ollama.rs) (local models)
-- [Vision / multimodal](examples/vision_llm_chain.rs)
+  ([advanced](https://github.com/89jobrien/langchainx/blob/main/examples/llm_deepseek_advanced.rs))
+- [Qwen / Alibaba Cloud](https://github.com/89jobrien/langchainx/blob/main/examples/llm_alibaba_qwen.rs) — OpenAI-compatible
+  ([advanced](https://github.com/89jobrien/langchainx/blob/main/examples/llm_qwen_advanced.rs))
+- [Ollama](https://github.com/89jobrien/langchainx/blob/main/examples/llm_ollama.rs) (local models)
+- [Vision / multimodal](https://github.com/89jobrien/langchainx/blob/main/examples/vision_llm_chain.rs)
 
 ### Embeddings
 
-- [OpenAI](examples/embedding_openai.rs) /
-  [Azure OpenAI](examples/embedding_azure_open_ai.rs)
-- [Ollama](examples/embedding_ollama.rs)
-- [FastEmbed](examples/embedding_fastembed.rs) (local, no API key)
-- [MistralAI](examples/embedding_mistralai.rs)
+- [OpenAI](https://github.com/89jobrien/langchainx/blob/main/examples/embedding_openai.rs) /
+  [Azure OpenAI](https://github.com/89jobrien/langchainx/blob/main/examples/embedding_azure_open_ai.rs)
+- [Ollama](https://github.com/89jobrien/langchainx/blob/main/examples/embedding_ollama.rs)
+- [FastEmbed](https://github.com/89jobrien/langchainx/blob/main/examples/embedding_fastembed.rs) (local, no API key)
+- [MistralAI](https://github.com/89jobrien/langchainx/blob/main/examples/embedding_mistralai.rs)
 
 ### Vector Stores
 
-- [Postgres (pgvector)](examples/vector_store_postgres.rs)
-- [Qdrant](examples/vector_store_qdrant.rs)
-- [OpenSearch](examples/vector_store_opensearch.rs)
-- [SQLite (sqlite-vss)](examples/vector_store_sqlite_vss.rs) /
-  [SQLite (sqlite-vec)](examples/vector_store_sqlite_vec.rs)
-- [SurrealDB](examples/vector_store_surrealdb/src/main.rs)
+- [Postgres (pgvector)](https://github.com/89jobrien/langchainx/blob/main/examples/vector_store_postgres.rs)
+- [Qdrant](https://github.com/89jobrien/langchainx/blob/main/examples/vector_store_qdrant.rs)
+- [OpenSearch](https://github.com/89jobrien/langchainx/blob/main/examples/vector_store_opensearch.rs)
+- [SQLite (sqlite-vss)](https://github.com/89jobrien/langchainx/blob/main/examples/vector_store_sqlite_vss.rs) /
+  [SQLite (sqlite-vec)](https://github.com/89jobrien/langchainx/blob/main/examples/vector_store_sqlite_vec.rs)
+- [SurrealDB](https://github.com/89jobrien/langchainx/blob/main/examples/vector_store_surrealdb/src/main.rs)
 
 ### Chains
 
-- [LLM Chain](examples/llm_chain.rs) /
-  [Simple Chain](examples/simple_chain.rs) /
-  [Streaming](examples/streaming_from_chain.rs)
-- [Conversational](examples/conversational_chain.rs) /
-  [Conversational Retriever](examples/conversational_retriever_simple_chain.rs) /
-  [with Vector Store](examples/conversational_retriever_chain_with_vector_store.rs)
-- [Sequential Chain](examples/sequential_chain.rs)
-- [Q&A Chain](examples/qa_chain.rs) /
-  [SQL Chain](examples/sql_chain.rs)
-- [DeepSeek Chain](examples/llm_chain_deepseek.rs) /
-  [Qwen Chain](examples/llm_chain_qwen.rs)
+- [LLM Chain](https://github.com/89jobrien/langchainx/blob/main/examples/llm_chain.rs) /
+  [Simple Chain](https://github.com/89jobrien/langchainx/blob/main/examples/simple_chain.rs) /
+  [Streaming](https://github.com/89jobrien/langchainx/blob/main/examples/streaming_from_chain.rs)
+- [Conversational](https://github.com/89jobrien/langchainx/blob/main/examples/conversational_chain.rs) /
+  [Conversational Retriever](https://github.com/89jobrien/langchainx/blob/main/examples/conversational_retriever_simple_chain.rs) /
+  [with Vector Store](https://github.com/89jobrien/langchainx/blob/main/examples/conversational_retriever_chain_with_vector_store.rs)
+- [Sequential Chain](https://github.com/89jobrien/langchainx/blob/main/examples/sequential_chain.rs)
+- [Q&A Chain](https://github.com/89jobrien/langchainx/blob/main/examples/qa_chain.rs) /
+  [SQL Chain](https://github.com/89jobrien/langchainx/blob/main/examples/sql_chain.rs)
+- [DeepSeek Chain](https://github.com/89jobrien/langchainx/blob/main/examples/llm_chain_deepseek.rs) /
+  [Qwen Chain](https://github.com/89jobrien/langchainx/blob/main/examples/llm_chain_qwen.rs)
 
 ### Agents
 
-- [Chat Agent with Tools](examples/agent.rs)
-- [OpenAI Tools Agent](examples/open_ai_tools_agent.rs)
-- [AI Commit Message Generator](examples/rcommiter.rs) — reads
+- [Chat Agent with Tools](https://github.com/89jobrien/langchainx/blob/main/examples/agent.rs)
+- [OpenAI Tools Agent](https://github.com/89jobrien/langchainx/blob/main/examples/open_ai_tools_agent.rs)
+- [AI Commit Message Generator](https://github.com/89jobrien/langchainx/blob/main/examples/rcommiter.rs) — reads
   `git diff --staged` and generates a conventional commit message
 
 ### Tools
 
 - Serpapi / Google search, DuckDuckGo search
-- [Wolfram / Math](examples/wolfram_tool.rs)
+- [Wolfram / Math](https://github.com/89jobrien/langchainx/blob/main/examples/wolfram_tool.rs)
 - Command line executor
-- [Text-to-Speech](examples/text_to_speech.rs) /
-  [Speech-to-Text (Whisper)](examples/speech2text_openai.rs)
+- [Text-to-Speech](https://github.com/89jobrien/langchainx/blob/main/examples/text_to_speech.rs) /
+  [Speech-to-Text (Whisper)](https://github.com/89jobrien/langchainx/blob/main/examples/speech2text_openai.rs)
 
 ### Semantic Routing
 
-- [Static routing](examples/semantic_routes.rs)
-- [Dynamic routing](examples/dynamic_semantic_routes.rs) (LLM-backed)
+- [Static routing](https://github.com/89jobrien/langchainx/blob/main/examples/semantic_routes.rs)
+- [Dynamic routing](https://github.com/89jobrien/langchainx/blob/main/examples/dynamic_semantic_routes.rs) (LLM-backed)
 
 ### Document Loaders
 
-PDF, HTML, [HTML-to-Markdown](examples/), CSV, Pandoc (DOCX, etc.), Git commits,
+PDF, HTML, [HTML-to-Markdown](https://github.com/89jobrien/langchainx/tree/main/examples), CSV, Pandoc (DOCX, etc.), Git commits,
 source code (tree-sitter with C, C++, C#, Go, Java, JavaScript, Kotlin, Python,
 Rust, Scala, TypeScript)
 

@@ -16,17 +16,17 @@ You can [download Warp](https://www.warp.dev/download) and [read our docs](https
 
 ## Licensing
 
-Warp's UI framework (the `warpui_core` and `warpui` crates) are licensed under the [MIT license](LICENSE-MIT).
+Warp's UI framework (the `warpui_core` and `warpui` crates) are licensed under the [MIT license](https://github.com/89jobrien/warpx/blob/main/LICENSE-MIT).
 
-The rest of the code in this repository is licensed under the [AGPL v3](LICENSE-AGPL).
+The rest of the code in this repository is licensed under the [AGPL v3](https://github.com/89jobrien/warpx/blob/main/LICENSE-AGPL).
 
 ## Open Source & Contributing
 
-Warp's client codebase is open source and lives in this repository. We welcome community contributions and have designed a lightweight workflow to help new contributors get started. For the full contribution flow, read our [CONTRIBUTING.md](CONTRIBUTING.md) guide.
+Warp's client codebase is open source and lives in this repository. We welcome community contributions and have designed a lightweight workflow to help new contributors get started. For the full contribution flow, read our [CONTRIBUTING.md](https://github.com/89jobrien/warpx/blob/main/CONTRIBUTING.md) guide.
 
 ### Issue to PR
 
-Before filing, [search existing issues](https://github.com/warpdotdev/warp/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc) for your bug or feature request. If nothing exists, [file an issue](https://github.com/warpdotdev/warp/issues/new/choose) using our templates. Security vulnerabilities should be reported privately as described in [CONTRIBUTING.md](CONTRIBUTING.md#reporting-security-issues).
+Before filing, [search existing issues](https://github.com/warpdotdev/warp/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc) for your bug or feature request. If nothing exists, [file an issue](https://github.com/warpdotdev/warp/issues/new/choose) using our templates. Security vulnerabilities should be reported privately as described in [CONTRIBUTING.md](https://github.com/89jobrien/warpx/blob/main/CONTRIBUTING.md).
 
 Once filed, a Warp maintainer reviews the issue and may apply a readiness label: [`ready-to-spec`](https://github.com/warpdotdev/warp/issues?q=is%3Aissue+is%3Aopen+label%3Aready-to-spec) signals the design is open for contributors to spec out, and [`ready-to-implement`](https://github.com/warpdotdev/warp/issues?q=is%3Aissue+is%3Aopen+label%3Aready-to-implement) signals the design is settled and code PRs are welcome. Anyone can pick up a labeled issue — mention **@oss-maintainers** on an issue if you'd like it considered for a readiness label.
 
@@ -40,7 +40,7 @@ To build and run Warp from source:
 ./script/presubmit   # fmt, clippy, and tests
 ```
 
-See [WARP.md](WARP.md) for the full engineering guide, including coding style, testing, and platform-specific notes.
+See [WARP.md](https://github.com/89jobrien/warpx/blob/main/WARP.md) for the full engineering guide, including coding style, testing, and platform-specific notes.
 
 ## Joining the Team
 
@@ -55,7 +55,7 @@ Interested in joining the team? See our [open roles](https://www.warp.dev/career
 
 ## Code of Conduct
 
-We ask everyone to be respectful and empathetic. Warp follows the [Code of Conduct](CODE_OF_CONDUCT.md). To report violations, email warp-coc at warp.dev.
+We ask everyone to be respectful and empathetic. Warp follows the [Code of Conduct](https://github.com/89jobrien/warpx/blob/main/CODE_OF_CONDUCT.md). To report violations, email warp-coc at warp.dev.
 
 ## Open Source Dependencies
 

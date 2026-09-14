@@ -183,7 +183,7 @@ The repository is a Cargo workspace:
 - `tests/` — workspace integration tests
 - `fuzz/` — fuzz targets, excluded from the default workspace
 
-See [`docs/ownership-model.md`](./docs/ownership-model.md) for canonical ownership boundaries.
+See [`docs/ownership-model.md`](https://github.com/89jobrien/looprs/blob/main/docs/ownership-model.md) for canonical ownership boundaries.
 
 ## Dev
 

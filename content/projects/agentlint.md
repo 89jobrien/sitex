@@ -253,8 +253,8 @@ delete them.
 **Conformance tests** verify every `Validator` impl against a shared contract
 suite in `agentlint-core`'s `testing` module.
 
-See [`docs/plans/2026-05-15-agentlint.md`](docs/plans/2026-05-15-agentlint.md) for the
-full design document and [`docs/roadmap.agentlint.md`](docs/roadmap.agentlint.md) for
+See [`docs/plans/2026-05-15-agentlint.md`](https://github.com/89jobrien/agentlint/blob/main/docs/plans/2026-05-15-agentlint.md) for the
+full design document and [`docs/roadmap.agentlint.md`](https://github.com/89jobrien/agentlint/blob/main/docs/roadmap.agentlint.md) for
 shipped milestones and planned work.
 
 ## License

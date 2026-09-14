@@ -59,7 +59,7 @@ learn_on_successful_fallback = true
 ## Documentation
 
 - [API docs (docs.rs)](https://docs.rs/prefixe)
-- [Book](docs/book/src/introduction.md) — mdBook scaffold in `docs/book/`
+- [Book](https://github.com/89jobrien/prefixe/blob/main/docs/book/src/introduction.md) — mdBook scaffold in `docs/book/`
 
 ## License
 

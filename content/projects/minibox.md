@@ -10,8 +10,8 @@ extra:
 
 [![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](#license)
 
-> **Status**: Stabilization freeze active — see [CONTRIBUTING.md](CONTRIBUTING.md) and
-> [docs/core/STABILITY_CHECKLIST.mbx.md](docs/core/STABILITY_CHECKLIST.mbx.md).
+> **Status**: Active production hardening under a stabilization freeze; feature additions are paused while the checklist closes. See [CONTRIBUTING.md](https://github.com/89jobrien/minibox/blob/main/CONTRIBUTING.md) and
+> [docs/core/STABILITY_CHECKLIST.mbx.md](https://github.com/89jobrien/minibox/blob/main/docs/core/STABILITY_CHECKLIST.mbx.md).
 
 An agent-controllable container runtime written in Rust. Daemon/CLI split, OCI image pulling,
 Linux namespace isolation, cgroups v2 resource limits, and overlay filesystem support. Hexagonal
@@ -20,7 +20,7 @@ server exposes policy-gated daemon operations directly to MCP clients — inspec
 default, controlled run/pull/stop/rm behind agent policy — so agents can drive container
 lifecycle without shelling out to the CLI.
 
-**Status:** Active development — `v0.32.0`. Linux runs natively and is production-ready; macOS feels like native but requires `smolvm`
+**Status:** Active stabilization — `v0.32.0`. Linux runs natively and is production-ready; macOS feels like native but requires `smolvm`
 (VM-backed). See the Platform Support table.
 
 ---
@@ -60,7 +60,7 @@ structured tracing, property testing.
 Requires Linux, root, kernel 5.0+, cgroups v2, overlay FS.
 
 First-time contributors: run `just install-hooks` and `cargo xtask doctor` to verify your
-toolchain and environment before building — see [`DEVELOPMENT.md`](DEVELOPMENT.md).
+toolchain and environment before building — see [`DEVELOPMENT.md`](https://github.com/89jobrien/minibox/blob/main/DEVELOPMENT.md).
 
 ```bash
 # Build
@@ -96,7 +96,7 @@ sudo ./target/release/mbx rm <id>
 | macOS (Intel)         | Experimental   | `colima`        | exec/logs limited                     |
 | Windows               | Planned        | `winbox` stub   | Returns error unconditionally         |
 
-See [`docs/core/FEATURE_MATRIX.mbx.md`](docs/core/FEATURE_MATRIX.mbx.md) for the full per-adapter capability
+See [`docs/core/FEATURE_MATRIX.mbx.md`](https://github.com/89jobrien/minibox/blob/main/docs/core/FEATURE_MATRIX.mbx.md) for the full per-adapter capability
 breakdown.
 
 ---
@@ -137,7 +137,7 @@ top of the same daemon protocol the CLI uses:
 - `minibox-tui` (`mbx tui`) — read-only live dashboard (container table + streaming lifecycle
   events) for watching what an agent is doing to the daemon in real time.
 
-[`agentbox`](agentbox/) (a separate Go module in this repo) is the multi-role review/task-decomposition
+[`agentbox`](https://github.com/89jobrien/minibox/tree/main/agentbox) (a separate Go module in this repo) is the multi-role review/task-decomposition
 agent runtime used to develop minibox itself — not a minibox subcommand, but worth knowing about
 if you're exploring the repo.
 
@@ -151,7 +151,7 @@ in `spawn_blocking` to avoid blocking the runtime.
 **Protocol.** JSON-over-newline on a Unix socket. 29 request variants, 28 response variants.
 Canonical source: `crates/minibox-core/src/protocol.rs`.
 
-Full architecture reference: [`docs/core/ARCHITECTURE.mbx.md`](docs/core/ARCHITECTURE.mbx.md).
+Full architecture reference: [`docs/core/ARCHITECTURE.mbx.md`](https://github.com/89jobrien/minibox/blob/main/docs/core/ARCHITECTURE.mbx.md).
 
 ---
 
@@ -243,7 +243,7 @@ just test-e2e                # daemon + CLI end-to-end (Linux + root)
 ```
 
 The conformance suite runs 28 backend-agnostic tests against every adapter. Unit tests run on
-macOS without root. See [`docs/core/TEST_INFRASTRUCTURE.mbx.md`](docs/core/TEST_INFRASTRUCTURE.mbx.md).
+macOS without root. See [`docs/core/TEST_INFRASTRUCTURE.mbx.md`](https://github.com/89jobrien/minibox/blob/main/docs/core/TEST_INFRASTRUCTURE.mbx.md).
 
 ---
 
@@ -256,7 +256,7 @@ just --list                  # all available recipes
 mbx doctor                   # preflight: show compiled adapters and capabilities
 ```
 
-See [`DEVELOPMENT.md`](DEVELOPMENT.md) for the full workflow.
+See [`DEVELOPMENT.md`](https://github.com/89jobrien/minibox/blob/main/DEVELOPMENT.md) for the full workflow.
 
 ---
 
@@ -287,12 +287,12 @@ Issues and PRs are welcome. A few things to know before contributing:
 | Windows (WSL2)         | Planned                              |
 | MCP control surface    | Initial MCP stdio server implemented |
 
-Full details: [`docs/core/ROADMAP.mbx.md`](docs/core/ROADMAP.mbx.md).
+Full details: [`docs/core/ROADMAP.mbx.md`](https://github.com/89jobrien/minibox/blob/main/docs/core/ROADMAP.mbx.md).
 
 ---
 
 ## License
 
-Licensed under either of [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE) at your option.
+Licensed under either of [MIT](https://github.com/89jobrien/minibox/blob/main/LICENSE-MIT) or [Apache-2.0](https://github.com/89jobrien/minibox/blob/main/LICENSE-APACHE) at your option.
 
 <sup>Previously named `mbx` during early development.</sup>

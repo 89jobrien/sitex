@@ -29,15 +29,15 @@ orchestrator replans (re-proposes from scratch) once before erroring.
 
 ## Crates
 
-| Crate                                     | Description                                                          |
-| ----------------------------------------- | -------------------------------------------------------------------- |
-| [`disyn-core`](crates/disyn-core)         | Domain types, port traits, error types                               |
-| [`disyn-symbolic`](crates/disyn-symbolic) | Rule engine, verifier, repair engine, 10-layer verification taxonomy |
-| [`disyn-neural`](crates/disyn-neural)     | LLM adapters (OpenAI, Ollama)                                        |
-| [`disyn-memory`](crates/disyn-memory)     | State persistence, in-memory store, CatRAG graph types               |
-| [`disyn-runtime`](crates/disyn-runtime)   | Budget manager (per-class tracking), telemetry, shell executor       |
-| [`disyn-app`](crates/disyn-app)           | Composition root, orchestrator, CLI                                  |
-| `disyn-xtask`                             | CI automation (`cargo xtask ci`)                                     |
+| Crate                                                                                  | Description                                                          |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| [`disyn-core`](https://github.com/89jobrien/disyn/tree/main/crates/disyn-core)         | Domain types, port traits, error types                               |
+| [`disyn-symbolic`](https://github.com/89jobrien/disyn/tree/main/crates/disyn-symbolic) | Rule engine, verifier, repair engine, 10-layer verification taxonomy |
+| [`disyn-neural`](https://github.com/89jobrien/disyn/tree/main/crates/disyn-neural)     | LLM adapters (OpenAI, Ollama)                                        |
+| [`disyn-memory`](https://github.com/89jobrien/disyn/tree/main/crates/disyn-memory)     | State persistence, in-memory store, CatRAG graph types               |
+| [`disyn-runtime`](https://github.com/89jobrien/disyn/tree/main/crates/disyn-runtime)   | Budget manager (per-class tracking), telemetry, shell executor       |
+| [`disyn-app`](https://github.com/89jobrien/disyn/tree/main/crates/disyn-app)           | Composition root, orchestrator, CLI                                  |
+| `disyn-xtask`                                                                          | CI automation (`cargo xtask ci`)                                     |
 
 ### Dependency graph
 

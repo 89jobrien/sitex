@@ -71,22 +71,22 @@ Requires Rust 1.88+ (edition 2024).
 
 ## Crates
 
-| Crate                                 | Description                                             |
-| ------------------------------------- | ------------------------------------------------------- |
-| [`crux`](crates/crux)                 | Facade -- re-exports runtime + macros                   |
-| [`crux-runtime`](crates/crux-runtime) | Core types, traits, and runtime                         |
-| [`crux-types`](crates/crux-types)     | Wire-format types (`Crux<T>`, `Step`, `Budget`)         |
-| [`crux-derive`](crates/crux-macros)   | `#[crux::agent]`, `#[crux::harness]`, `#[crux::evolve]` |
-| [`crux-agentic`](crates/crux-agentic) | Step handlers: shell, fs, git, llm, container           |
-| [`crux-script`](crates/crux-script)   | YAML pipeline scripting                                 |
-| [`crux-model`](crates/crux-model)     | Model ID types and provider parsers                     |
-| [`crux-plugin`](crates/crux-plugin)   | Subprocess plugin host                                  |
-| [`crux-planner`](crates/crux-planner) | Metrics-driven harness evolution                        |
-| [`crux-domain`](crates/crux-domain)   | Pure domain types -- no async, no LLM deps              |
-| [`crux-baml`](crates/crux-baml)       | BAML-powered LLM handlers (extract, decompose, plan)    |
-| [`crux-stdlib`](crates/crux-stdlib)   | Standard library handlers (fs, git, json, text, ctrl)   |
-| [`crux-task`](crates/crux-task)       | Project task management                                 |
-| [`crux-improve`](crates/crux-improve) | Improvement protocol: strategies, diffs, comparisons    |
+| Crate                                                                             | Description                                             |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| [`crux`](https://github.com/89jobrien/crux/tree/main/crates/crux)                 | Facade -- re-exports runtime + macros                   |
+| [`crux-runtime`](https://github.com/89jobrien/crux/tree/main/crates/crux-runtime) | Core types, traits, and runtime                         |
+| [`crux-types`](https://github.com/89jobrien/crux/tree/main/crates/crux-types)     | Wire-format types (`Crux<T>`, `Step`, `Budget`)         |
+| [`crux-derive`](https://github.com/89jobrien/crux/tree/main/crates/crux-macros)   | `#[crux::agent]`, `#[crux::harness]`, `#[crux::evolve]` |
+| [`crux-agentic`](https://github.com/89jobrien/crux/tree/main/crates/crux-agentic) | Step handlers: shell, fs, git, llm, container           |
+| [`crux-script`](https://github.com/89jobrien/crux/tree/main/crates/crux-script)   | YAML pipeline scripting                                 |
+| [`crux-model`](https://github.com/89jobrien/crux/tree/main/crates/crux-model)     | Model ID types and provider parsers                     |
+| [`crux-plugin`](https://github.com/89jobrien/crux/tree/main/crates/crux-plugin)   | Subprocess plugin host                                  |
+| [`crux-planner`](https://github.com/89jobrien/crux/tree/main/crates/crux-planner) | Metrics-driven harness evolution                        |
+| [`crux-domain`](https://github.com/89jobrien/crux/tree/main/crates/crux-domain)   | Pure domain types -- no async, no LLM deps              |
+| [`crux-baml`](https://github.com/89jobrien/crux/tree/main/crates/crux-baml)       | BAML-powered LLM handlers (extract, decompose, plan)    |
+| [`crux-stdlib`](https://github.com/89jobrien/crux/tree/main/crates/crux-stdlib)   | Standard library handlers (fs, git, json, text, ctrl)   |
+| [`crux-task`](https://github.com/89jobrien/crux/tree/main/crates/crux-task)       | Project task management                                 |
+| [`crux-improve`](https://github.com/89jobrien/crux/tree/main/crates/crux-improve) | Improvement protocol: strategies, diffs, comparisons    |
 
 ## Feature flags
 
@@ -99,11 +99,11 @@ Requires Rust 1.88+ (edition 2024).
 
 ## Documentation
 
-- [Tutorial](docs/walkthrough/README.md) -- chapter-by-chapter walkthrough
-- [Handlers and capabilities](docs/crux-capabilities.md) -- pipeline handlers, support matrix
-- [Syntax reference](docs/crux-syntax-reference.md) -- pipeline YAML syntax
-- [Plugin system](docs/crux-plugins.md) -- subprocess plugin host
+- [Tutorial](https://github.com/89jobrien/crux/blob/main/docs/walkthrough/README.md) -- chapter-by-chapter walkthrough
+- [Handlers and capabilities](https://github.com/89jobrien/crux/blob/main/docs/crux-capabilities.md) -- pipeline handlers, support matrix
+- [Syntax reference](https://github.com/89jobrien/crux/blob/main/docs/crux-syntax-reference.md) -- pipeline YAML syntax
+- [Plugin system](https://github.com/89jobrien/crux/blob/main/docs/crux-plugins.md) -- subprocess plugin host
 
 ## License
 
-MIT -- see [LICENSE](LICENSE).
+MIT -- see [LICENSE](https://github.com/89jobrien/crux/blob/main/LICENSE).

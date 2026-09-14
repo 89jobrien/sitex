@@ -18,8 +18,8 @@ execution trace, so previews, pushes, and health checks are inspectable and audi
 ## Status
 
 Pre-1.0 (`0.0.1`), edition 2024. Mid-migration to a "crux-first" core — see
-[docs/HANDOFF.md](docs/HANDOFF.md) for what is in flight and
-[docs/TODO.md](docs/TODO.md) for the backlog.
+`docs/HANDOFF.md` in the local checkout records what is in flight, and
+`docs/TODO.md` records the backlog. These working documents are not published upstream.
 
 ## Layout
 
@@ -33,7 +33,7 @@ Five crates in a hexagonal arrangement (domain core, adapters, application, inte
 | `neusym-sync`   | `NeusymService` orchestration, planner, stores, legacy engine |
 | `neusym-mcp`    | Binary `neusym`: CLI + MCP server (rmcp/stdio)                |
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full map.
+See `docs/ARCHITECTURE.md` in the local checkout for the full map.
 
 ## Prerequisites
 
@@ -55,7 +55,7 @@ cargo fmt --all -- --check
 ```
 
 The full local gate mirrors CI: `cargo xtask pre-commit` (delegates to `taskit`).
-See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
+See `docs/CONTRIBUTING.md` in the local checkout.
 
 ## Configuration
 
@@ -108,19 +108,19 @@ Exposed tools: `search`, `get`, `sync_link`, `sync_preview`, `sync_push`, `sync_
 
 ## Documentation
 
-| Doc                                  | Purpose                                   |
-| ------------------------------------ | ----------------------------------------- |
-| [ARCHITECTURE](docs/ARCHITECTURE.md) | Crate graph, ports, sync flow, crux model |
-| [CONFORMANCE](docs/CONFORMANCE.md)   | The `IssueProvider` contract suite        |
-| [CONTRIBUTING](docs/CONTRIBUTING.md) | Dev setup, gates, adding a provider       |
-| [TESTING](docs/TESTING.md)           | Test taxonomy, inventory, gaps            |
-| [CODE_STYLE](docs/CODE_STYLE.md)     | Conventions, error model, secret handling |
-| [TODO](docs/TODO.md)                 | Prioritized backlog                       |
-| [HANDOFF](docs/HANDOFF.md)           | Current in-flight state                   |
-| [MEMORY](docs/MEMORY.md)             | Durable project facts                     |
+| Local document | Purpose                                   |
+| -------------- | ----------------------------------------- |
+| `ARCHITECTURE` | Crate graph, ports, sync flow, crux model |
+| `CONFORMANCE`  | The `IssueProvider` contract suite        |
+| `CONTRIBUTING` | Dev setup, gates, adding a provider       |
+| `TESTING`      | Test taxonomy, inventory, gaps            |
+| `CODE_STYLE`   | Conventions, error model, secret handling |
+| `TODO`         | Prioritized backlog                       |
+| `HANDOFF`      | Current in-flight state                   |
+| `MEMORY`       | Durable project facts                     |
 
 ## License
 
-Dual licensed under [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE) at your option.
+Dual licensed under [MIT](https://github.com/89jobrien/neusym/blob/main/LICENSE-MIT) or [Apache-2.0](https://github.com/89jobrien/neusym/blob/main/LICENSE-APACHE) at your option.
 
 Copyright (c) Joseph O'Brien.

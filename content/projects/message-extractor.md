@@ -98,7 +98,7 @@ You'll see messages from all your AI assistants streaming in real-time! 🎉
 The core library that knows how to parse each AI assistant's session format.
 
 **Location**: Root directory
-**Documentation**: See [ARCHITECTURE.md](ARCHITECTURE.md#1-message-extractor-core-library)
+**Documentation**: See [ARCHITECTURE.md](https://github.com/89jobrien/message-extractor/blob/main/ARCHITECTURE.md)
 
 **Quick example:**
 
@@ -115,7 +115,7 @@ let messages = registry
 Real-time file watcher that monitors your AI assistant directories and broadcasts updates.
 
 **Location**: `message-watcher/`
-**Documentation**: [message-watcher/README.md](message-watcher/README.md)
+**Documentation**: [message-watcher/README.md](https://github.com/89jobrien/message-extractor/blob/main/message-watcher/README.md)
 
 **Features:**
 
@@ -129,7 +129,7 @@ Real-time file watcher that monitors your AI assistant directories and broadcast
 Yew-based WebAssembly frontend for visualizing message streams.
 
 **Location**: `frontend/`
-**Documentation**: [frontend/README.md](frontend/README.md)
+**Documentation**: [frontend/README.md](https://github.com/89jobrien/message-extractor/blob/main/frontend/README.md)
 
 **Features:**
 
@@ -451,7 +451,7 @@ impl MessageExtractor for NewProviderExtractor {
 ## FAQ
 
 **Q: Does this work with all AI assistants?**
-A: Currently supports 7 assistants. See [Contributing Guide](CONTRIBUTING.md#adding-a-new-provider) to add more.
+A: Currently supports 7 assistants. See the [Contributing Guide](https://github.com/89jobrien/message-extractor/blob/main/CONTRIBUTING.md) to add more.
 
 **Q: Is my data sent anywhere?**
 A: No. Everything runs locally. The server binds to localhost only.
@@ -463,7 +463,7 @@ A: Not yet, but this is a planned feature. Currently, filtering happens in the U
 A: Minimal. The watcher uses incremental reading and bounded concurrency.
 
 **Q: Can I run this on a server?**
-A: Yes, but you must add authentication first. See [Security Documentation](message-watcher/README.md#security).
+A: Yes, but you must add authentication first. See the [watcher documentation](https://github.com/89jobrien/message-extractor/blob/main/message-watcher/README.md).
 
 **Q: How do I export all my conversations?**
 A: Use the "EXPORT" button in the UI, or use the library directly:
@@ -476,10 +476,10 @@ std::fs::write("export.json", json)?;
 
 ## Further Reading
 
-- [Architecture Overview](ARCHITECTURE.md) - Deep dive into system design
-- [Contributing Guide](CONTRIBUTING.md) - How to contribute
-- [Watcher Documentation](message-watcher/README.md) - Service details
-- [Frontend Documentation](frontend/README.md) - UI features
+- [Architecture Overview](https://github.com/89jobrien/message-extractor/blob/main/ARCHITECTURE.md) - Deep dive into system design
+- [Contributing Guide](https://github.com/89jobrien/message-extractor/blob/main/CONTRIBUTING.md) - How to contribute
+- [Watcher Documentation](https://github.com/89jobrien/message-extractor/blob/main/message-watcher/README.md) - Service details
+- [Frontend Documentation](https://github.com/89jobrien/message-extractor/blob/main/frontend/README.md) - UI features
 
 ## License
 
@@ -487,4 +487,4 @@ MIT
 
 ## Contributing
 
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions are welcome! Please read [CONTRIBUTING.md](https://github.com/89jobrien/message-extractor/blob/main/CONTRIBUTING.md) for guidelines.

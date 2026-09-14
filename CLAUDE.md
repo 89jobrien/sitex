@@ -26,9 +26,14 @@ zola build                # build to public/ (gitignored)
 zk new-project --title "Some Project"   # creates content/projects/<slug>.md
 zk new-post --title "Some Post"         # creates content/blog/<slug>.md
 zk list-projects          # list notes in content/projects (excludes _index.md)
-zk list-posts             # list notes in content/blog, sorted by date desc
+zk list-posts             # list notes in content/blog, sorted by zk creation time desc
 zk new-idea --title "Some Idea"       # creates ideas/queue/some-idea.md
 zk list-ideas                          # list active pitches with priority and status
+crux run Cruxfile format  # rewrite content Markdown and Sass with Prettier
+crux run Cruxfile lint    # lint content Markdown
+crux run Cruxfile check   # run Zola checks, including external links
+crux run Cruxfile build   # check, format, lint, then build
+crux run Cruxfile ci      # default aggregate target; includes mutating format
 ```
 
 `zk` aliases are defined in `.zk/config.toml` under `[alias]`.
@@ -49,23 +54,28 @@ zk list-ideas                          # list active pitches with priority and s
   - `note.filename = "{{slug title}}"` — filenames are derived from the note title, not zk's
     default ID scheme.
 - The private `ideas` zk group writes pitch cards to `ideas/queue/`, outside Zola's
-  `content/` tree. Active notes use `seed`, `researching`, or `ready`; published pitch
-  history moves to `ideas/published/` with `status: published`. Pitch metadata is `title`,
-  `date`, `status`, `priority`, `theme`, and `effort`; each body contains Hook, Thesis, Reader
-  Value, Evidence, Mini Outline, and Readiness sections. Never place unpublished pitch notes
-  under `content/`.
+  `content/` tree and ignored by Git. Active notes use `seed`, `researching`, or `ready`.
+  Published pitches leave the active queue and may be retained under `ideas/published/` with
+  `status: published`. Pitch metadata is `title`, `date`, `status`, `priority`, `theme`, and
+  `effort`; each body contains Hook, Thesis, Reader Value, Evidence, Mini Outline, and
+  Readiness sections. Never place unpublished pitch notes under `content/`.
 - Zola side mirrors this with `content/projects/_index.md` and `content/blog/_index.md`, each
   setting `page_template` so section listing pages and individual pages render differently
   (`projects.html`/`project.html` vs `blog.html`/`post.html`).
 - `templates/base.html` is the shared shell (nav, footer); all other templates `{% extends %}`
-  it and override the `title`/`content` blocks.
-- `config.toml`'s `base_url` is a placeholder (`https://example.com`) — update before deploying.
+  it and override blocks as needed.
+- `Cruxfile` owns check, build, serve, and CI composition. `scripts/format.crux` and
+  `scripts/lint.crux` are the only standalone pipelines currently implemented; the broader
+  standalone-pipeline design remains planned.
+- `config.toml` enables the Atom feed at `atom.xml`.
+- `config.toml` sets the deployed base URL to `https://89jobrien.github.io/sitex`.
 </architecture>
 
 ## Deployment
 
 <deployment>
-`.github/workflows/deploy.yml` builds with Zola and publishes to GitHub Pages via
-`actions/deploy-pages` on push to `main`. Requires the repo's Pages source set to "GitHub
-Actions" in GitHub settings.
+`.github/workflows/deploy.yml` builds with Zola on pushes to `main`. The deploy job runs via
+`actions/deploy-pages` only when the repository variable `PAGES_ENABLED` is `true`; the repo's
+Pages source must also be set to "GitHub Actions". Manual dispatch runs the same gated workflow.
+The workflow pins Zola `0.19.2`; local changes must remain compatible with that version.
 </deployment>

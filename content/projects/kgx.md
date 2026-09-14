@@ -159,7 +159,7 @@ Obsidian vault.
 
 ## Code Quality
 
-100% [rustqual](https://github.com/89jobrien/checkup) score across all
+100% `rustqual` score across all
 six dimensions: IOSP, Complexity, DRY, SRP, Coupling, Test Quality.
 
 ## License

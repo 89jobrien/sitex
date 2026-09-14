@@ -117,8 +117,8 @@ For a terse end-to-end verification script:
 ```
 
 The demo is a guided walkthrough. The smoke script is the same core flow with minimal narration.
-They install [preflight.sh](/Users/joe/dev/rx/scripts/preflight.sh) as the default fast-path
-command, keep [preflight.rs](/Users/joe/dev/rx/.ctx/scripts/preflight.rs) as a richer direct-run
+They install [preflight.sh](https://github.com/89jobrien/rx/blob/main/scripts/preflight.sh) as the default fast-path
+command, keep `.ctx/scripts/preflight.rs` as a richer direct-run
 comparison script, and then exercise `examples/scripts/` through the same temporary XDG config root.
 
 `rx list` prints one tab-delimited row per installed command:

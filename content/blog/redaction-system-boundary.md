@@ -116,4 +116,4 @@ cleaning up somewhere else, the important decision has already been made.
 - [Staged-diff scanner](https://github.com/89jobrien/obfsck/blob/main/src/bin/scan.rs)
 - [Alert analyzer redaction boundary](https://github.com/89jobrien/obfsck/blob/main/src/analyzer/mod.rs)
 - **Redaction CLI and custom configuration:** `src/cli.rs` in the audited local Obfsck checkout; public `main` has not yet synchronized this implementation.
-- [Configuration roadmap and current integration limits](https://github.com/89jobrien/obfsck/blob/main/docs/feature-roadmap.md)
+- [Redaction pattern configuration](https://github.com/89jobrien/obfsck/blob/main/config/secrets.yaml)

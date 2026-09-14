@@ -124,7 +124,7 @@ cargo xtask docs
 cargo xtask book
 ```
 
-Reads [`xbook/copies.toml`](xbook/copies.toml) to copy source files (README,
+Reads [`xbook/copies.toml`](https://github.com/89jobrien/xtui/blob/main/xbook/copies.toml) to copy source files (README,
 CLAUDE.md, design plans, memory bank, knowledge graph wiki) into `xbook/`, then
 builds an [mdbook](https://rust-lang.github.io/mdBook/) at `xbook/dist/`. The
 source files stay in their canonical locations in the repo — `xbook/` holds only

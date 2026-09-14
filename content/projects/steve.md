@@ -34,31 +34,31 @@ This repository provides a well-organized collection of reusable components for 
 
 ### Core Modules
 
-| Module                        | Description                        | Location           |
-| ----------------------------- | ---------------------------------- | ------------------ |
-| [Agents](steve/agents/)       | Sub-agent configurations by domain | `steve/agents/`    |
-| [Commands](steve/commands/)   | Slash commands for workflows       | `steve/commands/`  |
-| [Skills](steve/skills/)       | Reusable domain knowledge bundles  | `steve/skills/`    |
-| [Hooks](steve/hooks/)         | Event-driven automation            | `steve/hooks/`     |
-| [Templates](steve/templates/) | Component scaffolds                | `steve/templates/` |
-| [Rules](steve/rules/)         | Language-specific coding rules     | `steve/rules/`     |
-| [Helpers](steve/helpers/)     | Python utility modules             | `steve/helpers/`   |
+| Module                                                                    | Description                        | Location           |
+| ------------------------------------------------------------------------- | ---------------------------------- | ------------------ |
+| [Agents](https://github.com/89jobrien/steve/tree/main/steve/agents)       | Sub-agent configurations by domain | `steve/agents/`    |
+| [Commands](https://github.com/89jobrien/steve/tree/main/steve/commands)   | Slash commands for workflows       | `steve/commands/`  |
+| [Skills](https://github.com/89jobrien/steve/tree/main/steve/skills)       | Reusable domain knowledge bundles  | `steve/skills/`    |
+| [Hooks](https://github.com/89jobrien/steve/tree/main/steve/hooks)         | Event-driven automation            | `steve/hooks/`     |
+| [Templates](https://github.com/89jobrien/steve/tree/main/steve/templates) | Component scaffolds                | `steve/templates/` |
+| [Rules](https://github.com/89jobrien/steve/tree/main/steve/rules)         | Language-specific coding rules     | `steve/rules/`     |
+| [Helpers](https://github.com/89jobrien/steve/tree/main/steve/helpers)     | Python utility modules             | `steve/helpers/`   |
 
 ### Documentation
 
-| Document                                       | Description                |
-| ---------------------------------------------- | -------------------------- |
-| [Getting Started](docs/GETTING_STARTED.md)     | Quick start guide          |
-| [Installation](docs/INSTALLATION.md)           | Detailed installation      |
-| [Architecture](docs/ARCHITECTURE.md)           | System design              |
-| [Development](docs/DEVELOPMENT.md)             | Development workflow       |
-| [Using Agents](docs/USING_AGENTS.md)           | Agent usage guide          |
-| [Using Commands](docs/USING_COMMANDS.md)       | Command usage guide        |
-| [Using Skills](docs/USING_SKILLS.md)           | Skill usage guide          |
-| [Using Hooks](docs/USING_HOOKS.md)             | Hook usage guide           |
-| [Contributing](docs/CONTRIBUTING.md)           | Contribution guidelines    |
-| [Scripts Reference](docs/SCRIPTS_REFERENCE.md) | Script documentation       |
-| [FAQ](docs/FAQ.md)                             | Frequently asked questions |
+| Document                                                                                    | Description                |
+| ------------------------------------------------------------------------------------------- | -------------------------- |
+| [Getting Started](https://github.com/89jobrien/steve/blob/main/docs/GETTING_STARTED.md)     | Quick start guide          |
+| [Installation](https://github.com/89jobrien/steve/blob/main/docs/INSTALLATION.md)           | Detailed installation      |
+| [Architecture](https://github.com/89jobrien/steve/blob/main/docs/ARCHITECTURE.md)           | System design              |
+| [Development](https://github.com/89jobrien/steve/blob/main/docs/DEVELOPMENT.md)             | Development workflow       |
+| [Using Agents](https://github.com/89jobrien/steve/blob/main/docs/USING_AGENTS.md)           | Agent usage guide          |
+| [Using Commands](https://github.com/89jobrien/steve/blob/main/docs/USING_COMMANDS.md)       | Command usage guide        |
+| [Using Skills](https://github.com/89jobrien/steve/blob/main/docs/USING_SKILLS.md)           | Skill usage guide          |
+| [Using Hooks](https://github.com/89jobrien/steve/blob/main/docs/USING_HOOKS.md)             | Hook usage guide           |
+| [Contributing](https://github.com/89jobrien/steve/blob/main/docs/CONTRIBUTING.md)           | Contribution guidelines    |
+| [Scripts Reference](https://github.com/89jobrien/steve/blob/main/docs/SCRIPTS_REFERENCE.md) | Script documentation       |
+| [FAQ](https://github.com/89jobrien/steve/blob/main/docs/FAQ.md)                             | Frequently asked questions |
 
 ## Repository Structure
 
@@ -267,11 +267,11 @@ description: Third-person description
 
 ## Documentation
 
-- [Getting Started](docs/GETTING_STARTED.md)
-- [Architecture](docs/ARCHITECTURE.md)
-- [Development Guide](docs/DEVELOPMENT.md)
-- [Contributing](docs/CONTRIBUTING.md)
-- [Scripts Reference](docs/SCRIPTS_REFERENCE.md)
-- [FAQ](docs/FAQ.md)
+- [Getting Started](https://github.com/89jobrien/steve/blob/main/docs/GETTING_STARTED.md)
+- [Architecture](https://github.com/89jobrien/steve/blob/main/docs/ARCHITECTURE.md)
+- [Development Guide](https://github.com/89jobrien/steve/blob/main/docs/DEVELOPMENT.md)
+- [Contributing](https://github.com/89jobrien/steve/blob/main/docs/CONTRIBUTING.md)
+- [Scripts Reference](https://github.com/89jobrien/steve/blob/main/docs/SCRIPTS_REFERENCE.md)
+- [FAQ](https://github.com/89jobrien/steve/blob/main/docs/FAQ.md)
 
 See `CLAUDE.md` for Claude Code-specific configuration and `docs/` for complete documentation.

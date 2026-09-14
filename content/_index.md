@@ -28,5 +28,5 @@ Lately that's meant building the scaffolding for agents to work inside that
 system safely — verification pipelines, drift detection, and evidence-based
 gates that catch regressions before they merge.
 
-See [projects](/projects/) for write-ups, or [the blog](/blog/) for
+See [projects](@/projects/_index.md) for write-ups, or [the blog](@/blog/_index.md) for
 longer-form notes.

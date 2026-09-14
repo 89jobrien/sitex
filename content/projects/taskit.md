@@ -32,7 +32,8 @@ taskit check quick  # fast feedback: fmt-check + lint + test (affected crates, o
 Subcommands are grouped by category: `dev` (build/install/setup), `check` (fmt/lint/CI
 gates), `test` (nextest/coverage/proptest/fuzz/bench), `health` (baselines/metrics),
 `protocol` (contract drift/TODO sync/dependency audit), `release` (version bumps/publish),
-`flow` (git branching), plus top-level `dashboard` and `init`. Run `taskit --help` or
+`flow` (git branching), `self` (taskit binary maintenance), plus top-level `dashboard` and
+`init`. Run `taskit --help` or
 `taskit <category> --help` to see each group.
 
 Add `--dry-run` to any command to print the commands that would run without executing them.
@@ -93,8 +94,8 @@ cmd  = "check-protocol-drift"
 ## Subcommands
 
 Subcommands are grouped into categories: `dev`, `check`, `test`, `health`, `protocol`,
-`release`, `flow`, plus top-level `dashboard` and `init`. Run `taskit <category> --help`
-for the full flag list of any group.
+`release`, `flow`, and `self`, plus top-level `dashboard` and `init`. Run
+`taskit <category> --help` for the full flag list of any group.
 
 ### `dev` — build, install, workspace setup
 
@@ -171,6 +172,14 @@ for the full flag list of any group.
 | `flow guard`   | Assert branch invariants                                                                                                                         |
 | `flow auto`    | Full promote -> CI -> finish pipeline with LLM conflict resolution (BamlConflictResolver / BAML); escalates to human via `FlowError::NeedsHuman` |
 
+### `self` — taskit binary maintenance
+
+| Command        | Description                                         |
+| -------------- | --------------------------------------------------- |
+| `self install` | Install the taskit binary from the current checkout |
+| `self test`    | Run taskit's hash-cached test suite                 |
+| `self check`   | Verify taskit's required tools are installed        |
+
 ### top-level
 
 | Command                          | Description                                          |
@@ -198,4 +207,4 @@ will fail CI until the lockfile is updated and committed.
 
 ## License
 
-Licensed under either of [MIT](LICENSE-MIT) or [Apache 2.0](LICENSE-APACHE) at your option.
+Licensed under either of [MIT](https://github.com/89jobrien/taskit/blob/main/LICENSE-MIT) or [Apache 2.0](https://github.com/89jobrien/taskit/blob/main/LICENSE-APACHE) at your option.

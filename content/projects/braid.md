@@ -37,9 +37,9 @@ Rust-first workspace for the Braid personal agent platform.
 
 ## Docs
 
-- [Planning Docs](./docs/planning/README.md)
-- [Workspace Overview](./docs/architecture/workspace-overview.md)
-- [Braid](./docs/planning/Braid.md)
-- [Braid - Rust Workspace Blueprint](./docs/planning/Braid%20-%20Rust%20Workspace%20Blueprint.md)
-- [Braid - Rust Workspace Spec](./docs/planning/Braid%20-%20Rust%20Workspace%20Spec.md)
-- [Braid - Crate Implementation Checklist](./docs/planning/Braid%20-%20Crate%20Implementation%20Checklist.md)
+- [Planning Docs](https://github.com/89jobrien/braid/blob/main/docs/planning/README.md)
+- [Workspace Overview](https://github.com/89jobrien/braid/blob/main/docs/architecture/workspace-overview.md)
+- [Braid](https://github.com/89jobrien/braid/blob/main/docs/planning/Braid.md)
+- [Braid - Rust Workspace Blueprint](https://github.com/89jobrien/braid/blob/main/docs/planning/Braid%20-%20Rust%20Workspace%20Blueprint.md)
+- [Braid - Rust Workspace Spec](https://github.com/89jobrien/braid/blob/main/docs/planning/Braid%20-%20Rust%20Workspace%20Spec.md)
+- [Braid - Crate Implementation Checklist](https://github.com/89jobrien/braid/blob/main/docs/planning/Braid%20-%20Crate%20Implementation%20Checklist.md)

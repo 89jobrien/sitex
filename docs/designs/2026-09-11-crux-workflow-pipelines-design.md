@@ -1,5 +1,8 @@
 # Design: Standalone Crux Workflow Pipelines
 
+> **Status (2026-09-12): Planned.** Current main has only `scripts/format.crux` and
+> `scripts/lint.crux`; `Cruxfile` still owns check, build, serve, and CI composition.
+
 ## Goal
 
 Give every `Cruxfile` workflow target a dedicated, independently runnable `.crux` pipeline while preserving the existing site commands and execution order.

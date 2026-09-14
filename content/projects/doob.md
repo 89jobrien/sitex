@@ -58,51 +58,23 @@ doob todo remove <id>
 doob todo remove <id1> <id2>
 ```
 
-## Sync to External Issue Trackers
+## Current CLI Surface
 
-**Status:** Foundation Complete (Phase 1 & 2) ✅
+| Command        | Purpose                                                 |
+| -------------- | ------------------------------------------------------- |
+| `doob todo`    | Manage todos, dependencies, status, and GitHub sync     |
+| `doob note`    | Manage notes                                            |
+| `doob kan`     | Display the todo kanban board                           |
+| `doob search`  | Search todos and notes                                  |
+| `doob stats`   | Show todo analytics                                     |
+| `doob archive` | Archive completed or cancelled todos                    |
+| `doob handoff` | Synchronize doob state with repository handoff files    |
+| `doob tui`     | Launch the interactive doobdash dashboard               |
+| `doob watch`   | Display a live-updating kanban board                    |
+| `doob schema`  | Print the machine-readable command and parameter schema |
 
-Sync your doob todos to external issue trackers using a plugin architecture.
-
-### Supported Providers
-
-- ✅ **GitHub Issues** (`doob todo gh-sync`) - Complete
-- 🚧 **Jira** - Planned
-- 🚧 **Linear** - Planned
-- 🚧 **kan** - Planned
-
-### Architecture
-
-Built with hexagonal architecture:
-
-- **Domain Layer** - Business logic, validation, error handling
-- **Ports** - `IssueTracker` trait interface
-- **Adapters** - Provider-specific implementations (CLI delegation)
-- **Tests** - 19 unit/integration tests (100% passing)
-
-### Documentation
-
-- [Testing Guide](docs/sync/testing.md)
-
-### Roadmap
-
-**Phase 3: Metadata & Repository** (Next)
-
-- SurrealDB repository for sync metadata
-- Track external IDs, sync timestamps, errors
-- Multi-provider support per todo
-
-**Phase 4: CLI Commands**
-
-- `doob sync status` - Show sync status
-- `doob sync providers` - List available providers
-
-**Phase 5+: Additional Providers**
-
-- GitHub Issues adapter
-- Jira adapter
-- Linear adapter
-- kan adapter
+`doob todo gh-sync` previews GitHub issue synchronization by default and applies it with
+`--execute`. `doob handoff` separately synchronizes repository handoff files with doob state.
 
 ## Agent Integration
 

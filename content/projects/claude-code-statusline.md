@@ -130,7 +130,7 @@ cargo test
 2. Make changes and run tests
 3. Submit a pull request
 
-See [CLAUDE.md](CLAUDE.md) for architecture details and development commands.
+See [CLAUDE.md](https://github.com/89jobrien/claude-code-statusline/blob/main/CLAUDE.md) for architecture details and development commands.
 
 ## Inspirations
 
@@ -139,4 +139,4 @@ See [CLAUDE.md](CLAUDE.md) for architecture details and development commands.
 
 ## License
 
-[MIT License](LICENSE)
+[MIT License](https://github.com/89jobrien/claude-code-statusline/blob/main/LICENSE)

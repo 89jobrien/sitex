@@ -1,5 +1,10 @@
 # Design: Private Blog Idea Backlog
 
+> **Status (2026-09-12):** Implemented with one operational change: `ideas/` is now a
+> local, gitignored workspace rather than a Git-versioned queue. Published posts live under
+> `content/blog/`; local pitch history may remain under `ideas/published/`. The original 12
+> pitches were expanded into published posts and removed from the active queue.
+
 ## Goal
 
 Create a private, searchable editorial queue of 12 strong blog pitches that turns project-specific experience and broader engineering judgment into publishable posts for a mixed technical and non-technical audience.
@@ -10,9 +15,9 @@ Use the approved **Curated Pitch Queue** approach: each idea is an independent z
 
 ## Context Map
 
-### Files to Modify
+### Planned Files
 
-| File                    | Purpose                | Changes Needed                                                        |
+| File                    | Purpose                | Planned Change                                                        |
 | ----------------------- | ---------------------- | --------------------------------------------------------------------- |
 | `.zk/config.toml`       | zk groups and aliases  | Add the `ideas` group plus `new-idea` and `list-ideas` aliases.       |
 | `.zk/templates/idea.md` | Idea-note template     | Define the pitch-card metadata and required editorial sections.       |
@@ -58,7 +63,7 @@ There is no automated test suite in this repository. These command-level checks 
 - [x] No public Rust API, serialization format, or crate dependency changes.
 - [x] No circular dependency: zk indexes the notes, while Zola never reads them.
 - [x] Custom frontmatter is available through zk's `metadata` object, matching the existing project-note pattern.
-- [x] "Private" means excluded from publication, not secret or unversioned; idea notes remain committed to Git.
+- [x] "Private" means excluded from publication, not confidential; idea notes are local and gitignored.
 
 ## Repository Ownership
 
@@ -120,8 +125,8 @@ Every note body contains these sections in this order:
 - A new idea enters only after an active idea is published or removed from the queue.
 - `seed` may advance to `researching`; `researching` may advance to `ready`; `ready` may advance to `published`.
 - Publishing creates a normal post through `zk new-post`; it does not move or copy the pitch body automatically.
-- A published pitch moves from `ideas/queue/` to `ideas/published/` and retains `status: published` as editorial history.
-- Removing an abandoned pitch deletes it from the active tree; Git history remains the archive.
+- A published pitch leaves `ideas/queue/` and may move to `ideas/published/` with `status: published` when local editorial history is useful.
+- Removing an abandoned pitch deletes it from the local active tree; Git is not an archive for `ideas/`.
 - Metadata changes and lifecycle transitions are manual. No command enforces capacity or state transitions.
 
 ## Initial Queue
@@ -149,7 +154,7 @@ The first queue contains six project case studies, four broader engineering essa
 2. **Develop**: the writer edits pitch sections and manually updates status, priority, theme, and effort as evidence improves.
 3. **Review**: `zk list-ideas` discovers active notes and exposes their editorial metadata for queue review.
 4. **Promote**: a ready pitch creates a separate post through the existing `zk new-post` flow under `content/blog/`.
-5. **Retain**: the source pitch moves to `ideas/published/` with `status: published`.
+5. **Retain**: optionally move the source pitch to `ideas/published/` with `status: published`.
 6. **Publish**: Zola reads `content/blog/` and ignores `ideas/`, preserving the publication boundary.
 
 ## Hexagonal Boundaries
@@ -172,16 +177,16 @@ No application-level port or adapter is introduced because this is a declarative
 - Zola template, Sass, navigation, deployment, or GitHub Actions changes.
 - Synchronization with bazaar or `89jobrien.github.io`.
 - Retrofitting existing posts into pitch notes.
-- Treating the committed queue as suitable for secrets or confidential client material.
+- Treating the local queue as suitable for secrets or confidential client material.
 
-## Acceptance Criteria
+## Implemented Outcome
 
 - The ideas group creates correctly structured YAML-frontmatter notes under `ideas/queue/`.
-- The initial active queue contains exactly 12 complete pitch cards in the approved 6/4/2 mix.
-- Every card includes all six required body sections and concrete evidence sources.
-- `zk list-ideas` displays every active pitch with priority and status.
+- The original 12 pitch cards were expanded into posts under `content/blog/` and removed from
+  the active queue.
+- `zk list-ideas` displays any active local pitches with priority and status.
 - A normal `zola build` succeeds and emits no route or file for `ideas/`.
-- Existing blog content, templates, and deployment behavior remain unchanged.
+- The public posts preserve the six-section pitch evidence as full narrative articles.
 
 ## Risk Summary
 
