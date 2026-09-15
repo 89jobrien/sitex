@@ -1,5 +1,28 @@
 # Design: Related Content Graph
 
+> **Status (2026-09-12): Implemented** on `feat/related-content-graph`. The graph generator,
+> committed artifacts, server-rendered discovery, browser enhancement, and CI freshness gates
+> are complete.
+
+## Contents
+
+- [Goal](#goal)
+- [Approved Approach](#approved-approach)
+- [Context Map](#context-map)
+- [Ownership And Boundaries](#ownership-and-boundaries)
+- [Content Contract](#content-contract)
+- [Manifest Schema](#manifest-schema)
+- [Module API](#module-api)
+- [Relationship Semantics](#relationship-semantics)
+- [Link Resolution](#link-resolution)
+- [User Experience](#user-experience)
+- [Data Flow](#data-flow)
+- [Dependencies](#dependencies)
+- [Validation And Tests](#validation-and-tests)
+- [Rollout](#rollout)
+- [Out Of Scope](#out-of-scope)
+- [Risk](#risk)
+
 ## Goal
 
 Add one shared relationship model that powers related-content cards, incoming backlinks, tag browsing, and an interactive graph across project and blog pages.
@@ -39,7 +62,7 @@ Use a pinned JavaScript build step, with Bun as the package manager and task run
 | `templates/base.html`                   | Site navigation                    | Add graph and tag discovery links and load graph JavaScript only on the graph page.                        |
 | `sass/style.scss`                       | Presentation                       | Style cards, backlinks, tags, graph controls, SVG states, and mobile fallback.                             |
 | `Cruxfile`                              | Local quality orchestration        | Run graph tests and freshness checks before Zola checks and builds.                                        |
-| `scripts/lint.crux`                     | Content lint pipeline              | Include graph validation in the existing lint target.                                                      |
+| `scripts/lint.crux`                     | Content lint pipeline              | Keep Markdown linting separate from the Crux `graph` target.                                               |
 | `.github/workflows/deploy.yml`          | Deployment gate                    | Use Zola `0.23.3`, install pinned dependencies with Bun, and verify generated artifacts before deployment. |
 | `.github/workflows/ci.yml`              | Pull-request gate                  | Run graph tests, freshness checks, `zola check`, and `zola build`.                                         |
 
@@ -56,7 +79,8 @@ Use a pinned JavaScript build step, with Bun as the package manager and task run
 
 ### Existing Test Coverage
 
-There is no automated graph, template, or browser test suite. The current checks are Markdown linting, `zola check`, and `zola build`. This feature adds focused Node tests and keeps Zola as the final integration gate.
+The implementation has 20 Node tests covering graph-domain, generator, and browser behavior,
+plus Markdown linting, generated-artifact freshness, `zola check`, and `zola build` gates.
 
 ### Reference Patterns
 
@@ -70,10 +94,11 @@ There is no automated graph, template, or browser test suite. The current checks
 
 ## Ownership And Boundaries
 
-This repository has no Rust crate or `Cargo.toml`. The feature is owned by three JavaScript modules with distinct responsibilities:
+This repository has no Rust crate or `Cargo.toml`. The feature is owned by four JavaScript modules with distinct responsibilities:
 
 - `core.mjs` is the pure domain and sole owner of relationship semantics, graph validation, backlink derivation, and related-card ranking.
 - `generate.mjs` is the build adapter for filesystem access, YAML parsing, Markdown parsing, artifact writing, and freshness comparison.
+- `bundle.mjs` is the build adapter that bundles the browser module and checks committed bundle freshness.
 - `ui.mjs` is the browser adapter. It renders the manifest but never infers, ranks, or mutates relationships.
 
 Tera templates are presentation adapters. They consume precomputed node views and must not reimplement relationship rules.
@@ -159,10 +184,10 @@ The manifest contains no generation timestamp or repository source paths. Source
 
 ## Module API
 
-The graph package exports only the functions needed by the CLI and tests:
+The graph modules export the functions used by their CLIs, browser entry point, and tests:
 
 ```ts
-function normalizeDocument(input: ParsedDocument): ContentDocument;
+function normalizeDocument(input: ParsedDocument): ContentDocument | null;
 function buildContentGraph(documents: ContentDocument[]): ContentGraph;
 function validateContentGraph(graph: ContentGraph): ValidationIssue[];
 function rankRelated(
@@ -171,11 +196,26 @@ function rankRelated(
   limit: number,
 ): RelatedNode[];
 function serializeContentGraph(graph: ContentGraph): string;
+function extractGraphLinks(body: string, sourcePath: string): string[];
 async function generateContentGraph(
-  options: GenerateOptions,
+  options?: GenerateOptions,
 ): Promise<ContentGraph>;
-async function writeContentGraph(options: GenerateOptions): Promise<void>;
-async function checkContentGraph(options: GenerateOptions): Promise<void>;
+async function writeContentGraph(options?: GenerateOptions): Promise<void>;
+async function checkContentGraph(options?: GenerateOptions): Promise<void>;
+async function buildContentGraphBundle(): Promise<Buffer>;
+async function writeContentGraphBundle(): Promise<void>;
+async function checkContentGraphBundle(): Promise<void>;
+const DEFAULT_EDGE_KINDS: readonly ["explicit", "link"];
+function validateContentGraphManifest(graph: unknown): ContentGraph;
+function readFilterState(root: Element): FilterState;
+function filterGraph(
+  graph: ContentGraph,
+  state: FilterState,
+): { nodes: ContentNode[]; edges: ContentEdge[] };
+async function initializeContentGraph(
+  root: Element,
+  adapters?: BrowserAdapters,
+): Promise<boolean>;
 ```
 
 The CLI exposes data-only scripts during metadata work and composed top-level scripts once the browser bundle exists:
@@ -218,11 +258,14 @@ Sections with no entries are omitted.
 
 ### Tag Pages
 
-Zola taxonomies create the tag routes, while taxonomy templates filter precomputed manifest nodes by the current term. The tags index lists all normalized tags, and each tag page lists matching projects and posts using the existing card language, providing a server-rendered discovery path independent of JavaScript.
+Zola taxonomies create the tag routes. Taxonomy templates render Zola's `terms` and
+`term.pages` directly; they do not consume the graph manifest. The result is a server-rendered
+discovery path independent of JavaScript.
 
 ### Graph Page
 
-`/graph/` initially renders a complete searchable relationship list. JavaScript progressively enhances it into an SVG graph with:
+`/graph/` initially renders a complete relationship list. JavaScript adds list filtering and
+progressively enhances the page into an SVG graph with:
 
 - Text search.
 - Project and post filters.
@@ -240,7 +283,7 @@ Explicit and link edges are enabled initially; tag edges are opt-in. On narrow v
 2. `generate.mjs` parses the Markdown into normalized content documents.
 3. `core.mjs` validates IDs, derives evidence, combines pairwise edges, computes backlinks, and ranks related nodes.
 4. Canonical serialization writes one committed manifest; the browser source is bundled into one committed script.
-5. Zola loads the manifest to render detail-page relationships, taxonomies, and the graph fallback.
+5. Zola loads the manifest for detail-page relationships and the graph fallback; taxonomy pages use Zola's built-in term data.
 6. The browser module loads the same manifest URL through a base-path-safe value rendered by Zola and enhances the graph page.
 7. Crux and GitHub Actions regenerate in check mode before Zola validation, rejecting stale or invalid artifacts.
 
@@ -260,7 +303,7 @@ Tests use Node's built-in test runner. External parser and visualization librari
 
 ## Validation And Tests
 
-Generation fails for duplicate IDs, unknown curated targets, self-relations, malformed or duplicate tags, unsupported route overrides, ambiguous content links, and unresolved content-shaped links.
+Generation fails for duplicate IDs, unknown curated targets, self-relations, malformed or duplicate tags, unsupported route overrides, and unresolved content-shaped links.
 
 Tests cover:
 
@@ -280,15 +323,10 @@ Tests cover:
 
 ## Rollout
 
-The feature ships as one release, but implementation proceeds through one dependency chain:
-
-1. Establish the package contract, pure domain, fixtures, and generator tests.
-2. Add tags and curated relationships to existing projects and posts.
-3. Generate and validate the first manifest.
-4. Add server-rendered cards, backlinks, and tag pages.
-5. Add the accessible graph fallback and browser enhancement.
-6. Add Crux and GitHub Actions freshness gates.
-7. Verify direct `zola serve`, no-JavaScript rendering, narrow layouts, and deployment under the `/sitex` base path.
+The completed dependency chain established the package contract and tests, migrated content
+metadata, generated the manifest and browser bundle, added server-rendered relationships and
+taxonomy routes, implemented the accessible graph enhancement, and finished with Crux and
+GitHub Actions freshness gates.
 
 ## Out Of Scope
 
@@ -306,7 +344,7 @@ The feature ships as one release, but implementation proceeds through one depend
 - [ ] Breaking public API changes: no; this repository exposes static pages rather than a library API.
 - [x] New external dependencies: yes; pinned Markdown/YAML parsing, graph visualization, bundling, formatting, and lint packages.
 - [ ] Feature flag required: no; JavaScript enhancement fails open to server-rendered content.
-- [x] Large content migration: existing projects and posts need an editorial metadata pass before the graph is useful.
+- [x] Large content migration: the completed editorial pass added relationship metadata to existing projects and posts.
 - [x] Generated-artifact drift: check mode and CI byte comparison prevent stale manifests and bundles from shipping.
-- [x] Tera compatibility: a minimal manifest lookup fixture must pass with Zola `0.23.3` before broad template integration.
+- [x] Tera compatibility: manifest lookup and relationship includes pass with Zola `0.23.3`.
 - [x] Graph density: tag thresholds, top-four cards, edge toggles, and list-first mobile rendering limit noise.

@@ -27,10 +27,15 @@ bun run graph:data:write  # regenerate static/data/content-graph.json only
 bun run graph:data:check  # check manifest freshness
 bun run graph:write       # regenerate manifest and browser bundle
 bun run graph:check       # check both committed graph artifacts
+bun run verify            # format, lint, tests, graph freshness, Zola check/build
+crux run Cruxfile graph   # graph tests and generated-artifact freshness
+crux run Cruxfile check   # graph gates followed by Zola checks
+crux run Cruxfile build   # check followed by Zola build
+crux run Cruxfile ci      # lint plus the complete build chain
 zk new-project --title "Some Project"   # creates content/projects/<slug>.md
 zk new-post --title "Some Post"         # creates content/blog/<slug>.md
 zk list-projects          # list notes in content/projects (excludes _index.md)
-zk list-posts             # list notes in content/blog, sorted by date desc
+zk list-posts             # list notes in content/blog, sorted by zk creation time desc
 zk new-idea --title "Some Idea"       # creates ideas/queue/some-idea.md
 zk list-ideas                          # list active pitches with priority and status
 ```
@@ -82,11 +87,13 @@ zk list-ideas                          # list active pitches with priority and s
   artifacts. Run the `graph:data:*` commands for manifest-only work and `graph:write` or
   `graph:check` when validating both artifacts. Bun `1.3.10` is the package manager and task
   runner; Zola `0.23.3` builds the site. Versions are pinned in `.mise.toml`.
+- Node `22.22.1` executes the graph scripts. Bun `1.3.10` owns dependency installation and
+  task composition; both versions are pinned with Zola in `.mise.toml` and CI.
 - `/tags/` provides taxonomy browsing. `/graph/` starts with a complete server-rendered content
   list and progressively adds filters and an SVG graph. If the manifest request or enhancement
   fails, the list remains available and the SVG is left empty.
-- `templates/base.html` is the shared shell (nav, footer); all other templates `{% extends %}`
-  it and override the `title`/`content` blocks.
+- `templates/base.html` is the shared shell (nav, footer); page templates extend it and override
+  blocks as needed. `templates/partials/relationships.html` is included by detail templates.
 - `config.toml` sets `base_url` to the GitHub Pages `/sitex` deployment URL; keep generated
   links prefix-safe with Zola's `get_url` helpers.
 </architecture>
@@ -95,6 +102,6 @@ zk list-ideas                          # list active pitches with priority and s
 
 <deployment>
 `.github/workflows/deploy.yml` builds with Zola and publishes to GitHub Pages via
-`actions/deploy-pages` on push to `main`. Requires the repo's Pages source set to "GitHub
-Actions" in GitHub settings.
+`actions/deploy-pages` on push to `main` only when `PAGES_ENABLED` is `true`. The repo's Pages
+source must be set to "GitHub Actions". Manual dispatch uses the same deployment gate.
 </deployment>

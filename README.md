@@ -6,6 +6,14 @@ as plain markdown with YAML frontmatter — zk manages it as notes (search, link
 tags), Zola builds it as pages. Kept intentionally separate from
 `89jobrien.github.io`, which is generated output from the `bazaar` repo.
 
+## Requirements
+
+- Node `22.22.1`, Bun `1.3.10`, and Zola `0.23.3`, pinned in `.mise.toml`.
+- zk for note creation and listing.
+- Crux for repository workflow targets.
+
+Install JavaScript dependencies with `bun install --frozen-lockfile`.
+
 ## Writing
 
 ```text
@@ -66,8 +74,17 @@ server-rendered with a complete content list; JavaScript adds filtering and an S
 the manifest cannot load or enhancement fails, the list remains available and no SVG is
 shown.
 
-The pinned tools are Bun `1.3.10` and Zola `0.23.3` (see `.mise.toml`). Install JavaScript
-dependencies with `bun install --frozen-lockfile`.
+The pinned tools are Node `22.22.1`, Bun `1.3.10`, and Zola `0.23.3`.
+
+## Verification
+
+```text
+bun run verify              # format, lint, tests, graph freshness, and Zola gates
+crux run Cruxfile graph     # graph tests and generated-artifact freshness
+crux run Cruxfile check     # graph gates followed by zola check
+crux run Cruxfile build     # check followed by zola build
+crux run Cruxfile ci        # lint plus the complete build chain
+```
 
 ## Preview
 
@@ -85,5 +102,6 @@ zola build   # outputs to public/
 ## Deploy
 
 `.github/workflows/deploy.yml` builds with Zola and publishes to GitHub Pages
-on push to `main`. Requires GitHub Pages set to "GitHub Actions" as the source
-in repo settings, and `base_url` in `config.toml` updated to the real domain.
+on push to `main`. Deployment runs only when the repository variable `PAGES_ENABLED` is
+`true` and Pages uses "GitHub Actions" as its source. Manual dispatch uses the same gate.
+The deployed base URL is already configured in `config.toml`.
