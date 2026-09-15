@@ -6,7 +6,8 @@ steps:
     handler: shell::capture
     args:
       # templates/*.html excluded: prettier's HTML parser can't parse Tera syntax ({{ }}, {% %})
-      cmd: "prettier --write 'content/**/*.md' 'sass/**/*.scss'"
+      # .zk/templates/*.md stays excluded because Prettier corrupts zk template expressions.
+      cmd: "npx --no-install prettier --no-error-on-unmatched-pattern --write README.md CLAUDE.md 'content/**/*.md' 'docs/**/*.md' 'ideas/**/*.md' 'sass/**/*.scss'"
 
   - step: log_result
     handler: ctrl::log

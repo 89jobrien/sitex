@@ -1,0 +1,11 @@
+pipeline: build
+budget: { calls: 4 }
+
+steps:
+  - step: isolated_site_build
+    handler: shell::capture
+    args: { cmd: "sh scripts/build-site.sh" }
+
+  - step: log_result
+    handler: ctrl::log
+    args: { field: stdout, compact: true }

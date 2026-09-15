@@ -1,0 +1,31 @@
+pipeline: check
+budget: { calls: 10 }
+
+steps:
+  - step: workflow_contracts
+    handler: shell::capture
+    args: { cmd: "sh scripts/test-workflow-contract.sh" }
+
+  - step: workflow_plans
+    handler: shell::capture
+    args: { cmd: "sh scripts/check-workflows.sh" }
+
+  - step: zk_template_contracts
+    handler: shell::capture
+    args: { cmd: "sh scripts/check-zk-templates.sh" }
+
+  - step: fail_fast_contract
+    handler: shell::capture
+    args: { cmd: "sh scripts/check-fail-fast.sh" }
+
+  - step: zola_content
+    handler: shell::capture
+    args: { cmd: "zola check --skip-external-links" }
+
+  - step: external_links
+    handler: shell::capture
+    args: { cmd: "sh scripts/check-external-links.sh" }
+
+  - step: log_result
+    handler: ctrl::log
+    args: { field: stdout, compact: true }

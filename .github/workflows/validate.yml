@@ -1,0 +1,39 @@
+name: Validate
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Zola
+        uses: taiki-e/install-action@v2
+        with:
+          tool: zola@0.19.2
+      - name: Install lychee
+        uses: taiki-e/install-action@v2
+        with:
+          tool: lychee@0.24.2
+      - name: Install Crux
+        run: >-
+          cargo install --git https://github.com/89jobrien/crux.git
+          --rev 8d54a65df7696ec01b1ef27a5c0972422020efc1
+          --package crux-agentic --locked
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install quality tools
+        run: npm install --ignore-scripts
+      - name: Run non-mutating quality gates
+        run: crux run Cruxfile ci

@@ -30,10 +30,11 @@ zk list-posts             # list notes in content/blog, sorted by zk creation ti
 zk new-idea --title "Some Idea"       # creates ideas/queue/some-idea.md
 zk list-ideas                          # list active pitches with priority and status
 crux run Cruxfile format  # rewrite content Markdown and Sass with Prettier
-crux run Cruxfile lint    # lint content Markdown
-crux run Cruxfile check   # run Zola checks, including external links
-crux run Cruxfile build   # check, format, lint, then build
-crux run Cruxfile ci      # default aggregate target; includes mutating format
+crux run Cruxfile format-check # non-mutating Prettier check
+crux run Cruxfile lint    # non-mutating repository Markdown lint
+crux run Cruxfile check   # workflow, zk, fail-fast, Zola, and external-link checks
+crux run Cruxfile build   # isolated build and prefix-safe output smoke checks
+crux run Cruxfile ci      # non-mutating aggregate; each quality gate runs once
 ```
 
 `zk` aliases are defined in `.zk/config.toml` under `[alias]`.
@@ -64,9 +65,15 @@ crux run Cruxfile ci      # default aggregate target; includes mutating format
   (`projects.html`/`project.html` vs `blog.html`/`post.html`).
 - `templates/base.html` is the shared shell (nav, footer); all other templates `{% extends %}`
   it and override blocks as needed.
-- `Cruxfile` owns check, build, serve, and CI composition. `scripts/format.crux` and
-  `scripts/lint.crux` are the only standalone pipelines currently implemented; the broader
-  standalone-pipeline design remains planned.
+- `scripts/*.crux` owns executable workflow behavior; `Cruxfile` is a thin dispatcher. CI
+  composes format-check, lint, check, and isolated build once each. Mutating format remains an
+  explicit local target outside CI. Repository Markdown scope includes the root docs,
+  `content/**/*.md`, `docs/**/*.md`, and `ideas/**/*.md`; `.zk/templates/*.md` remains excluded
+  from Prettier and is checked by `scripts/check-zk-templates.sh` instead.
+- Tested workflow versions are Zola `0.19.2`, zk `0.15.6` or newer, Rust `1.89` or newer,
+  `crux-agentic` `0.3.1` at revision `8d54a65`, lychee `0.24.2`, Node.js `22` or newer, Prettier `3.8.3`, and
+  `markdownlint-cli2` `0.22.0`. Use `npm install --ignore-scripts` for the exact top-level Node tools. Zola
+  validates local content without network access; lychee owns bounded concurrent HTTP(S) checks.
 - `config.toml` enables the Atom feed at `atom.xml`.
 - `config.toml` sets the deployed base URL to `https://89jobrien.github.io/sitex`.
 </architecture>
@@ -74,8 +81,9 @@ crux run Cruxfile ci      # default aggregate target; includes mutating format
 ## Deployment
 
 <deployment>
-`.github/workflows/deploy.yml` builds with Zola on pushes to `main`. The deploy job runs via
-`actions/deploy-pages` only when the repository variable `PAGES_ENABLED` is `true`; the repo's
-Pages source must also be set to "GitHub Actions". Manual dispatch runs the same gated workflow.
-The workflow pins Zola `0.19.2`; local changes must remain compatible with that version.
+`.github/workflows/validate.yml` is the non-mutating pull-request quality adapter.
+`.github/workflows/deploy.yml` is the separate production adapter and builds with Zola on pushes
+to `main`. Its deploy job runs via `actions/deploy-pages` only when the repository variable
+`PAGES_ENABLED` is `true`; the repo's Pages source must also be set to "GitHub Actions". Manual
+dispatch uses the same deployment gate. Both workflows pin Zola `0.19.2`.
 </deployment>

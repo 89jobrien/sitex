@@ -1,0 +1,23 @@
+pipeline: ci
+budget: { calls: 8 }
+
+steps:
+  - step: format_check
+    handler: shell::capture
+    args: { cmd: "crux run scripts/format-check.crux" }
+
+  - step: markdown_lint
+    handler: shell::capture
+    args: { cmd: "crux run scripts/lint.crux" }
+
+  - step: repository_checks
+    handler: shell::capture
+    args: { cmd: "crux run scripts/check.crux" }
+
+  - step: site_build
+    handler: shell::capture
+    args: { cmd: "crux run scripts/build.crux" }
+
+  - step: log_result
+    handler: ctrl::log
+    args: { field: stdout, compact: true }

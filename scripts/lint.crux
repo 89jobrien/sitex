@@ -5,7 +5,7 @@ steps:
   - step: markdownlint_check
     handler: shell::capture
     args:
-      cmd: "markdownlint-cli2 'content/**/*.md'"
+      cmd: "npx --no-install markdownlint-cli2 README.md CLAUDE.md 'content/**/*.md' 'docs/**/*.md' 'ideas/**/*.md'"
 
   - step: log_result
     handler: ctrl::log

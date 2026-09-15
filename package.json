@@ -1,0 +1,11 @@
+{
+  "name": "sitex-quality-tools",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "0.22.0",
+    "prettier": "3.8.3"
+  }
+}
