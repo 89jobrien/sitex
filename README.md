@@ -8,13 +8,24 @@ tags), Zola builds it as pages. Kept intentionally separate from
 
 ## Requirements
 
-- Zola; GitHub Actions pins `0.19.2`, so local changes must remain compatible with that version.
-- zk for note creation and listing.
-- Crux for the repository workflow targets.
-- Prettier and `markdownlint-cli2` for formatting and Markdown checks.
+- Zola `0.19.2`, matching validation and deployment.
+- zk `0.15.6` or newer for note creation and listing.
+- Rust `1.89` or newer and `crux-agentic` `0.3.1` for the `crux` workflow runner.
+- lychee `0.24.2` for concurrent external-link validation.
+- Node.js `22` or newer; `npm install --ignore-scripts` installs exact top-level Prettier and
+  `markdownlint-cli2` versions from `package.json`.
 
-The repository does not pin local zk, Crux, Prettier, or markdownlint versions; it uses the
-compatible executables available on `PATH`.
+Bootstrap the repository-owned tools with:
+
+```text
+cargo install --git https://github.com/89jobrien/crux.git --rev 8d54a65df7696ec01b1ef27a5c0972422020efc1 --package crux-agentic --locked
+cargo install lychee --version 0.24.2 --locked
+npm install --ignore-scripts
+```
+
+Install Zola `0.19.2` from its release artifacts. GitHub Actions uses
+`taiki-e/install-action` for the same version. zk is editorial tooling and is not needed to
+build the site; CI checks its templates directly.
 
 ## Writing
 
@@ -47,22 +58,34 @@ zola serve --open   # same, and opens it in your default browser
 ## Build
 
 ```text
-zola build   # outputs to public/
+zola build                       # persistent local output in public/
+crux run Cruxfile build          # isolated disposable build plus smoke checks
 ```
 
 ## Quality Workflows
 
 ```text
-crux run Cruxfile format   # rewrites content Markdown and Sass with Prettier
-crux run Cruxfile lint     # checks content/**/*.md with markdownlint-cli2
-crux run Cruxfile check    # runs zola check, including external links
-crux run Cruxfile build    # check, format, lint, then zola build
-crux run Cruxfile ci       # default aggregate target; also runs the mutating format step
+crux run Cruxfile format        # explicitly rewrites repository Markdown and Sass
+crux run Cruxfile format-check  # checks formatting without writing files
+crux run Cruxfile lint          # checks repository Markdown without writing files
+crux run Cruxfile check         # checks workflow, zk, fail-fast, Zola, and external links
+crux run Cruxfile build         # isolated Zola build followed by site smoke checks
+crux run Cruxfile ci            # non-mutating aggregate; runs each gate exactly once
 ```
 
-`crux run Cruxfile serve` starts the long-running preview server and opens a browser. The
-standalone pipeline design in `docs/designs/2026-09-11-crux-workflow-pipelines-design.md`
-is planned work; only format and lint currently have dedicated files under `scripts/`.
+Formatting and linting cover `README.md`, `CLAUDE.md`, `content/**/*.md`, `docs/**/*.md`, and
+`ideas/**/*.md`; formatting also covers `sass/**/*.scss`. `.zk/templates/*.md` is deliberately
+excluded from Prettier because rewriting its template expressions breaks zk. The check target
+validates every `.crux` file and Cruxfile target plan, all four zk templates, disposable
+fail-fast propagation, Zola content, and external links. Zola checks site-local content without
+network access; lychee checks HTTP(S) links concurrently with bounded timeouts. If a slot-provided
+editorial checker exists under a supported `scripts/check-editorial*` name, the zk wrapper invokes
+it too.
+
+`crux run Cruxfile build` writes to a temporary directory, verifies prefix-safe project/blog
+links, representative project and post pages, and `atom.xml`, then removes the output.
+`crux run Cruxfile serve` remains a long-running local-only target. Executable workflow
+ownership lives in the standalone pipelines under `scripts/`; `Cruxfile` is only a dispatcher.
 
 Zola also generates an Atom feed at `atom.xml` under the configured base URL.
 
@@ -73,8 +96,8 @@ Zola also generates an Atom feed at `atom.xml` under the configured base URL.
 
 ## Deploy
 
-`.github/workflows/deploy.yml` builds with Zola on pushes to `main`. It publishes to
-GitHub Pages only when the repository variable `PAGES_ENABLED` is set to `true` and Pages
-uses "GitHub Actions" as its source. The workflow also supports manual dispatch, with the
-same deployment gate. CI installs Zola `0.19.2`; the deployed base URL is configured in
-`config.toml`.
+`.github/workflows/validate.yml` is the pull-request quality adapter and runs the non-mutating
+`ci` target with pinned tools. `.github/workflows/deploy.yml` is a separate production adapter:
+it builds on pushes to `main` or manual dispatch, but publishes to GitHub Pages only when the
+repository variable `PAGES_ENABLED` is `true` and Pages uses "GitHub Actions" as its source.
+Both workflows pin Zola `0.19.2`; the deployed base URL is configured in `config.toml`.

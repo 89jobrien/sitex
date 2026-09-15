@@ -1,0 +1,7 @@
+pipeline: serve
+budget: { calls: 2 }
+
+steps:
+  - step: zola_serve_open
+    handler: shell::exec
+    args: { cmd: "zola serve --open" }
