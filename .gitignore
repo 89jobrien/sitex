@@ -3,4 +3,8 @@ public/
 .DS_Store
 node_modules/
 .ctx/
-ideas/
+ideas/queue/*
+!ideas/queue/.gitkeep
+ideas/published/*
+!ideas/published/.gitkeep
+!ideas/published/published-slugs.yaml
