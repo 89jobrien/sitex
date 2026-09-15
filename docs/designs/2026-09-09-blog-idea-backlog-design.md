@@ -3,7 +3,9 @@
 > **Status (2026-09-12):** Implemented with one operational change: `ideas/` is now a
 > local, gitignored workspace rather than a Git-versioned queue. Published posts live under
 > `content/blog/`; local pitch history may remain under `ideas/published/`. The original 12
-> pitches were expanded into published posts and removed from the active queue.
+> pitches were expanded from their pitch evidence into published posts and removed from the
+> active queue. The exact-12 requirement described below is historical; the active invariant
+> is now a maximum of 12 pitches.
 
 ## Goal
 
@@ -43,7 +45,7 @@ Use the approved **Curated Pitch Queue** approach: each idea is an independent z
 | `zk list ideas/queue --format '{{metadata.priority}} [{{metadata.status}}] {{title}}'` | Custom metadata parsing and queue discovery.                  |
 | `zola build`                                                                           | Existing public site still builds successfully.               |
 | Verify no `public/ideas/` output exists                                                | Private notes remain outside the published site.              |
-| Count `ideas/queue/*.md`                                                               | Initial active queue contains exactly 12 notes.               |
+| Count `ideas/queue/*.md`                                                               | Historical initial queue contained exactly 12 notes.          |
 
 There is no automated test suite in this repository. These command-level checks are the acceptance tests for the configuration and content change.
 
@@ -67,8 +69,9 @@ There is no automated test suite in this repository. These command-level checks 
 
 ## Repository Ownership
 
-- **Owner**: `.zk/config.toml` and `.zk/templates/idea.md` own the editorial workflow contract.
-- **Content owner**: `ideas/queue/` owns active pitches; published articles continue to belong to `content/blog/`.
+- **Authoring-schema owner**: `.zk/config.toml` and `.zk/templates/idea.md` define how new pitch notes are routed and shaped.
+- **Editorial-lifecycle owner**: `scripts/editorial-check.nu`, the active queue, and `ideas/published/published-slugs.yaml` enforce capacity, active status, and promotion records.
+- **Content owner**: `ideas/queue/` holds active pitches; `ideas/published/` holds optional archived pitches, while published articles continue to belong to `content/blog/`.
 - **Affected runtime**: zk only. Zola templates, Sass, deployment, and generated site output remain unchanged.
 
 No new crate, executable, service, or external dependency is required.
@@ -101,14 +104,15 @@ effort: medium
 
 Field contracts:
 
-| Field      | Allowed values                              | Meaning                                        |
-| ---------- | ------------------------------------------- | ---------------------------------------------- |
-| `title`    | Non-empty string                            | Working article title and zk note title.       |
-| `date`     | `YYYY-MM-DD`                                | Date the idea entered the queue.               |
-| `status`   | `seed`, `researching`, `ready`, `published` | Manual editorial lifecycle.                    |
-| `priority` | `P1`, `P2`, `P3`                            | Relative editorial priority; P1 is highest.    |
-| `theme`    | Short lowercase slug                        | Primary subject used for zk search and review. |
-| `effort`   | `small`, `medium`, `large`                  | Expected research and drafting effort.         |
+| Field      | Allowed values                 | Meaning                                        |
+| ---------- | ------------------------------ | ---------------------------------------------- |
+| `title`    | Non-empty string               | Working article title and zk note title.       |
+| `date`     | `YYYY-MM-DD`                   | Date the idea entered the queue.               |
+| `status`   | `seed`, `researching`, `ready` | Active queue lifecycle.                        |
+| `status`   | `published`                    | Archived pitch lifecycle outside the queue.    |
+| `priority` | `P1`, `P2`, `P3`               | Relative editorial priority; P1 is highest.    |
+| `theme`    | Short lowercase slug           | Primary subject used for zk search and review. |
+| `effort`   | `small`, `medium`, `large`     | Expected research and drafting effort.         |
 
 Every note body contains these sections in this order:
 
@@ -126,12 +130,13 @@ Every note body contains these sections in this order:
 - `seed` may advance to `researching`; `researching` may advance to `ready`; `ready` may advance to `published`.
 - Publishing creates a normal post through `zk new-post`; it does not move or copy the pitch body automatically.
 - A published pitch leaves `ideas/queue/` and may move to `ideas/published/` with `status: published` when local editorial history is useful.
-- Removing an abandoned pitch deletes it from the local active tree; Git is not an archive for `ideas/`.
-- Metadata changes and lifecycle transitions are manual. No command enforces capacity or state transitions.
+- Active statuses are `seed`, `researching`, and `ready`; `published` is reserved for pitches archived under `ideas/published/`.
+- Removing an abandoned pitch deletes it from the local active tree. Local pitch notes are non-durable and disposable unless backed up separately; Git is not their archive.
+- Metadata changes and lifecycle transitions are manual. The editorial checker enforces capacity and valid active states but does not perform transitions.
 
 ## Initial Queue
 
-The first queue contains six project case studies, four broader engineering essays, and two reflective pieces. Each implementation note will expand the row into the complete pitch-card schema.
+Historically, the first queue contained six project case studies, four broader engineering essays, and two reflective pieces. Each implementation note expanded its row into the complete pitch-card schema; exact-12 acceptance applied only to that initial set.
 
 | Priority | Category           | Working title                                             | Core evidence or argument                                                                                                 |
 | -------- | ------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
@@ -159,7 +164,7 @@ The first queue contains six project case studies, four broader engineering essa
 
 ## Hexagonal Boundaries
 
-No application-level port or adapter is introduced because this is a declarative zk content workflow, not production code. zk is the editor/index adapter selected by repository configuration; Markdown files are the durable source of truth, and Zola remains an independent read-only consumer of `content/`.
+No application-level port or adapter is introduced because this is a declarative zk content workflow, not production code. zk is the editor/index adapter selected by repository configuration. Published Markdown under `content/` is durable; local pitch notes are disposable working state unless separately backed up. Zola remains an independent read-only consumer of `content/`.
 
 ## Integration Points
 
@@ -186,7 +191,7 @@ No application-level port or adapter is introduced because this is a declarative
   the active queue.
 - `zk list-ideas` displays any active local pitches with priority and status.
 - A normal `zola build` succeeds and emits no route or file for `ideas/`.
-- The public posts preserve the six-section pitch evidence as full narrative articles.
+- The public posts are narrative articles expanded from the evidence and argument captured in the six-section pitches; they do not preserve the pitch-card structure verbatim.
 
 ## Risk Summary
 

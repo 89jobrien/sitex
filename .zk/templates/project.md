@@ -1,7 +1,10 @@
 ---
-title: "{{title}}"
+title: >-
+  {{title}}
 date: {{ format-date now "%Y-%m-%d" }}
-description: "{{extra.description}}"
+description: >-
+  {{extra.description}}
 extra:
-  repo: "{{extra.repo}}"
+  repo: >-
+    {{extra.repo}}
 ---
