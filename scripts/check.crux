@@ -14,6 +14,14 @@ steps:
     handler: shell::capture
     args: { cmd: "sh scripts/check-zk-templates.sh" }
 
+  - step: zk_template_rendering
+    handler: shell::capture
+    args: { cmd: "nu scripts/test-zk-templates.nu" }
+
+  - step: editorial_contracts
+    handler: shell::capture
+    args: { cmd: "nu scripts/editorial-check.nu" }
+
   - step: fail_fast_contract
     handler: shell::capture
     args: { cmd: "sh scripts/check-fail-fast.sh" }

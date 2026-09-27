@@ -10,7 +10,7 @@ for template in default project post idea; do
     file=".zk/templates/$template.md"
     test -f "$file" || fail "missing $file"
     test "$(grep -c '^---$' "$file")" -eq 2 || fail "$file must have YAML frontmatter"
-    grep -F 'title: "{{title}}"' "$file" >/dev/null || fail "$file must render a title"
+    grep -F '{{title}}' "$file" >/dev/null || fail "$file must render a title"
     grep -F 'format-date now' "$file" >/dev/null || fail "$file must render a date"
     grep -F "template = \"$template.md\"" .zk/config.toml >/dev/null || fail "$file is not configured"
 done
