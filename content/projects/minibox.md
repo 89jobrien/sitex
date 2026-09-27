@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/minibox"
 ---
 
-# minibox
-
 [![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](#license)
 
 > **Status**: Active production hardening under a stabilization freeze; feature additions are paused while the checklist closes. See [CONTRIBUTING.md](https://github.com/89jobrien/minibox/blob/main/CONTRIBUTING.md) and
@@ -105,7 +103,7 @@ breakdown.
 
 15 crates plus `xtask` (16 workspace members), Rust 2024 edition:
 
-```
+```text
 minibox-macros          proc macros (as_any!, adapt!)
     ^
 minibox-core            cross-platform types, domain traits, protocol, OCI ops

@@ -1,156 +1,181 @@
 ---
-title: 125+ Projects, No Monorepo
+title: One Workspace Without a Monorepo
 date: 2026-08-23
-description: "How 125+ independent repositories behave like one workspace through shared conventions, tooling, and cross-repo observability."
+description: "How discovery and automation coordinate more than a hundred repositories without taking ownership away from each project."
 ---
 
-I keep 125+ independent projects under `~/dev`. Rust, Go, Nushell, and a few
-prototypes that never left "prototype." Each one has its own git repo, its
-own history, and its own remote or no remote at all. No monorepo, no shared
-`.git`, no Bazel/Nx-style build graph tying them together.
+There is no workspace-wide `.git`. That is the point.
 
-And yet they do not feel like 125+ unrelated things. They feel like one
-workspace. Here is how that holds together without the tooling that usually
-makes it hold together.
+I keep more than a hundred projects under one development root. Some are active products, some are
+libraries, and some are experiments. They use different languages and move at different speeds.
+Each repository owns its history, branches, CI, versioning, and releases.
 
-<svg viewBox="0 0 640 220" role="img" aria-label="Monorepo, one shared .git enclosing many project folders, versus independent repos, each project with its own separate .git" style="width:100%;height:auto;font-family:inherit;">
-  <text x="130" y="24" text-anchor="middle" fill="#9aa0a6" font-size="13">monorepo</text>
-  <rect x="20" y="36" width="220" height="150" rx="8" fill="none" stroke="#7dd3fc" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <text x="130" y="54" text-anchor="middle" fill="#7dd3fc" font-size="11">.git</text>
-  <g fill="none" stroke="#e6e6e6" stroke-width="1.2">
-    <rect x="36" y="66" width="60" height="34" rx="4"/>
-    <rect x="104" y="66" width="60" height="34" rx="4"/>
-    <rect x="172" y="66" width="52" height="34" rx="4"/>
-    <rect x="36" y="110" width="60" height="34" rx="4"/>
-    <rect x="104" y="110" width="60" height="34" rx="4"/>
-    <rect x="172" y="110" width="52" height="34" rx="4"/>
-    <rect x="36" y="154" width="188" height="24" rx="4"/>
-  </g>
-  <text x="410" y="24" text-anchor="middle" fill="#9aa0a6" font-size="13">this workspace</text>
-  <g fill="none" stroke="#e6e6e6" stroke-width="1.2">
-    <rect x="300" y="40" width="70" height="40" rx="4"/>
-    <rect x="300" y="94" width="70" height="40" rx="4"/>
-    <rect x="300" y="148" width="70" height="40" rx="4"/>
-    <rect x="385" y="40" width="70" height="40" rx="4"/>
-    <rect x="385" y="94" width="70" height="40" rx="4"/>
-    <rect x="385" y="148" width="70" height="40" rx="4"/>
-    <rect x="470" y="40" width="70" height="40" rx="4"/>
-    <rect x="470" y="94" width="70" height="40" rx="4"/>
-    <rect x="470" y="148" width="70" height="40" rx="4"/>
-  </g>
-  <g fill="none" stroke="#7dd3fc" stroke-width="1" stroke-dasharray="2 2">
-    <rect x="296" y="36" width="78" height="48" rx="5"/>
-    <rect x="296" y="90" width="78" height="48" rx="5"/>
-    <rect x="296" y="144" width="78" height="48" rx="5"/>
-    <rect x="381" y="36" width="78" height="48" rx="5"/>
-    <rect x="381" y="90" width="78" height="48" rx="5"/>
-    <rect x="381" y="144" width="78" height="48" rx="5"/>
-    <rect x="466" y="36" width="78" height="48" rx="5"/>
-    <rect x="466" y="90" width="78" height="48" rx="5"/>
-    <rect x="466" y="144" width="78" height="48" rx="5"/>
-  </g>
-</svg>
+Yet the collection behaves like a workspace because coordination sits one layer above Git.
+Discovery answers what exists. Cross-repository status shows what needs attention. Dependency
+inspection and command automation make coordinated changes manageable. None of those systems
+turns the repositories into one transaction or one release train.
 
-## The index is a file, not a tool
+That separation is the thesis: independent repositories can behave like one workspace when shared
+discovery and automation coordinate them, while Git history and releases remain locally owned.
 
-At the root of `~/dev` there is a single `CLAUDE.md` with a table listing
-project name and one-line description. That is it. No dependency graph and
-no build manifest. Just enough to stop me, or an agent working alongside
-me, from guessing what a project is from its name alone. `crux` sounds like
-it could be an LLM wrapper. It is actually an agentic Rust DSL and runtime
-trace model, explicitly not an LLM layer. `rx` sounds like secrets
-management. It is a shell command prefix learning system. The table exists
-because names lie and I got tired of re-discovering that the hard way.
+## The operating scale
 
-Every project also carries its own `CLAUDE.md` with build commands,
-architecture notes, and gotchas specific to it. The root file is the map.
-The per-project file is the terrain. Nothing links them except a
-convention. Check the root table first, then descend.
+At this scale, memory is not an inventory system. Repository names are easy to forget, active work
+is spread across branches, and a library change may affect consumers elsewhere. Running the same
+command by hand in dozens of directories is slow and, more importantly, produces no reliable
+record of which repository passed or failed.
 
-<svg viewBox="0 0 640 180" role="img" aria-label="Root CLAUDE.md as a map, branching by convention rather than by link, to per-project CLAUDE.md files for crux, rx, minibox, doob, and others" style="width:100%;height:auto;font-family:inherit;">
-  <rect x="270" y="16" width="100" height="36" rx="6" fill="none" stroke="#7dd3fc" stroke-width="1.5"/>
-  <text x="320" y="39" text-anchor="middle" fill="#7dd3fc" font-size="12">~/dev/CLAUDE.md</text>
-  <text x="320" y="66" text-anchor="middle" fill="#9aa0a6" font-size="10">convention, not a link</text>
-  <g stroke="#3a3f47" stroke-width="1" stroke-dasharray="3 3">
-    <line x1="320" y1="52" x2="90" y2="118"/>
-    <line x1="320" y1="52" x2="220" y2="118"/>
-    <line x1="320" y1="52" x2="350" y2="118"/>
-    <line x1="320" y1="52" x2="480" y2="118"/>
-    <line x1="320" y1="52" x2="580" y2="118"/>
-  </g>
-  <g fill="none" stroke="#e6e6e6" stroke-width="1.2">
-    <rect x="40" y="118" width="100" height="34" rx="5"/>
-    <rect x="170" y="118" width="100" height="34" rx="5"/>
-    <rect x="300" y="118" width="100" height="34" rx="5"/>
-    <rect x="430" y="118" width="100" height="34" rx="5"/>
-    <rect x="540" y="118" width="70" height="34" rx="5"/>
-  </g>
-  <g fill="#e6e6e6" font-size="11" text-anchor="middle">
-    <text x="90" y="139">crux/</text>
-    <text x="220" y="139">rx/</text>
-    <text x="350" y="139">minibox/</text>
-    <text x="480" y="139">doob/</text>
-    <text x="575" y="139">…</text>
-  </g>
-</svg>
+The tools in this system have deliberately narrow jobs:
 
-## Conventions travel as prose, not as package versions
+- [Rx](https://github.com/89jobrien/rx) discovers repositories, gathers Git status, inspects Cargo
+  dependencies, and runs commands across selected repositories.
+- [Godmode](https://github.com/89jobrien/godmode) keeps task graphs and agent work scoped to the
+  current repository.
+- [Taskit](https://github.com/89jobrien/taskit) determines which crates are affected inside one
+  Rust repository and runs that repository's workflow.
 
-A monorepo enforces consistency by construction. One lockfile, one CI
-config, one place to bump a shared dependency. Across 125+ separate repos I
-do not get that for free, so the consistency has to travel some other way.
-Mostly it travels as _written convention_, re-applied per repo rather than
-inherited.
+Rx observes across boundaries. Godmode and Taskit operate within a boundary. Git remains the
+authority underneath all three.
 
-- Several Rust workspaces gate commits through their own `cargo xtask
-pre-commit`, hand-written per project, `minibox` runs fmt check, clippy,
-  and a release build behind that gate, and other projects that adopt the
-  same shape copy it rather than share a crate.
-- `minibox` is designated the canonical reference for CI and workflow
-  patterns, meaning `ci.yml`, `nightly.yml`, `release.yml`, and
-  `deny.toml`. New projects do not inherit these by import. They get
-  copied and adapted, with minibox as the thing you diff against when
-  something looks off.
-- HANDOFF files live in a `.ctx/` directory in every project that uses the
-  session-handoff workflow, and generated filenames always work the repo's
-  own dirname in as a component. `HANDOFF.doob.doob.yaml`, not
-  `HANDOFF.doob.workspace.yaml`, so a file never lies about which project
-  it belongs to once it is out of context.
+The design follows three questions a reader with many repositories eventually asks:
 
-None of this is enforced by tooling. It is enforced by the convention being
-written down somewhere I will actually read it again, and by treating
-drift from it as a bug when I notice it.
+1. What repositories do I have?
+2. What state are they in right now?
+3. How do I change several of them without pretending the change is atomic?
 
-## The boundary is the point, not the cost
+## Problem one: inventory
 
-The obvious objection is that this means constant duplication. Some, yes.
-Every `xtask` crate is hand-rolled rather than shared. But a lot of what
-looks like duplication is actually isolation doing its job. When a project
-needs parallel worktrees on distinct branches for genuinely separate lines
-of work, they sit side by side as their own directories rather than being
-forced into one working tree or a branching scheme that fights the tool.
-Independent repos just let them be independent.
+A folder full of repositories is not yet a workspace. The first requirement is a trustworthy list
+of what is there.
 
-Same logic applies to `seaography`, which is a vendored upstream clone
-kept read-only on purpose. It is reference material, not a project I own,
-and treating it as a separate repo is what keeps that boundary honest
-instead of it slowly becoming our fork of seaography by accident.
+Rx can read explicit metadata from a registry, but it can also discover repositories by walking a
+root directory. Discovery recognizes both a `.git` directory and a `.git` file, so ordinary clones
+and Git worktrees appear in the same inventory. Ignored directories are excluded, and each result
+becomes repository metadata that later operations can consume.
 
-## Where this breaks down
+This matters because the inventory should not depend on every project joining a central build
+configuration. A new repository becomes visible because it is a repository, not because someone
+remembered to add it to a monorepo manifest.
 
-It is not free. Cross-project changes, the kind a monorepo makes atomic,
-have to be done project by project, commit by commit, with no shared CI
-run to confirm nothing downstream broke. If I rename a crate, `linuxbox`
-to `mbx` was a recent one, every reference outside that repo goes stale
-until someone or some agent greps for it. There is no single `git log`
-across the workspace. Understanding what happened this week means walking
-125+ repos, which is exactly the itch that led to building `devloop` and
-`herald` as workspace-level observability layers on top of independent git
-histories, rather than as an alternative to them.
+Optional metadata adds meaning without taking ownership. A repository can be labeled with a role,
+language, default branch, or tags. That supports questions such as “show me active Rust libraries”
+without moving any source tree or changing any Git remote.
 
-That trade seems right for this shape of work. Mostly-independent projects
-at wildly different maturity levels, production employer code next to
-half-finished prototypes, where the cost of true monorepo coupling would
-outweigh the convenience. The consistency that matters, build gates,
-naming, and where state lives, comes from conventions I keep re-reading
-and re-applying, not from a tool that would make skipping them impossible.
+The central map should stay shallow. It needs enough information to identify and group projects,
+but build commands, architecture notes, and release instructions belong with the repository they
+describe. The map tells automation where to look; the project remains the source of truth.
+
+This approach has an important failure mode: discovery can tell you that a repository exists, but
+not whether it is maintained, correctly configured, or safe to modify. Inventory is the beginning
+of coordination, not proof of health.
+
+## Problem two: cross-repository status
+
+Once the inventory exists, the next question is operational: which repositories are dirty, on an
+unexpected branch, ahead of their remote, behind it, or unable to answer at all?
+
+A monorepo can answer much of that with one Git invocation because it has one working tree. A
+multi-repository workspace needs to run the same probe separately in every repository and preserve
+the result separately.
+
+Rx does that through a small Git-status interface. Its production adapter invokes Git within each
+repository, while the status collector can process repositories in parallel. The result for one
+repository includes its own branch, working-tree state, ahead/behind counts, and any error.
+
+Per-repository errors are essential. One missing remote or malformed checkout should not erase the
+status of every other project. The observer reports partial failure instead of inventing a
+workspace-wide success or failure state.
+
+The same principle applies to dependencies. Rx scans Cargo manifests, records packages, and adds an
+edge when one known package depends on another. The resulting graph answers questions such as
+“which repositories consume this crate?” before a breaking change begins.
+
+That graph is observability, not a build system. It does not create a shared lockfile, guarantee
+that every consumer uses the same revision, or prove that downstream branches compile together.
+It reveals coupling so that each affected repository can be checked on its own terms.
+
+Status collection is most useful when it stays read-only. It creates a shared view without silently
+cleaning working trees, switching branches, pulling remotes, or rewriting local work. Observation
+comes before intervention.
+
+## Problem three: coordinated change
+
+The hardest case is a change that crosses repository boundaries. A shared Rust crate may change its
+public API, several consumers may need updates, and each consumer may have a different test suite
+and release policy.
+
+The dependency graph provides the candidate list. Rx can then fan out a command with bounded
+concurrency, a timeout, and optional fail-fast behavior. Each execution retains its repository,
+argument list, exit code, standard output, standard error, and error state.
+
+Separate results are more valuable than a single wall of terminal output. They show which
+repositories passed, which failed, and which never ran. The operator can retry one project without
+rerunning everything or confusing a timeout with a test failure.
+
+Fan-out is useful for read-only checks and for commands whose effects are already understood. It is
+not a distributed transaction. If a command modifies five repositories and fails on the sixth,
+the first five are still modified. Automation must expose that reality rather than imply rollback
+that Git cannot provide across independent histories.
+
+The safe cross-repository workflow is therefore staged:
+
+1. Discover the downstream repositories.
+2. Inspect their current branches and working trees.
+3. Update one repository at a time or in explicitly independent groups.
+4. Run each repository's own quality gates.
+5. Commit and review the changes in that repository.
+6. Release projects according to their local dependency order and policy.
+
+Local tooling makes step four efficient without weakening ownership. Inside a Rust repository,
+Taskit compares changed files with the configured crate map and expands declared dependents. It can
+run only the affected parts of that repository's workspace. Its analysis stops at the Git boundary;
+Rx supplies the cross-repository view.
+
+Godmode applies the same boundary to task state. It finds the nearest Git root and keeps the task
+graph with that repository. Work on one project does not leak into another project's plan merely
+because both projects live under the same parent directory.
+
+These boundaries also make the tools replaceable. Cross-repository discovery does not need to own
+task scheduling, and task scheduling does not need to own Git status. Shared conventions connect
+the tools, but each tool has a limited responsibility and a visible failure surface.
+
+## What stays local
+
+This model intentionally gives up several monorepo properties:
+
+- There is no atomic commit spanning every affected project.
+- There is no single lockfile proving one dependency resolution.
+- There is no universal CI result for the whole collection.
+- Configuration may be duplicated across repositories.
+- Migrations and releases happen in stages.
+
+In return, each repository can choose its own release cadence, branch policy, quality gates, and
+versioning. A prototype does not inherit the production workflow of an unrelated service. A library
+can publish a compatibility release without forcing every consumer to release at the same time.
+
+That trade is worthwhile when repository autonomy is a requirement rather than an accident. The
+coordination layer reduces the cost of autonomy; it does not conceal the cost.
+
+## A workspace is a behavior
+
+The useful definition of a workspace is not “everything inside one Git repository.” It is a system
+that can answer what exists, show the state of the whole collection, reveal important coupling, and
+apply repeatable operations with clear results.
+
+Independent repositories can provide that behavior. They need a discoverable inventory, read-only
+cross-repository observability, bounded command execution, and disciplined handoffs to local build
+and release tools.
+
+The line to protect is ownership. Shared automation may find, inspect, and coordinate repositories.
+It should not blur their histories or claim guarantees that only a true monorepo transaction could
+provide. Coordination lives above Git. History and releases stay below it.
+
+## Sources
+
+- [Rx repository discovery](https://github.com/89jobrien/rx/blob/02101072c8b7daf57466e12a096397e145862ac2/crates/rx-core/src/repo.rs)
+- [Rx status collection](https://github.com/89jobrien/rx/blob/02101072c8b7daf57466e12a096397e145862ac2/crates/rx-core/src/status/mod.rs)
+- [Rx dependency graph](https://github.com/89jobrien/rx/blob/02101072c8b7daf57466e12a096397e145862ac2/crates/rx-core/src/graph.rs)
+- [Rx fan-out execution](https://github.com/89jobrien/rx/blob/02101072c8b7daf57466e12a096397e145862ac2/crates/rx-core/src/fan.rs)
+- [Godmode repository detection](https://github.com/89jobrien/godmode/blob/main/crates/godmode-core/src/detect.rs)
+- [Godmode task dispatch](https://github.com/89jobrien/godmode/blob/main/crates/godmode-core/src/dispatch.rs)
+- [Taskit affected-crate detection](https://github.com/89jobrien/taskit/blob/ed428faa61f563fc8d84761fa1846613a9aa9500/crates/taskit-engine/src/affected.rs)

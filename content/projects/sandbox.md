@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/sandbox"
 ---
 
-# sandbox
-
 A virtual bash interpreter with a sandboxed in-memory filesystem. No real OS
 commands are executed — everything runs inside a `vfs::MemoryFS`. Designed for
 embedding in applications that need to evaluate shell-like scripts safely.

@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/cargo-promote"
 ---
 
-# cargo-promote
-
 Crate publishing and promotion pipeline for Rust projects.
 Publishes to private registries (Gitea, GitHub) and optionally
 crates.io, with configurable pipelines, per-package overrides,

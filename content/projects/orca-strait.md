@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/orca-strait"
 ---
 
-# orca-strait
-
 Parallel sub-agent orchestrator for Rust workspaces.
 
 Reads open GitHub issues, `HANDOFF.*` files, and an implementation plan; decomposes
@@ -32,7 +30,7 @@ claude plugin add github:89jobrien/orca-strait
 
 ### Slash command
 
-```
+```text
 /orca-strait
 /orca-strait /path/to/repo
 /orca-strait --dry-run
@@ -46,7 +44,7 @@ claude plugin add github:89jobrien/orca-strait
 
 ## Workflow
 
-```
+```text
 gh issue list → .ctx/git/issues/open.json
 HANDOFF.*   ──┐
 PLAN.md     ──┴── decompose.sh → task list → dispatch.sh → waves
@@ -95,7 +93,7 @@ The `check-blocked` hook surfaces this immediately to the orchestrator session.
 
 ## File Layout
 
-```
+```text
 tdd-orchestrator/
 ├── .claude-plugin/plugin.json
 ├── commands/

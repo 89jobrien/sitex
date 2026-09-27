@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/coursers"
 ---
 
-# coursers
-
 Claude Code hook pipeline for course-correcting AI-generated Bash commands.
 
 Two tools:
@@ -192,7 +190,7 @@ commands that match filter/rewrite rules but weren't intercepted.
 
 ## Workspace Structure
 
-```
+```text
 crates/
   core/        # shared library — rules, state, config, filters, rewrite
   coursers/    # `coursers` and `crs` binaries — hooks, rewrite, filter, discover

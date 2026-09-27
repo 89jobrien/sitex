@@ -4,97 +4,121 @@ date: 2026-09-11
 description: "Why operational prompts need stable intent, concrete examples, and tests even though their implementation is prose."
 ---
 
-I edit agent instructions in Markdown, but I depend on them like code.
+I keep agent instructions in Markdown, but I depend on them like code.
 
-A small wording change in `CLAUDE.md` can change which tool an agent chooses,
-whether it asks before a risky action, what it puts in a final response, or
-whether a downstream script can use the result. The file looks like prose.
-The effect looks like an interface change.
+A small change to `CLAUDE.md` can change which tool an agent picks, whether it
+asks before a risky action, or whether another program can use its output. The
+file is prose. The effect is an interface change.
 
-## The exact words are not the contract
+That means I review prompts for behavior, not wording.
 
-Traditional APIs expose named inputs and predictable outputs. A prompt cannot
-promise exact behavior in the same way because a model interprets it rather
-than executing it. Testing whether the response contains a particular phrase
-usually measures wording, not behavior.
+## The words aren't the contract
 
-The useful contract sits one level higher. Given a dirty worktree, the agent
-must not erase unrelated changes. Given a request to inspect a file, it should
-use the read tool rather than printing it through a shell. Given a failed test,
-it should diagnose the cause before claiming the work is done.
+An API can promise named inputs and predictable outputs. A prompt can't make
+the same promise. A model interprets instructions instead of executing them,
+and two good responses may use completely different words.
 
-Those outcomes can survive a rewrite of the prompt. They can also become
-examples in a small conformance set: representative inputs, expected tool
-choices, and forbidden side effects.
+The useful contract sits above the phrasing. Given an unrelated edit in
+`README.md`, an agent changing `config.toml` must leave the first file alone.
+Checking whether the final response says "I preserved your changes" isn't
+enough. The agent can say the right thing after doing the wrong thing.
 
-For example, I do not need a test that expects an agent to say "I preserved
-your changes." I need a scenario with an unrelated dirty file and an assertion
-that the file is still present after the requested edit. I do not need the
-agent to recite the debugging method. I need it to inspect evidence before it
-changes implementation code.
+The tests should target the decision. Coursers does that when two rules could
+match the same command:
 
-That difference keeps the test attached to intent instead of model style. A
-new model may explain itself differently and still honor the interface. A
-familiar model may produce reassuring prose while violating it.
+```rust
+#[test]
+fn pipeline_segment_match_takes_priority_over_fallback() {
+    let rules = vec![
+        make_rule("no-grep", r"\bgrep\b"),
+        make_rule("no-bash-use-nu", r"(;|&&|\|\|)"),
+    ];
+    let (id, _) = check_pipeline("grep foo . && ls", &rules).unwrap();
+    assert_eq!(id, "no-grep");
+}
+```
 
-Conformance remains imperfect because agent behavior is probabilistic and tool
-environments change. I want representative cases to catch broad regressions:
-unsafe mutation, wrong tool selection, malformed structured output, or a
-completion claim without fresh verification. I do not want them to freeze
-every sentence the agent produces.
+That test comes from Coursers' rule engine. It checks which policy owns the
+command, not what an agent says about it afterward. The `unwrap()` is confined
+to test code, which matches the Rust conventions I use across these projects.
 
-## Skills give the interface a name
+The same rule applies to debugging. I don't need an agent to recite a method. I
+need it to inspect the failure before changing implementation code. I don't
+need it to announce that tests passed. I need a fresh test run that proves it.
 
-I use skills to pull recurring behavior out of one enormous instruction file.
-`godmode:systematic-debugging` names the workflow for failures.
-`godmode:verification-before-completion` names the evidence required before a
-completion claim. A skill gives the trigger and goal a named place that can
-remain stable while the detailed guidance improves.
+Model changes don't change the contract. Different wording can still comply,
+and reassuring wording can still hide a violation. I test the failures that
+matter, not every sentence.
 
-That is similar to extracting a function from repeated inline code. The prose
-still matters, but callers can depend on a named capability instead of copying
-the entire implementation into every prompt.
+## Give recurring behavior a name
 
-Version control then becomes useful in the ordinary way. A review can ask
-whether a skill changed its public behavior, whether examples still cover the
-important cases, and whether another instruction contradicts it.
+Skills let me name recurring behavior instead of growing one enormous
+instruction file. `godmode:systematic-debugging` owns the process for failures.
+`godmode:verification-before-completion` owns what must happen before an agent
+says the work is done.
 
-## Layer instructions by scope
+It is the prompt equivalent of extracting a function. The prose can change,
+but callers still have one named capability to depend on and one place to
+review its behavior.
 
-My global `CLAUDE.md` contains rules that should follow me between projects:
-git safety, verification discipline, and environment assumptions. A
-repository `CLAUDE.md` describes local commands and architecture. Skills name
-workflows that should trigger only in a particular situation.
+## Put each rule at the narrowest useful scope
 
-Those layers solve different problems. Putting a Minibox build command in the
-global file would leak project detail into every session. Repeating the same
-git-safety rule in every repository would create copies that drift. Expanding
-the global file with every debugging technique would make the important rules
-harder to find.
+I split instructions by ownership. `$HOME/.claude/CLAUDE.md` holds rules that
+follow me between projects. A repository `CLAUDE.md` holds its commands and
+architecture. Skills own workflows triggered by a specific situation. Hooks
+own consequences the model must not bypass.
 
-I treat the layers like interface ownership. The narrowest stable owner should
-define the behavior, and broader layers should point to it rather than restate
-it. This does not eliminate contradictions, but it makes them easier to locate
-when an agent receives two plausible instructions.
+Each layer solves a different problem. Project commands don't belong in the
+global file. Global git rules shouldn't be copied into every repository.
+Detailed debugging workflows shouldn't bury the few rules that always matter.
 
-## Some rules do not belong in the prompt
+The narrowest stable owner defines the behavior. Broader layers point to it.
 
-Coursers is the other half of this design. Its configured `crs` `PreToolUse`
-hook sees a proposed Bash command before execution. It can pass an unmatched
-command through, rewrite it, or deny it. If an agent tries to use a disallowed
-command, the hook does not need the model to remember the instruction.
+## Some rules shouldn't depend on the prompt
 
-That is the limit of treating prompts like interfaces: interfaces still need
-callers and enforcement. Prose is good for intent, judgment, and adaptation.
-It is a poor place for a hard safety guarantee.
+Prompts are good at intent and judgment. They are a bad place for a hard safety
+guarantee.
 
-I now review operational prompts by asking three questions. What behavior are
-callers relying on? Which examples prove that behavior without depending on
-exact phrasing? Which consequences are important enough to enforce somewhere
-other than the model context?
+Coursers handles that boundary for shell commands. Its `crs` `PreToolUse` hook
+receives the command before the shell runs, then allows, rewrites, or denies
+it. Godmode applies the same idea to commit readiness:
 
-Once those questions are explicit, prompt editing feels less like tuning a
-spell and more like maintaining a real interface.
+```rust
+#[derive(Debug)]
+pub enum PreCommitResult {
+    Pass,
+    Block(String),
+}
+
+pub fn run(root: &Path) -> PreCommitResult {
+    if let Err(reason) = check_task_state(root) {
+        return PreCommitResult::Block(reason);
+    }
+
+    if let Err(e) = quality_gate::run(root, None) {
+        return PreCommitResult::Block(e.to_string());
+    }
+
+    PreCommitResult::Pass
+}
+```
+
+This is the production path, shortened only by removing comments. It checks
+task state first, then runs the Cargo quality gate. The result is an enum rather
+than a boolean, so a blocked commit keeps its reason. The model doesn't get to
+declare the commit ready and step around that decision.
+
+That is where the interface comparison stops being enough. I keep intent and
+judgment in prompts. I put consequences that matter on the live execution path.
+
+I now ask three questions when I edit operational prompts:
+
+1. What behavior is something else relying on?
+2. Which example proves that behavior without depending on exact wording?
+3. Which failure is important enough to prevent outside the model context?
+
+Once those answers are clear, prompt editing stops feeling like spell tuning.
+It becomes ordinary interface maintenance.
 
 ## Sources
 
@@ -102,5 +126,7 @@ spell and more like maintaining a real interface.
 - [Godmode verification skill](https://github.com/89jobrien/godmode/blob/main/skills/verification-before-completion/SKILL.md)
 - [Coursers front-controller path](https://github.com/89jobrien/coursers/blob/main/crates/coursers/src/crs_commands.rs)
 - [Coursers pipeline actions](https://github.com/89jobrien/coursers/blob/main/crates/core/src/hook/pipeline.rs)
+- [Coursers rule-selection test](https://github.com/89jobrien/coursers/blob/main/crates/core/src/rules.rs)
+- [Godmode pre-commit enforcement](https://github.com/89jobrien/godmode/blob/main/crates/godmode-core/src/hooks/pre_commit.rs)
 - **This site's repository instructions:** `CLAUDE.md` in the local Sitex checkout; the repository is private.
 - **Global instruction layer:** local `$HOME/.claude/CLAUDE.md`; it is intentionally not published with the site.

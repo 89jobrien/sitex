@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/xtui"
 ---
 
-# xtui
-
 [![crates.io](https://img.shields.io/crates/v/xtui.svg)](https://crates.io/crates/xtui)
 
 A terminal UI for discovering and running project commands. Point it at any
@@ -133,7 +131,7 @@ generated copies and built output (both gitignored). Requires `mdbook`
 
 ## Project Structure
 
-```
+```text
 src/
   main.rs         Entry point, workspace resolution
   app.rs          App state, event loop, key handling

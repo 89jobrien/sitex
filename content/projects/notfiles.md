@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/notfiles"
 ---
 
-# notfiles
-
 A pure-Rust dotfiles manager — and eventually, a complete new-machine bootstrap system.
 
 `notfiles` started as a Rust replacement for [GNU Stow](https://www.gnu.org/software/stow/). It's growing into a **Cargo workspace** of focused crates that together replace an entire shell-script-based dotfiles ecosystem.
@@ -52,7 +50,7 @@ notstrap run
 
 ## Workspace Architecture
 
-```
+```text
 notfiles/
 ├── crates/
 │   ├── notcore/        # shared types, config, paths, errors, Reporter trait
@@ -80,7 +78,7 @@ notfiles/
 
 ### Dependency graph
 
-```
+```text
 notstrap
   ├── notfiles
   │     └── notcore
@@ -99,7 +97,7 @@ notstrap
 
 Each subdirectory of your dotfiles repo is a **package**. `notfiles link` walks each package and symlinks its contents into a target directory (default: `$HOME`), mirroring the directory structure.
 
-```
+```text
 dotfiles/
 └── zsh/
     └── .zshrc          →  symlink  →  ~/.zshrc
@@ -115,7 +113,7 @@ State is tracked in `.notfiles-state.toml` so `unlink` and `status` know exactly
 
 ### Link flow
 
-```
+```text
 notfiles link
   │
   ├─ config.validate()                check include/exclude mutual exclusion
@@ -153,7 +151,7 @@ The hardest part of a new machine is the chicken-and-egg problem: you need secre
 
 `notstrap` solves this with a staged bootstrap:
 
-```
+```text
 notstrap run
   │
   ├─ 1. Prerequisites check
@@ -188,7 +186,7 @@ Note: 1Password (`op`) is installed as a **hook** in phase `setup` — after sec
 
 `notsecrets` implements a `SecretResolver` with pluggable provider sources:
 
-```
+```text
 SecretResolver
   ├── EnvSource         read from environment variables
   ├── OpSource          1Password CLI (op read)

@@ -6,11 +6,9 @@ extra:
   repo: "https://github.com/89jobrien/maid"
 ---
 
-# neatly
-
 A clean, fast CLI tool that organises files in a directory by sorting them into subfolders based on their file type. Built with Rust.
 
-```
+```text
 Downloads/
 ├── invoice.pdf
 ├── photo.jpg
@@ -88,7 +86,7 @@ neatly preview ~/Downloads
 
 Example output:
 
-```
+```text
 Preview - no files will be moved:
 
  invoice.pdf -> documents/
@@ -109,7 +107,7 @@ neatly run ~/Downloads
 
 Example output:
 
-```
+```text
  invoice.pdf -> documents/
  photo.jpg -> images/
  song.mp3 -> audio/
@@ -128,7 +126,7 @@ neatly undo ~/Downloads
 
 Example output:
 
-```
+```text
  Restored: /Users/mac/Downloads/invoice.pdf
  Restored: /Users/mac/Downloads/photo.jpg
  Restored: /Users/mac/Downloads/song.mp3

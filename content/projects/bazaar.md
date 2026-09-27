@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/bazaar"
 ---
 
-# Open Source
-
 Projects I maintain or contribute to.
 
 _Generated 2026-08-18_

@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/sanctum"
 ---
 
-# sanctum
-
 1Password and direnv session management — secrets validation and env chain tracing.
 
 ## Installation

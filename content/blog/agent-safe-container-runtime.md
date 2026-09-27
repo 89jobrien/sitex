@@ -1,128 +1,241 @@
 ---
-title: Designing a Container Runtime an Agent Can Safely Operate
+title: Designing an Agent-Safe Container Interface
 date: 2026-09-11
-description: "What changed when Minibox stopped treating agent access as ordinary shell access with a different client."
+description: "A capability-scoped container interface that keeps inspection and ordinary runs available while gating dangerous operations."
 ---
 
-The shortest path to an agent-controlled container runtime is to give the
-agent a shell and tell it to run container commands. That also gives the agent
-every typo, unsafe flag, and host-level escape hatch the shell can reach.
+An AI agent that can operate a container runtime can also ask that runtime to
+read host files, share the host's network, consume all available memory, or run
+with elevated privileges. The threat is not only a malicious prompt. A faulty
+plan, compromised dependency, or ambiguous instruction can produce the same
+request.
 
-When I added agent access to Minibox, I took a different route. Its agent
-interface is not a wrapper around `mbx`. It is another client of the same
-daemon protocol, with a smaller set of capabilities and policy checks in front
-of mutation.
+The unsafe design is familiar: give the agent a shell and rely on its prompt to
+avoid dangerous flags. That makes a general-purpose command interpreter the
+security boundary. Every shell feature, executable on `PATH`, and runtime flag
+becomes part of the agent's authority.
 
-## Start with inspection
+An agent-safe interface should do the opposite:
 
-An agent usually needs to understand the machine before it needs to change it.
-Listing containers, reading a manifest, and fetching logs are useful during
-diagnosis and comparatively easy to reason about. A policy-bounded,
-ephemeral, unprivileged run can be useful too, although it is not a complete
-sandbox and may pull a missing image into shared storage. Mounting a host
-directory, enabling privileged mode, or explicitly changing shared runtime
-state is a different class of operation.
+- expose narrow, typed operations rather than arbitrary commands;
+- separate inspection from mutation;
+- deny dangerous capabilities unless an operator enables each one; and
+- enforce policy again in the component that performs the effect.
 
-I made the Minibox MCP server reflect that distinction. Inspection and
-policy-bounded ephemeral runs are allowed by default. Explicit pull, stop, and
-remove operations require a mutation opt-in, while privileged mode, bind
-mounts, and host networking have separate controls. A run can still populate
-the shared image cache when its image is missing.
+Minibox is a small, open-source container runtime written in Rust. Like many
+system services, it has a daemon/client architecture: a long-running process
+named `miniboxd` owns container state and performs runtime operations, while
+clients send it structured requests over a local Unix socket.
 
-This is less flexible than a shell, on purpose. The MCP surface exposes no
-generic host-shell operation. Commands arrive as structured arguments to a
-container run, while host-affecting capabilities are gated separately.
+One of those clients is a Model Context Protocol server. MCP is an open
+protocol through which an AI application discovers and calls named tools with
+structured inputs. In this case, the MCP server translates tools such as
+`minibox_ps`, `minibox_logs`, and `minibox_run` into Minibox daemon requests. It
+does not give the agent a host shell.
 
-A typical diagnostic session can therefore stay read-only for most of its
-life. The agent lists containers, reads the manifest for the one that failed,
-and fetches its logs. If it decides a replacement container is needed, the
-request changes category. Before execution, MCP validates the typed request
-and gates privileged mode, bind mounts, and host networking. The daemon then
-parses the image and applies its configured run policy. Minibox does not
-currently interpret command semantics as policy.
+## Follow the request all the way down
 
-The daemon also has its own runtime policy, which is concrete enough to inspect
-in configuration:
-
-```toml
-[policy]
-allow_privileged = false
-allow_bind_mounts = false
-```
-
-Those settings are separate from the MCP server's agent policy. The MCP layer
-decides which requests an agent may propose; daemon configuration decides
-which capabilities the runtime will honor from any client. Neither layer asks
-the model whether it thinks a mount is safe. A person can choose a different
-policy for a controlled environment, but the default does not rely on good
-judgment emerging from a prompt.
-
-## Keep one authority
-
-Minibox has a daemon and client split. I kept the `mbx` CLI, the MCP server,
-and the Crux plugin on the same daemon protocol so they would not each grow
-their own container lifecycle rules.
-
-That matters because the daemon remains the common authority for effects and
-run validation. MCP adds a separate agent policy that does not apply to the
-CLI or Crux plugin. Native mode also checks for a root peer, while other
-adapter suites rely primarily on socket permissions.
-
-The same separation keeps platform details out of the policy model. Native
-Linux and VM-backed macOS adapters do very different work underneath, but the
-question "may this agent start a privileged container?" should not change with
-the adapter.
-
-The request path looks roughly like this:
+The safety argument only makes sense when the whole path is visible. A request
+to run a container travels through these boundaries:
 
 ```text
-agent -> Minibox MCP tool -> policy check -> daemon protocol -> runtime adapter
+AI agent
+  -> MCP client in the AI application
+  -> minibox-mcp stdio server
+  -> typed RunContainerInput
+  -> AgentPolicy validation
+  -> typed DaemonRequest::Run
+  -> MiniboxDaemonClient
+  -> local Unix socket
+  -> miniboxd request handler
+  -> daemon ContainerPolicy and admission checks
+  -> selected runtime, filesystem, network, and resource adapters
 ```
 
-Each boundary has one job. MCP turns a model request into a typed Minibox
-operation. Policy decides whether that operation is available. The daemon
-owns runtime state and validation. The adapter deals with the operating
-system. Keeping those responsibilities separate makes a denial easier to
-explain and a backend easier to replace.
+The MCP server is an adapter: it converts one protocol into another. The daemon
+is the runtime boundary: it owns the state and is the last Minibox component
+that can refuse a request before an adapter creates the container.
 
-It also gives me one place to watch the system. The read-only Minibox TUI polls
-the same daemon's container list and displays its lifecycle event stream. That
-is a live operational view, not a complete policy audit trail, but it avoids
-reconstructing runtime state from the MCP transcript alone.
+This separation matters because the MCP process is not the only possible
+daemon client. A CLI or another integration can speak the daemon protocol too.
+Agent-side checks reduce what the agent may request; daemon-side checks protect
+the runtime from requests regardless of which client sent them.
 
-## Make the dangerous thing visible
+## Prefer typed operations to shell strings
 
-Agent safety gets vague when every action is called a tool invocation. The
-useful distinction is what happens after the call. Reading logs is not the
-same class of event as attaching a host directory. Stopping a disposable test
-container is not the same as removing shared state.
+The `minibox_run` tool accepts a structured `RunContainerInput`. Image,
+command arguments, environment variables, mounts, memory, CPU weight, network
+mode, and privileged mode are independent fields.
 
-A good agent control surface names those differences. It gives inspection a
-wide path, mutation a narrower one, and high-risk capabilities their own
-decision points. It also leaves enough structured information for a person to
-see what was requested and why it was denied.
+That is safer than accepting a string such as `mbx run ...` for two reasons.
+First, the adapter does not need to reconstruct intent by parsing shell syntax.
+Second, policy can inspect the exact capability being requested. A non-empty
+mount list means host filesystem access is being proposed; a `host` network
+value means network isolation is being removed.
 
-The goal is not to make an agent incapable of operating infrastructure. The
-goal is to let it do real work without making unrestricted shell access the
-price of admission. Minibox became more useful to agents when it exposed less
-of the machine and more of the domain.
+Minibox's MCP policy starts with no optional permissions, supplies bounded
+resource requests, validates higher-risk fields, rejects unknown network
+modes, and requires an explicit permission for host networking. Bridge and
+tailnet modes remain valid without that host-network permission.
 
-That does not make Minibox a complete sandbox. The runtime still has platform
-security work of its own, and a policy-approved operation can still be a bad
-idea. The narrower claim is more practical: an agent interface should not be
-more powerful than the task requires, and the component performing the side
-effect should enforce that limit. Everything else is an instruction waiting
-to be ignored.
+This abridged pseudocode preserves the public implementation's decisions:
+
+```rust
+pub const fn safe_default() -> Self {
+    Self {
+        permissions: Vec::new(),
+        default_memory_limit_bytes: Some(512 * 1024 * 1024),
+        default_cpu_weight: Some(100),
+        max_output_bytes: 1024 * 1024,
+    }
+}
+
+pub fn validate_run(&self, input: &RunContainerInput) -> Result<()> {
+    if input.privileged.unwrap_or(false)
+        && !self.allows(AgentPermission::Privileged)
+    {
+        return Err(policy_denied("privileged"));
+    }
+    if !input.mounts.is_empty()
+        && !self.allows(AgentPermission::BindMounts)
+    {
+        return Err(policy_denied("bind mounts"));
+    }
+
+    let network = parse_network_mode(input.network.as_deref())?;
+    if network == NetworkMode::Host
+        && !self.allows(AgentPermission::HostNetwork)
+    {
+        return Err(policy_denied("host networking"));
+    }
+
+    require_non_empty(&input.image, "image")?;
+    Ok(())
+}
+```
+
+Error construction is condensed, but the defaults and checks are unchanged.
+Parsing the network
+mode before checking permission is important. A misspelling such as `hostt`
+becomes invalid input rather than an unrecognized value that might evade a
+string comparison.
+
+## Separate inspection from mutation
+
+Most troubleshooting begins with observation: check whether the daemon is
+reachable, list containers and cached images, read logs, or retrieve an
+execution manifest. Those tools are available under Minibox's default MCP
+policy because they inspect existing state.
+
+Pulling an image, stopping a container, and removing a container mutate shared
+daemon state. Minibox denies those tools unless the operator explicitly enables
+the MCP mutation permission. A normal run is deliberately different: an
+ephemeral, auto-removed, unprivileged run is the core agent use case, so it is
+allowed by default and receives memory and CPU defaults. Networking defaults to
+`none`; bridge and tailnet remain valid requests, while host networking requires
+permission.
+
+That distinction is more useful than labeling every container operation either
+"safe" or "unsafe." It asks what persistent effect the operation has and what
+authority it adds.
+
+## Treat runtime options as capabilities
+
+A capability is an authority the request would gain, not merely another
+configuration field.
+
+A **bind mount** exposes a host directory inside the container. Even a
+read-only mount can reveal source code, credentials, or private data, so the
+MCP policy denies any bind mount by default.
+
+**Host networking** places the container on the host's network stack instead
+of Minibox's default `none` mode. That can expose local services and removes a
+useful isolation boundary, so it has a separate opt-in. Bridge and tailnet are
+different network modes and do not use that permission.
+
+**Privileged mode** requests substantially elevated container authority. It is
+not required for ordinary diagnostic commands and is independently denied.
+
+**Resource requests** can constrain accidental denial of service when the
+selected `ResourceLimiter` adapter enforces them. When the agent omits values, the MCP adapter
+supplies a 512 MiB memory request and CPU weight 100. Some adapters, including
+the committed GKE `NoopLimiter`, do not enforce those values. Collected daemon
+responses are capped at 1 MiB by default, limiting unbounded tool output. The
+operator can override that cap with `MINIBOX_MCP_MAX_OUTPUT_BYTES`.
+
+The resulting policy is easier to review as a matrix:
+
+| Operation or capability                     | MCP default    | Explicit opt-in           | Runtime-boundary check                |
+| ------------------------------------------- | -------------- | ------------------------- | ------------------------------------- |
+| Inspect containers, images, logs, manifests | Allow          | None                      | Daemon handles typed request          |
+| Ephemeral unprivileged run                  | Allow          | None                      | Daemon admission and runtime setup    |
+| Pull, stop, or remove                       | Deny           | Mutation permission       | MCP gate; daemon owns operation       |
+| Bind mount                                  | Deny           | Bind-mount permission     | MCP gate and daemon `ContainerPolicy` |
+| Bridge or tailnet networking                | Allow          | None                      | Runtime-specific network adapter      |
+| Host networking                             | Deny           | Host-network permission   | MCP gate before daemon request        |
+| Privileged mode                             | Deny           | Privileged permission     | MCP gate and daemon `ContainerPolicy` |
+| Memory and CPU requests                     | Apply defaults | Caller may request values | Selected `ResourceLimiter` adapter    |
+| Collected output                            | Default 1 MiB  | Environment override      | MCP adapter                           |
+
+Separate switches avoid a single "unsafe mode" that grants unrelated powers.
+An operator can permit image pulls without also permitting privileged
+containers or host filesystem access.
+
+## Recheck policy where effects happen
+
+An adapter-side denial is necessary, but it is not sufficient. The Minibox
+daemon applies its own `ContainerPolicy` before container creation. Bind mounts
+and privileged mode default to denied there too, under daemon configuration
+separate from the MCP permissions.
+
+The two layers answer different questions:
+
+- MCP policy: may this agent-facing tool propose the operation?
+- daemon policy: may this runtime instance perform the operation?
+
+For bind mounts and privileged mode, both answers must be yes. Enabling an MCP
+permission alone does not force the daemon to honor it. This is the useful
+defense-in-depth property: a mistake or future regression in the adapter does
+not automatically remove the runtime's policy boundary.
+
+The public implementation is not a claim of a perfect sandbox. The daemon's
+`ContainerPolicy` covers bind mounts, privileged mode, and minimum execution
+priority. A separate manifest-level `ExecutionPolicy` can constrain images,
+network modes, mounts, memory, and privilege, but it is optional and defaults
+to no additional manifest policy. The standard daemon composition injects no
+run-admission `ExecutionPolicy`. MCP-specific mutation and host-network
+permissions remain adapter-side controls. Minibox also documents security work
+that remains, including capability dropping, seccomp filtering, user-namespace
+remapping, and rootless operation.
+
+That limitation reinforces the broader design rule. Each dangerous capability
+should eventually be represented explicitly and checked by the component that
+can exercise it. Prompts can explain intended behavior, but prompts are not
+authorization systems.
+
+## The reusable pattern
+
+This architecture is not specific to containers. Any agent integration that
+can alter infrastructure benefits from the same shape:
+
+1. Replace a general shell with named operations and typed inputs.
+2. Keep read-only inspection available without granting mutation.
+3. Model sensitive options as independent, deny-by-default capabilities.
+4. Supply conservative limits and verify the selected adapter enforces them.
+5. Validate before protocol translation and again before the side effect.
+6. Return structured denials so callers can distinguish policy from failure.
+
+The goal is not to make every agent action harmless. It is to make authority
+visible, narrow, and enforceable at boundaries the model cannot talk around.
 
 ## Sources
 
-- [Minibox MCP policy](https://github.com/89jobrien/minibox/blob/main/crates/mcp/src/policy.rs)
-- [Container tool request handling](https://github.com/89jobrien/minibox/blob/main/crates/mcp/src/tools/containers.rs)
-- [Image mutation gate](https://github.com/89jobrien/minibox/blob/main/crates/mcp/src/tools/images.rs)
-- [Daemon run and automatic image pulling](https://github.com/89jobrien/minibox/blob/main/crates/minibox/src/daemon/handler/run.rs)
-- [Daemon configuration and runtime policy](https://github.com/89jobrien/minibox/blob/main/crates/miniboxd/src/config.rs)
-- [Daemon policy composition](https://github.com/89jobrien/minibox/blob/main/crates/minibox/src/daemon/handler/mod.rs)
-- [Daemon request authority and peer checks](https://github.com/89jobrien/minibox/blob/main/crates/minibox/src/daemon/server.rs)
-- [Crux daemon client](https://github.com/89jobrien/minibox/blob/main/crates/minibox-crux-plugin/src/lib.rs)
-- [Adapter registry](https://github.com/89jobrien/minibox/blob/main/crates/miniboxd/src/adapter_registry.rs)
-- [TUI daemon event client](https://github.com/89jobrien/minibox/blob/main/crates/minibox-tui/src/event.rs)
+- [Minibox project overview and security model](https://github.com/89jobrien/minibox)
+- [MCP tool permission model](https://github.com/89jobrien/minibox/blob/f75ef70c764b570554053f964cc1ba2deb85cb25/crates/mcp/README.md)
+- [Typed MCP inputs](https://github.com/89jobrien/minibox/blob/f75ef70c764b570554053f964cc1ba2deb85cb25/crates/mcp/src/types.rs)
+- [Agent policy and safe defaults](https://github.com/89jobrien/minibox/blob/f75ef70c764b570554053f964cc1ba2deb85cb25/crates/mcp/src/policy.rs)
+- [Container tool request mapping](https://github.com/89jobrien/minibox/blob/f75ef70c764b570554053f964cc1ba2deb85cb25/crates/mcp/src/tools/containers.rs)
+- [Daemon container policy](https://github.com/89jobrien/minibox/blob/f75ef70c764b570554053f964cc1ba2deb85cb25/crates/minibox/src/daemon/handler/mod.rs)
+- [Manifest execution policy](https://github.com/89jobrien/minibox/blob/f75ef70c764b570554053f964cc1ba2deb85cb25/crates/minibox-domain/src/execution_policy.rs)
+- [GKE resource-limiter adapter](https://github.com/89jobrien/minibox/blob/f75ef70c764b570554053f964cc1ba2deb85cb25/crates/minibox/src/adapters/gke.rs)
+- [Model Context Protocol introduction](https://modelcontextprotocol.io/introduction)

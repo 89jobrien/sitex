@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/atelier"
 ---
 
-# atelier
-
 Personal dev workflow plugin — Rust gates, code review, CI, git safety,
 multi-repo pulse.
 

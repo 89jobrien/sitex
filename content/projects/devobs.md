@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/devobs"
 ---
 
-# devobs
-
 Public Obsidian vault for tracking open-source projects under [89jobrien](https://github.com/89jobrien). Automated with [crux](https://github.com/89jobrien/crux) pipelines and [kgx](https://github.com/89jobrien/kgx) knowledge graphs.
 
 ## Structure

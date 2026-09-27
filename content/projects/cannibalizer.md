@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/cannibalizer"
 ---
 
-# cannibalizer
-
 Absorbs foreign repos into the Rust ecosystem.
 
 Scans a source repo, classifies every file by kind (domain logic, port, adapter,
@@ -33,7 +31,7 @@ cargo build --release
 `cnbl` has a 4-stage pipeline. Each stage reads JSONL from the previous stage
 (stdin or `--input FILE`):
 
-```
+```text
 scan  -->  plan  -->  gen  -->  eat
 ```
 

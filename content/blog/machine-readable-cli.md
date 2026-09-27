@@ -4,113 +4,217 @@ date: 2026-09-11
 description: "What Doob's JSON listing, batch command inputs, and exit behavior taught me about CLIs becoming APIs."
 ---
 
-Adding `--json` to a CLI looks like a formatting option. The first time another
-program parses that output, it becomes an API decision.
+`--json` stops being a formatting option when another program parses it.
 
-That is especially visible in Doob, my cross-project todo tool. I use it
-directly in a terminal, but `godmode`, handoff tooling, and agent sessions also
-need to list and update the same work. Pretty terminal output is useful to me.
-Stable structure is useful to everything around me.
+Doob is a terminal tool, but Godmode and agent workflows also query its todos.
+Human output can optimize for scanning. Machine output needs a shape that
+survives unattended use (`/Users/joe/dev/doob/crates/doob/src/output/json.rs`):
 
-## JSON creates consumers you cannot see
-
-A person can tolerate a renamed heading or an extra explanatory line. A
-parser cannot. If Doob changes `priority` to `rank`, moves `todos` under a new
-object, or prints a warning to stdout before the JSON document, a downstream
-tool may stop working even though the command still looks fine in a terminal.
-
-That means machine-readable output needs a deliberate shape. Doob's list path
-writes JSON data to stdout and top-level errors to stderr. Several mutation
-commands still emit human text even when `--json` is present, so the structured
-contract does not yet cover the whole CLI.
-
-Once those rules exist, `--json` is not a second coat of paint on the human
-output. It is a separate interface backed by the same domain operation.
-
-A useful response includes both the collection and enough context to interpret
-it:
-
-```json
-{
-  "count": 1,
-  "todos": [
-    {
-      "content": "Verify release artifacts",
-      "status": "pending",
-      "priority": 1
-    }
-  ]
+```rust
+pub fn format_todos(todos: &[Todo]) -> String {
+    let output = json!({
+        "count": todos.len(),
+        "todos": todos
+    });
+    serde_json::to_string_pretty(&output).unwrap()
 }
 ```
 
-This abbreviated example omits fields from the full serialized todo. A caller
-can select pending work without scraping columns or guessing whether color
-codes are present. The record ID returned by `todo list --json` can be passed
-to a later complete, undo, or remove operation, although Doob does not document
-that representation as a stable public contract.
+## JSON creates consumers you cannot see
 
-This also creates obligations. If priority later needs more structure, Doob
-cannot casually replace the number with a nested object. It needs an additive
-change, a version boundary, or a coordinated update to consumers.
+A person can tolerate a renamed heading or an extra warning. A parser can't.
+Changing `todos` to `items`, printing diagnostics before the document, or
+replacing a number with an object can break a caller while the terminal still
+looks reasonable.
+
+The payload also exposes IDs, timestamps, project context, dependencies, and
+metadata. Doob does not currently document that full representation as a stable
+public contract (`/Users/joe/dev/doob/crates/doob-core/src/models/todo.rs`, shortened):
+
+```rust
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Todo {
+    pub id: Option<String>,
+    pub uuid: String,
+    pub content: String,
+    pub status: TodoStatus,
+    pub priority: u8,
+    pub project: Option<String>,
+    pub file_path: Option<String>,
+    pub blocks: Vec<String>,
+    pub blocked_by: Vec<String>,
+}
+```
+
+Machine mode should be a separate interface backed by the same domain result.
+Doob's list command does this cleanly. The repository returns `Vec<Todo>`, then
+the CLI chooses a formatter (`/Users/joe/dev/doob/crates/doob/src/main.rs`, shortened):
+
+```rust
+let todos = commands::list::execute(repo, status, project, limit).await?;
+
+if cli.json {
+    println!("{}", output::format_json(&todos));
+} else {
+    println!("{}", output::format_human(&todos));
+}
+```
+
+That split is not consistent across the whole CLI. `--json` is global, but add,
+complete, remove, undo, update, and several handoff mutations still print human
+confirmation lines. Callers should not assume the flag makes every subcommand
+structured (`/Users/joe/dev/doob/crates/doob/src/main.rs`, shortened):
+
+```rust
+let todos =
+    commands::add::execute(repo, content, priority, project, file, tags).await?;
+
+for todo in &todos {
+    println!("✓ Created todo: {}", todo.content);
+}
+```
 
 ## Agents need operations, not terminal mimicry
 
-Doob accepts several todos or IDs in one add, complete, remove, or undo
-command. The implementation processes them sequentially rather than
-transactionally, so an error can leave earlier items changed and later items
-untouched. One call is convenient, but it is not atomic.
+Batch arguments are useful, but one invocation does not imply one transaction.
+Complete, remove, and undo process IDs sequentially. An error can leave earlier
+items changed and later items untouched.
 
-Git-based context detection serves both audiences too. When available, Doob
-derives the project from the `origin` remote and records a non-root working
-directory relative to the repository root. At the repository root that path is
-unset. The resolved context appears in the serialized todo rather than
-remaining hidden state.
+That caveat belongs in the machine contract. Completion currently returns only
+the count reached before success or the first error
+(`/Users/joe/dev/doob/crates/doob/src/commands/complete.rs`):
 
-The design question becomes: what would a careful API client need to know?
-That question improves the CLI even for people. Errors get clearer, operations
-get better boundaries, and implicit context becomes visible.
+```rust
+pub async fn execute(repo: &dyn TodoRepository, ids: Vec<String>) -> Result<usize> {
+    let mut completed_count = 0;
 
-At session start, `godmode handon` can display the next Doob todo for its
-detected project. When work becomes active, `godmode task pull` explicitly
-imports pending todos as independent tasks; dependencies have to be added
-separately. The integration requests JSON rather than scraping Doob's terminal
-table.
+    for id in ids {
+        repo.complete_todo(&id).await?;
+        completed_count += 1;
+    }
 
-Batch input still exposes a gap in the current machine interface. One command
-can accept several todos, but creation emits human lines and persistence is
-sequential. A future structured batch result would need to represent partial
-success rather than imply transactionality.
+    Ok(completed_count)
+}
+```
+
+Creation accepts several todo strings too. The SurrealDB adapter loops over
+them and issues one create query at a time. A future structured batch result
+would need to report each item rather than imply atomic persistence
+(`/Users/joe/dev/doob/crates/doob-surrealdb/src/todo.rs`, shortened):
+
+```rust
+let mut created_todos = Vec::new();
+
+for (uuid, content, priority, project, file_path, tags) in todos {
+    let mut result = self.db.query(&query).await?;
+    let created: Option<Todo> = result.take(0)?;
+
+    if let Some(todo) = created {
+        created_todos.push(todo);
+    }
+}
+```
+
+Implicit context must become visible too. Doob derives a project from the
+`origin` remote when possible. It records a non-root working directory as a
+relative file path and leaves it unset at the repository root
+(`/Users/joe/dev/doob/crates/doob-core/src/context/git.rs`, shortened):
+
+```rust
+let cwd = env::current_dir().ok()?;
+let repo = Repository::discover(&cwd).ok()?;
+let workdir = repo.workdir()?;
+let rel_path = cwd.strip_prefix(workdir).ok()?;
+
+if rel_path.as_os_str().is_empty() {
+    None
+} else {
+    Some(rel_path.to_string_lossy().to_string())
+}
+```
+
+Godmode is one of the consumers Doob's terminal user cannot see. It requests
+JSON with a project filter, parses the document, and selects pending work. It
+does not scrape columns or remove color codes
+(`/Users/joe/dev/godmode/crates/godmode-core/src/integrations/doob.rs`):
+
+```rust
+pub fn todo_list(project: &str) -> Result<serde_json::Value> {
+    let raw = subprocess::run(
+        "doob",
+        &["todo", "list", "-p", project, "--json"],
+        "doob not found on PATH",
+    )?;
+    parse_todo_list(raw.as_bytes())
+}
+```
+
+`godmode handon` can surface the next todo when integration is enabled.
+`godmode task pull` imports pending todos as independent tasks, so dependency
+edges still need separate handling. The imported task retains Doob provenance
+(`/Users/joe/dev/godmode/crates/godmode-core/src/integrations/doob.rs`, shortened):
+
+```rust
+let id = t.get("id")?.as_str()?;
+let title = t.get("content")?.as_str()?;
+let mut task = Task::new(format!("doob-{}", &id[..8.min(id.len())]), title);
+task.notes = format!("doob:{id}");
+task.set_doob_id(id);
+```
 
 ## Keep the human interface human
 
-None of this means every command should print JSON by default. I still want
-`doob todo list` to be quick to scan. A human-oriented view can use spacing,
-labels, and color without promising that another program can parse it forever.
+None of this requires JSON by default. `doob todo list` should remain fast to
+scan. Human output can change spacing, labels, and color without asking every
+parser for permission.
 
-The important part is not to mix the contracts. Human output can evolve with
-the experience. Machine output should evolve with compatibility in mind.
+The important part is not mixing contracts. The command layer already returns
+domain values without presentation, which gives both formatters the same source
+of truth (`/Users/joe/dev/doob/crates/doob/src/commands/list.rs`):
 
-The moment a CLI gains a machine-readable mode, its audience changes. It is
-still a command-line tool, but it is also a dependency. Treating it that way
-early is much easier than discovering the contract after several other tools
-already rely on it.
+```rust
+pub async fn execute(
+    repo: &dyn TodoRepository,
+    status: Option<String>,
+    project: Option<String>,
+    limit: Option<usize>,
+) -> Result<Vec<Todo>> {
+    repo.list_todos(status.as_deref(), project.as_deref(), limit).await
+}
+```
 
 ## Compatibility includes failure
 
-Successful JSON gets most of the attention, but failure behavior is just as
-important. A client needs to distinguish "the todo does not exist" from "the
-database could not be opened." A person may understand both from a sentence;
-automation needs a stable exit status and a diagnostic in the right stream.
+Success is not the whole API. Doob maps top-level errors to exit categories and
+writes diagnostics to stderr. The caveat is that classification currently
+inspects error text, and unknown errors fall back to `DatabaseError`
+(`/Users/joe/dev/doob/crates/doob-core/src/error.rs`, shortened):
 
-This is where CLIs often become awkward APIs. Doob maps most top-level failures
-to documented exit categories, but some classification is text-based and not
-every subcommand follows the contract consistently. Callers should not yet
-treat all of its failure behavior as a strict API.
+```rust
+if msg.contains("permission denied") || msg.contains("no such file") {
+    ExitCode::IoError
+} else if msg.contains("failed to parse") {
+    ExitCode::ParseError
+} else if msg.contains("not found") {
+    ExitCode::TodoNotFound
+} else {
+    ExitCode::DatabaseError
+}
+```
 
-Designing for that caller does not make the terminal experience colder. It
-forces the domain operation to have a clear result before either formatter
-touches it. The human view and the JSON view can then differ in presentation
-without disagreeing about what happened.
+A machine-readable mode changes the audience. The CLI becomes a dependency,
+even if nobody publishes an SDK. Treating stdout shape, partial mutation,
+context, and failure behavior as API decisions early is cheaper than discovering
+the contract after several tools rely on it. Doob's entry point already keeps
+top-level diagnostics off stdout (`/Users/joe/dev/doob/crates/doob/src/main.rs`, shortened):
+
+```rust
+Err(e) => {
+    let code = ExitCode::from_error(&e);
+    eprintln!("{:?}", Report::msg(format!("{e:#}")));
+    process::exit(code as i32);
+}
+```
 
 ## Sources
 

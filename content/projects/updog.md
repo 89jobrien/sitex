@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/updog"
 ---
 
-# updog
-
 Agent Improvement Loop — systematic agent behavior improvement from observed traces.
 
 ## What it does

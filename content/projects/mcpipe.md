@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/mcpipe"
 ---
 
-# mcpipe
-
 Turn any MCP server, OpenAPI spec, or GraphQL endpoint into a shell CLI.
 
 ## Install
@@ -18,7 +16,7 @@ cargo install --path .
 
 ## Usage
 
-```
+```text
 mcpipe --mcp-stdio <cmd> [SUBCOMMAND] [ARGS]
 mcpipe --mcp <url> [SUBCOMMAND] [ARGS]
 mcpipe --spec <file-or-url> [SUBCOMMAND] [ARGS]
@@ -38,7 +36,7 @@ mcpipe --cli <cmd> [SUBCOMMAND] [ARGS]
 
 ### Global flags
 
-```
+```text
 --list                List available commands and exit
 --scan                Scan Claude config and workspace for MCP sources
 --pretty              Pretty-print JSON output

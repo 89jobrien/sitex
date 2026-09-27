@@ -1,120 +1,202 @@
 ---
-title: A Tool Starts Paying Rent When It Changes Your Behavior
+title: The Developer Tools Worth Maintaining Remove Decisions
 date: 2026-09-11
-description: "How I decide whether a developer tool is worth maintaining by looking for changed habits instead of more features."
+description: "A practical test for whether a developer tool earns its upkeep: it should reliably remove a recurring decision, mistake, or manual step."
 ---
 
-I have built plenty of tools that worked and still did not matter.
+Developers are good at building tools and bad at deciding when those tools have
+earned a permanent place in the workshop.
 
-They compiled. They had documentation. Some even solved the problem in their
-README. Then I went back to the old workflow because using the tool required
-more attention than the problem it was meant to remove.
+A repository can compile, have polished documentation, and solve the problem in
+its README without changing anyone's work. The tool may still require its user
+to notice the problem, remember the command, choose the right options, and check
+the result. It has automated some mechanics while preserving most of the
+attention cost.
 
-The tools I keep are the ones that change what I do without requiring me to
-remember that they exist.
+That is a poor trade if the tool also brings dependencies, releases, bug fixes,
+and compatibility work.
 
-## Look for a changed habit
+My test is simpler than a feature checklist: **a developer tool earns its
+maintenance cost when it reliably removes a recurring decision, mistake, or
+manual step.** The important evidence is not that the code works. It is that an
+old habit becomes unnecessary.
 
-Godmode pays rent when I start a new agent session and read the task graph
-instead of reconstructing unfinished work from memory. Coursers pays rent when
-`crs` catches a bad command before I have to review it. Doob pays rent when a
-todo created in one session appears in the next `godmode handon` triage without
-a second tracking ritual, provided Doob integration is enabled and Godmode's
-detected project matches the todo.
+## Start with the behavior, not the feature
 
-Obfsck changes a different behavior. I can put log data on an outbound path
-through `redact` rather than manually hunting for credentials and personal
-information before sharing it. The valuable part is not that Obfsck has
-several redaction modes. It is that "sanitize this first" becomes part of the
-path instead of a thing I hope to remember.
+Ask what happens at the repeated moment before the tool exists.
 
-Those are stronger signals than feature count. Each tool replaced a recurring
-decision or prevented a familiar failure.
+Perhaps a developer starts each session by reconstructing unfinished work.
+Perhaps they review every generated shell command for a familiar dangerous
+pattern. Perhaps they search logs for credentials and personal information
+before sharing them. These are small tasks, but they recur often enough to
+consume attention and fail often enough to matter.
 
-The change can be small and still matter. `mcpipe` lets me inspect a supplied
-MCP server or OpenAPI specification through the same list, search, and invoke
-workflow. Taskit makes a configured protocol surface's normalized-content
-change require a lockfile update when the default drift gate runs. Neither tool
-needs to transform the whole day to justify its place; it needs to improve a
-moment that actually recurs.
+A useful tool changes one of those moments. It puts the next action in front of
+the user, blocks the known mistake before execution, or routes outbound text
+through a sanitizer. The feature matters because of the behavior it replaces.
 
-This is why I pay attention to what invokes a tool. A command I run only while
-developing the command may not have found a real workflow. A command called by
-hooks, handoff scripts, or another maintained tool has evidence of demand
-beyond its own README.
+This leads to four useful questions:
 
-## Usage can reveal the wrong product
+1. What do I do differently because the tool exists?
+2. What mistake no longer reaches me?
+3. What manual step disappeared?
+4. Which old habit returns if I remove the tool?
 
-Sometimes the code I thought was central is not the part that changes my
-work. A dashboard may be polished while the plain JSON command becomes the
-thing other tools depend on. A broad automation layer may sit unused while one
-small pre-commit check quietly prevents mistakes every day.
+Vague answers are a warning. Adding features rarely turns an optional ritual
+into infrastructure.
 
-That is useful feedback, even when it is uncomfortable. It tells me where to
-simplify and what not to build next. The unused feature is not waiting for
-better marketing when I am its intended user. It may simply be outside the
-real workflow.
+## Example 1: remove the recurring decision
 
-I now ask a tool a few plain questions. What do I do differently because it
-exists? What mistake no longer reaches me? What manual step disappeared? If I
-removed the tool, which old habit would return?
+[Godmode](https://github.com/89jobrien/godmode) is a session workflow tool that
+loads a task graph and presents the next runnable work when an agent session
+starts. [Doob](https://github.com/89jobrien/doob) is a todo tracker that can
+supply the next pending item for the current project.
 
-If the answers are vague, adding another feature rarely helps.
+Together, they remove a recurring decision: "What should I resume?" Instead of
+reconstructing state from memory, I can begin with the task graph and the next
+project-specific todo already in view.
 
-There is a harsher version of the test: stop using it for a while. If nothing
-gets slower, less safe, or more annoying, the tool may not be carrying its
-maintenance cost. I do not need to delete the repository immediately, but I
-should stop treating activity on it as automatic progress.
+The integration is deliberately conditional. Godmode loads its graph, checks
+whether Doob support is enabled, and asks for a todo associated with the
+detected project:
 
-Some prototypes are still worth keeping as experiments. Crux explores a typed
-way to retain agent execution history. RSLM explores having a model write Rhai
-scripts that query supplied context through registered functions rather than
-placing the raw context directly in model messages. An experiment can answer a
-design question before it changes a daily habit. The mistake is judging that
-experiment by production-tool standards or pretending it has graduated
-because the code is polished.
+```rust
+let g = graph::load(root)?;
+let summary = g.summary();
 
-## Maintenance is part of the rent
+let next_todo = if cfg.integrations.doob {
+    doob::todo_next_for_root(root).ok().flatten()
+} else {
+    None
+};
+```
 
-A tool can change behavior and still cost too much to keep. It may depend on a
-fragile service, need constant configuration repair, or create a new workflow
-that only I understand. The benefit has to exceed that maintenance tax.
+The interesting product decision is not the terminal presentation. It is the
+stable machine-readable boundary between the tools. Doob returns a JSON object
+with a `todos` array; Godmode selects the first pending item. Changing that
+envelope would break the behavior even if Doob's human-facing table still
+looked perfect.
 
-This is why rough, narrow tools often survive in my workspace while more
-ambitious prototypes do not. The narrow tool owns one repeated moment and
-makes it better. The prototype owns an idea.
+Usage can reveal that a modest interface is more valuable than a polished
+surface. When another maintained tool depends on a command, the command has
+evidence of demand beyond its own README.
 
-Working software is the start of the evaluation, not the end. A tool becomes
-part of the system only when behavior bends around it and stays better after
-the novelty wears off.
+## Example 2: prevent the familiar mistake
 
-## Build around the retained behavior
+[Coursers](https://github.com/89jobrien/coursers) is a command-policy tool that
+checks proposed shell commands against rules before an agent executes them.
 
-Once I know why a tool survives, roadmap decisions get easier. Doob's value is
-not every possible todo feature; it is durable, context-aware work that both
-people and agents can query. Coursers earns its place on the live command path,
-so rule correctness, configuration validation, and end-to-end testing of the
-installed hook command matter more than another reporting screen. Obfsck
-belongs at outbound boundaries, so integrations that put it in those paths
-matter more than an isolated demo of another pattern.
+That placement matters. A linter I must remember to run adds a task. A hook on
+the execution path removes the review decision for known patterns. When a rule
+matches, the command is denied before it can produce the failure the rule was
+written to prevent:
 
-The retained behavior becomes a constraint. A redesign that makes the code
-cleaner but removes the quick path people actually use is not an improvement.
-A new feature that weakens the reliable core may cost more than it adds.
+```text
+proposed command
+  -> evaluate static rules and task-scoped exceptions
+  -> enrich and record the matched violation
+  -> render a protocol-native denial
+  -> exit before shell execution
+```
 
-This is the closest thing I have to a product strategy for personal developer
-tools: identify the behavior that changed, protect the path that caused it,
-and be willing to let the rest stay small.
+This is stronger than recording advice in a contributor guide. Documentation
+can explain why a command is risky, but an execution-path check can make the
+safe behavior the default. The tool pays rent each time the mistake stops at
+the boundary instead of becoming a failure to diagnose.
 
-## Sources
+The lesson generalizes: if prevention depends on memory, it is still a manual
+process. Put the check where the effect occurs.
+
+## Example 3: absorb the manual step
+
+[Obfsck](https://github.com/89jobrien/obfsck) is a text-redaction library and CLI
+for sanitizing secrets and, when requested, personally identifiable information
+before text leaves a trusted context.
+
+Its value is not the number of patterns it recognizes. The changed behavior is
+that outbound logs can travel through a redaction path instead of relying on a
+last-minute visual search.
+
+The implementation also preserves an important distinction: disabling broader
+PII handling does not disable secret redaction. Secrets are processed first;
+minimal mode can return before IP address and email handling:
+
+```rust
+s = Cow::Owned(self.obfuscate_secrets(s.as_ref()));
+if self.level == ObfuscationLevel::Minimal || !self.pii {
+    return s.into_owned();
+}
+
+s = Cow::Owned(self.obfuscate_ips(s.as_ref()));
+s = Cow::Owned(self.obfuscate_emails(s.as_ref()));
+```
+
+That ordering supports the behavioral promise. The baseline safety step stays
+on even when the caller chooses a less aggressive mode. A useful default does
+not merely offer protection; it makes accidentally skipping protection harder.
+
+## Adoption and experimentation are different outcomes
+
+Not every worthwhile repository needs to pass the behavior-change test yet.
+Experiments have a different job: they answer a design question cheaply enough
+to inform later work.
+
+[Crux](https://github.com/89jobrien/crux) explores carrying a typed result and
+its causal execution history as one value. [RSLM](https://github.com/89jobrien/rslm)
+explores model-written Rhai scripts that query supplied context with a fresh
+scope for each execution. Those are useful technical questions, but polished
+implementations would not by themselves prove adoption.
+
+I therefore use different labels:
+
+- **Adopted tools** own a recurring path. Removing one makes work slower, less
+  safe, or more annoying.
+- **Experiments** reduce uncertainty. They may produce a reusable design, a
+  negative result, or evidence that the idea should stop.
+
+Confusing the two creates bad roadmaps. An experiment gets burdened with
+production expectations, while an adopted tool accumulates speculative
+features instead of protecting the narrow behavior that made it useful.
+
+## Maintenance is part of the calculation
+
+Behavior change is necessary, not sufficient. A tool that saves two minutes a
+week but breaks every month has not removed work; it has moved work into a less
+predictable form.
+
+The maintenance calculation should include more than bug count:
+
+- How often does the protected moment occur?
+- How costly is the old decision, mistake, or manual step?
+- How reliably does the tool stay on that path?
+- How much compatibility and operational work does it create?
+
+This is why narrow tools often survive. They own one repeated moment, expose a
+small contract, and avoid becoming platforms. Their value can be observed in a
+missing action: no reconstruction ritual, no repeated command review, no manual
+redaction pass.
+
+Invocation is useful evidence. A command run only while developing itself may
+still be a prototype. A command called by hooks or another maintained tool is
+closer to infrastructure. Neither signal is absolute, but both are more honest
+than counting features or commits.
+
+There is also a direct test: stop using the tool for a while. If nothing gets
+slower, less safe, or more frustrating, the repository may be working software
+without being useful infrastructure. That does not require deleting it. It does
+require being honest about what kind of project it is.
+
+Working code starts the evaluation; changed behavior finishes it. Find the
+recurring decision, mistake, or manual step. Put the tool directly on that path.
+Protect the small interface that makes the change reliable, and let everything
+else justify its own maintenance cost.
+
+## Public sources
 
 - [Godmode session triage and Doob integration](https://github.com/89jobrien/godmode/blob/main/crates/godmode-core/src/integrations/mod.rs)
-- [Coursers live front-controller path](https://github.com/89jobrien/coursers/blob/main/crates/coursers/src/crs_commands.rs)
-- [Obfsck redaction pipeline](https://github.com/89jobrien/obfsck/blob/main/src/lib.rs)
-- [`mcpipe` source selection and command flow](https://github.com/89jobrien/mcpipe/blob/main/src/main.rs)
-- [RSLM context-query execution](https://github.com/89jobrien/rslm/blob/main/crates/rslm-core/src/rlm.rs)
-- [Crux typed execution trace](https://github.com/89jobrien/crux/blob/main/crates/crux-types/src/crux_value.rs)
-- [Taskit drift comparison and lock updates](https://github.com/89jobrien/taskit/blob/main/crates/taskit-engine/src/protocol/drift.rs)
-- [Doob Git context](https://github.com/89jobrien/doob/blob/main/crates/doob-core/src/context/git.rs)
-- [Doob JSON output](https://github.com/89jobrien/doob/blob/main/crates/doob/src/output/json.rs)
-- [Doob query path](https://github.com/89jobrien/doob/blob/main/crates/doob/src/commands/list.rs)
+- [Godmode's Doob JSON adapter](https://github.com/89jobrien/godmode/blob/main/crates/godmode-core/src/integrations/doob.rs)
+- [Doob's JSON output](https://github.com/89jobrien/doob/blob/main/crates/doob/src/output/json.rs)
+- [Coursers pre-tool command handling](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/coursers/src/hook/pre.rs)
+- [Obfsck's redaction pipeline](https://github.com/89jobrien/obfsck/blob/main/src/lib.rs)
+- [Crux's typed execution trace](https://github.com/89jobrien/crux/blob/main/crates/crux-types/src/crux_value.rs)
+- [RSLM's context-query execution](https://github.com/89jobrien/rslm/blob/main/crates/rslm-core/src/rlm.rs)

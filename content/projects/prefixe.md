@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/prefixe"
 ---
 
-# prefixe
-
 Prepend validated prefixes to shell commands, with support for confirmed mappings and
 speculative candidate learning.
 

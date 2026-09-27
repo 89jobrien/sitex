@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/braid"
 ---
 
-# Braid
-
 Rust-first workspace for the Braid personal agent platform.
 
 ## Crates

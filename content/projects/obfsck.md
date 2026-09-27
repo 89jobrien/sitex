@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/obfsck"
 ---
 
-# obfsck
-
 Redacts secrets and PII from log lines and structured text.
 
 ## Install

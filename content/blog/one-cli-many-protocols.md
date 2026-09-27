@@ -4,108 +4,189 @@ date: 2026-09-11
 description: "What mcpipe can normalize across tool protocols, and what an honest abstraction has to leave different."
 ---
 
-I kept meeting the same capability through different front doors. An MCP
-server called it a tool. OpenAPI called it an operation. GraphQL exposed it as
-a field. A compatible CLI described it through a JSON command manifest.
+The protocols aren't the same. The repeated work around them is.
 
-The underlying action might be "list issues" in every case, but discovering
-and invoking it required a different client each time. `mcpipe` is my attempt
-to give those capabilities one shell-shaped entrance without pretending the
-protocols underneath are the same.
+MCP, OpenAPI, GraphQL, and manifest-compatible CLIs all describe callable operations. `mcpipe`
+normalizes that overlap into discovery and execution. The real port is in `src/backend/mod.rs`:
 
-## Normalize the part people repeat
-
-`mcpipe` can connect to an MCP server over stdio or HTTP/SSE, read an OpenAPI
-specification, introspect GraphQL, or query a CLI that implements its
-`schema --json` manifest contract. From there it builds a command surface that
-supports the same basic habits: list available operations, search by name,
-pass arguments, and format the result.
-
-That shared layer is useful for people, scripts, and agents. I do not need a
-new discovery workflow every time a tool provider chooses a different
-transport. An agent can also reason about commands instead of carrying a
-custom adapter for every schema source.
-
-The value is not that a CLI is inherently better than MCP or GraphQL. The
-value is that the caller can keep one interaction model while `mcpipe` handles
-discovering commands from the selected backend.
-
-The first operation is usually discovery:
-
-```text
-mcpipe --mcp-stdio "my-mcp-server" --list
-mcpipe --spec ./openapi.yaml --list
-mcpipe --graphql https://example.test/graphql --list
-mcpipe --cli my-manifest-compatible-cli --list
+```rust
+#[async_trait]
+pub trait Backend: Send + Sync {
+    async fn discover(&self) -> Result<Vec<CommandDef>, BackendError>;
+    async fn execute(
+        &self,
+        cmd: &CommandDef,
+        args: ArgMap,
+    ) -> Result<serde_json::Value, BackendError>;
+}
 ```
 
-Those commands start from very different source material. MCP returns tool
-definitions. OpenAPI describes paths and operations. GraphQL exposes a type
-system through introspection. The CLI backend expects a structured manifest
-from `schema --json`. `mcpipe` turns each source into a list a person can
-search and an agent can inspect before choosing an operation.
+## Normalize discovery first
 
-That discovery step is easy to overlook, but it is where a lot of integration
-friction lives. Calling a known endpoint is straightforward. Figuring out what
-can be called, which arguments are required, and how to present it consistently
-is the work that otherwise gets rebuilt in every client.
+Discovery is the useful common operation. Before a person or agent can call anything, it needs
+names, descriptions, required arguments, and enough schema to construct values.
 
-## Do not normalize away the truth
+The MCP adapter requests `tools/list`, then maps each `inputSchema` into the common model. Source:
+`src/backend/mcp.rs` (shortened).
 
-The abstraction gets dishonest when it claims the backends are equivalent.
-They are not.
+```rust
+let result = session
+    .send_request("tools/list", serde_json::json!({}))
+    .await?;
+let tools = result
+    .get("tools")
+    .and_then(|value| value.as_array())
+    .cloned()
+    .unwrap_or_default();
+let cmds = tools_to_commands(&tools);
+```
 
-OpenAPI starts with HTTP operations and status codes. GraphQL has selection
-sets and a response that can contain both data and errors. MCP includes tool
-metadata and transport behavior of its own. A shell command may expose only
-prose help and process exit codes. Authentication, streaming, cancellation,
-and schema quality differ too.
+OpenAPI starts from paths and HTTP methods. Its adapter keeps each parameter's original name and
+location because execution still needs to distinguish a path value from a header or request body.
 
-`mcpipe` therefore needs backend-specific adapters even though the user sees a
-shared command shape. The common layer owns discovery, argument handling, and
-output presentation. Today those adapters translate into a deliberately
-limited common model; they do not preserve every backend semantic.
+That difference survives normalization in `src/domain.rs`:
 
-Authentication is a good example. An OpenAPI service may need an HTTP header.
-An MCP stdio server may inherit credentials from the environment of the
-process that starts it. A wrapped CLI may already own an authenticated session.
-HTTP backends share repeatable header flags, while stdio and wrapped CLIs rely
-on their process environment or existing configuration.
+```rust
+pub struct ParamDef {
+    pub name: String,
+    pub original_name: String,
+    pub required: bool,
+    pub description: String,
+    pub location: ParamLocation,
+    pub schema: serde_json::Value,
+}
 
-Errors expose a current limit of the abstraction. OpenAPI keeps status and body
-text, and the CLI backend keeps stderr, but top-level errors generally become
-strings. GraphQL partial data is discarded when the response also contains
-errors. The common surface is convenient, but it is not yet a lossless error
-model.
+pub enum ParamLocation {
+    Body,
+    Query,
+    Path,
+    Header,
+    ToolInput,
+}
+```
 
-That boundary is the main design work. Parsing another schema is relatively
-straightforward. Deciding which differences the caller must still see is
-harder.
+The common argument map doesn't make those values interchangeable. The OpenAPI adapter still puts
+them in different parts of the request.
 
-## The cache is part of the interface
+{% raw %}
 
-Schema discovery can involve fetching a document or introspecting a remote
-service. `mcpipe` caches command catalogs for MCP HTTP, OpenAPI, and GraphQL
-sources; MCP stdio and CLI sources are not cached. `--refresh` bypasses catalog
-loading and overwrites the cache after discovery.
+```rust
+// src/backend/openapi.rs
+match param.location {
+    ParamLocation::Path => {
+        url_path = url_path.replace(
+            &format!("{{{}}}", param.original_name),
+            val.as_str().unwrap_or(&val.to_string()),
+        );
+    }
+    ParamLocation::Query => query_params.push((param.original_name.clone(), val.to_string())),
+    ParamLocation::Body => {
+        body_map.insert(param.original_name.clone(), val);
+    }
+    ParamLocation::Header => header_params.push((param.original_name.clone(), val.to_string())),
+    ParamLocation::ToolInput => {}
+}
+```
 
-The current cache does not tell the user that a missing operation came from
-stale discovery data rather than the backend. That is a real seam the common
-interface still needs to expose.
+{% endraw %}
 
-The recurring lesson in `mcpipe` is that a unified surface is not one giant
-adapter. It is a small common model surrounded by honest translations. The
-more carefully I preserve those seams, the more useful the common CLI becomes.
+## Keep the leaks visible
 
-One CLI across several protocols is useful because the protocols are
-different, not because they secretly were the same all along.
+GraphQL is the clearest warning against overclaiming. A response can contain both `data` and
+`errors`. The current adapter turns any `errors` member into `BackendError::Execution`, so partial
+data is discarded.
+
+It also discovers mutation fields but currently emits a query-shaped document during execution.
+That is a real limit in `src/backend/graphql.rs`, not a detail the CLI can normalize away:
+
+{% raw %}
+
+```rust
+let fields = per_call_fields
+    .or_else(|| self.fields_override.clone())
+    .unwrap_or_else(|| "id".to_string());
+let query = format!("{{ {} {{ {} }} }}", call, fields);
+
+if let Some(errors) = value.get("errors") {
+    return Err(BackendError::Execution(errors.to_string()));
+}
+```
+
+{% endraw %}
+
+The CLI backend has different limits. Discovery requires `schema --json`, execution requires JSON
+on stdout, and command names support at most one nested level. An arbitrary executable with prose
+help does not satisfy that contract.
+
+The split is explicit in `src/backend/cli.rs`:
+
+```rust
+let output = Command::new(&self.command)
+    .args(["schema", "--json"])
+    .output()
+    .await?;
+let manifest: CliManifest = serde_json::from_slice(&output.stdout)?;
+
+let parts: Vec<&str> = cmd.name.splitn(2, '-').collect();
+let mut argv: Vec<String> = parts.iter().map(|part| part.to_string()).collect();
+argv.push("--json".to_string());
+```
+
+MCP stdio inherits the child process environment. HTTP/SSE, OpenAPI, and GraphQL can use request
+headers. Authentication cannot become one universal flag without hiding where credentials live.
+
+Errors are normalized just as narrowly. The categories are consistent, but typed HTTP status,
+GraphQL partial data, MCP metadata, and process exit details are not preserved. Source:
+`src/domain.rs`.
+
+```rust
+pub enum BackendError {
+    Discovery(String),
+    Execution(String),
+    NotFound(String),
+    Transport(String),
+    Schema(String),
+}
+```
+
+## Cache the catalog, not the claim
+
+Remote discovery can be expensive. `mcpipe` caches catalogs for MCP HTTP, OpenAPI, and GraphQL
+sources. MCP stdio and CLI sources are not cached. `--refresh` bypasses loading and saves a fresh
+catalog.
+
+The cache silently misses when an entry is expired, unreadable, or invalid. It does not explain
+whether a missing operation came from stale discovery data. Source: `src/cache.rs`.
+
+```rust
+pub fn load(&self, source: &str) -> Option<Vec<CommandDef>> {
+    let path = self.path(source);
+    let modified = std::fs::metadata(&path).ok()?.modified().ok()?;
+    let age = SystemTime::now().duration_since(modified).ok()?;
+    if age >= self.ttl {
+        return None;
+    }
+    let data = std::fs::read_to_string(&path).ok()?;
+    serde_json::from_str(&data).ok()
+}
+```
+
+One CLI works when the common model stays small. Discovery, argument capture, execution, and JSON
+output fit. Protocol-specific transport, error, and authentication semantics do not disappear.
+
+The abstraction is useful because the adapters remain different. `Backend` is the shared doorway,
+not proof that every room behind it is the same.
+
+```rust
+pub type ArgMap = HashMap<String, serde_json::Value>;
+```
 
 ## Sources
 
-- [`mcpipe` backend contract and adapter modules](https://github.com/89jobrien/mcpipe/blob/main/src/backend/mod.rs)
-- [MCP stdio and HTTP/SSE adapter](https://github.com/89jobrien/mcpipe/blob/main/src/backend/mcp.rs)
-- [OpenAPI adapter, headers, and HTTP errors](https://github.com/89jobrien/mcpipe/blob/main/src/backend/openapi.rs)
-- [Common command model](https://github.com/89jobrien/mcpipe/blob/main/src/domain.rs)
-- [CLI manifest contract](https://github.com/89jobrien/mcpipe/blob/main/src/backend/cli.rs)
-- [GraphQL discovery and error handling](https://github.com/89jobrien/mcpipe/blob/main/src/backend/graphql.rs)
-- [Catalog caching and refresh flow](https://github.com/89jobrien/mcpipe/blob/main/src/main.rs)
+- [`Backend` contract](https://github.com/89jobrien/mcpipe/blob/a72418622baa38e852df286b5bcf5dc61e6b0b65/src/backend/mod.rs)
+- [Common command and error types](https://github.com/89jobrien/mcpipe/blob/a72418622baa38e852df286b5bcf5dc61e6b0b65/src/domain.rs)
+- [MCP adapter](https://github.com/89jobrien/mcpipe/blob/a72418622baa38e852df286b5bcf5dc61e6b0b65/src/backend/mcp.rs)
+- [OpenAPI adapter](https://github.com/89jobrien/mcpipe/blob/a72418622baa38e852df286b5bcf5dc61e6b0b65/src/backend/openapi.rs)
+- [GraphQL adapter](https://github.com/89jobrien/mcpipe/blob/a72418622baa38e852df286b5bcf5dc61e6b0b65/src/backend/graphql.rs)
+- [CLI manifest adapter](https://github.com/89jobrien/mcpipe/blob/a72418622baa38e852df286b5bcf5dc61e6b0b65/src/backend/cli.rs)
+- [Catalog cache](https://github.com/89jobrien/mcpipe/blob/a72418622baa38e852df286b5bcf5dc61e6b0b65/src/cache.rs)

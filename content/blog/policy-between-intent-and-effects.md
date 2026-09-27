@@ -1,140 +1,207 @@
 ---
-title: Policy Gates Belong Between Intent and Side Effects
+title: Put Policy at the Edge of the Effect
 date: 2026-09-11
-description: "What Minibox and Coursers taught me about placing safety checks after an action is understood but before it runs."
+description: "Automation is safer when intent becomes a structured request and policy runs immediately before the component that can cause the effect."
 ---
 
-I kept seeing safety guidance placed at one of two useless extremes. It appears in
-the prompt before the agent has decided what to do, where it can be forgotten,
-or in an audit log after the tool has run, where it can only explain the
-damage.
+```text
+intent -> structured request -> policy decision -> effect
+           "what, exactly?"     allow or deny      filesystem,
+                                                   process, network,
+                                                   or remote service
+```
 
-The useful control point is between those moments: the action is concrete, but
-the side effect has not started.
+That sequence is the central safety pattern for automation. Let a person or
+agent decide what it wants, turn that intent into explicit data, and evaluate
+policy immediately before the component responsible for the side effect acts.
 
-## Wait until the action has a shape
+The timing matters. Before the request is structured, policy has too little
+information. After execution, a log can explain an incident but cannot prevent
+it.
 
-Policy needs something specific to evaluate. "Be careful with containers" is
-not enough. "Run this image with a host bind mount and privileged mode" has
-the information needed for a decision.
+## The four stages
 
-Minibox applies that point at both the MCP and daemon boundaries. MCP gates
-explicit pull, stop, and remove operations and separately controls privileged
-mode, bind mounts, and host networking. The daemon independently enforces
-bind-mount and privileged-run policy for every external client, although an
-allowed run may auto-pull a missing image.
+**Intent** is a desired outcome: “run this program,” “publish this release,” or
+“update that record.” Intent may begin as prose and may still be ambiguous.
 
-The agent gets room to decide what operation it wants. Minibox gets the last
-word before that operation changes the machine.
+A **structured request** names the operation and its security-relevant fields.
+A container request, for example, can separate the image, command, network
+mode, mounts, resource limits, and privileged flag. Policy no longer has to
+guess those facts from a sentence or shell command.
 
-The policy decision is stronger when it receives a structured action rather
-than raw prose. In simplified form, the run arguments look like this:
+A **policy decision** compares that request with rules and returns a small,
+explicit result such as allow or deny. A useful denial also says which
+capability was rejected and why.
+
+The **effect owner** is the component that can actually change the world. It
+holds the filesystem handle, process API, network client, database connection,
+or daemon authority. The most important gate belongs at this boundary because
+all accepted paths converge there.
+
+“Immediately before” does not have to mean the final line before a system
+call. It means after parsing and normalization, but before the operation starts
+acquiring resources or making irreversible changes.
+
+## Why instructions are not enforcement
+
+A prompt can tell an agent not to use privileged containers or overwrite
+production data. That guidance is valuable, but it is advisory. It competes
+with every later instruction, depends on the model remembering it, and is
+usually written before the exact request exists.
+
+A check in the caller is stronger, but still incomplete. Systems gain new
+callers over time: a command-line client, an HTTP endpoint, a scheduled job, or
+another agent integration. One caller may forget the check, carry an older
+version, or call a lower-level interface directly.
+
+This is why safe systems use **defense in depth**: independent controls at
+different boundaries. An early caller-side check gives fast feedback and
+rejects obviously disallowed requests. A second check at the effect owner is
+authoritative because bypassing one caller does not bypass the operation.
+Operating-system isolation, least-privilege credentials, and audit records add
+further layers.
+
+These layers are not interchangeable. Prompts guide. Policy gates prevent.
+Isolation limits damage. Logs support detection and investigation.
+
+## Example one: Minibox container execution
+
+[Minibox](https://github.com/89jobrien/minibox/blob/f75ef70c764b570554053f964cc1ba2deb85cb25/README.md)
+is an open-source, agent-controllable container runtime written in Rust. A
+daemon owns container lifecycle operations, while clients ask the daemon to
+pull images, start containers, stop them, and remove them.
+
+One client is its MCP server. The
+[Model Context Protocol](https://modelcontextprotocol.io/specification/2025-06-18)
+(MCP) is a standard way for an AI application to discover and call external
+tools using structured messages. In this example, MCP is only the transport
+and tool interface; it is not the policy itself.
+
+A simplified run request looks like this:
 
 ```json
 {
-  "image": "alpine",
-  "command": ["/bin/sh"],
-  "mounts": [
-    {
-      "host_path": "/absolute/workspace",
-      "container_path": "/work",
-      "read_only": true
-    }
-  ],
-  "privileged": false
+  "image": "alpine:3.20",
+  "command": ["sh", "-lc", "make test"],
+  "network": "none",
+  "mounts": [],
+  "privileged": false,
+  "memory_limit_bytes": 536870912
 }
 ```
 
-The request keeps image, command, mounts, network, and privilege fields
-distinct. Current MCP policy evaluates mounts, privilege, and host networking;
-it does not interpret command semantics. A shell policy that sees only an
-opaque string has to parse intent back out of syntax.
+This shape exposes facts that matter to policy. The MCP layer can reject a
+privileged run, a host bind mount, or host networking unless that capability is
+enabled. Pull, stop, and remove share a separate mutation permission. Those
+checks are visible in the committed
+[MCP policy implementation](https://github.com/89jobrien/minibox/blob/f75ef70c764b570554053f964cc1ba2deb85cb25/crates/mcp/src/policy.rs).
 
-This is why I prefer capability-level gates when the domain offers them. The
-closer policy is to the operation, the less guessing it has to do.
+That is a useful first gate, but the MCP server is not the only possible
+client. Treating it as the sole authority would make safety depend on every
+caller using that adapter correctly.
 
-## The same placement works for development tools
+Minibox therefore checks again inside the daemon. Its run handler validates
+basic run policy before handing the request to container preparation. An
+uncached image may then be retrieved. After that, Minibox builds an execution
+manifest—a normalized description of the workload—and, when a manifest policy
+has been configured, evaluates it before creating the overlay filesystem,
+cgroup, or container-network resources. Standard daemon composition injects no
+additional manifest policy. This optional gate precedes container setup, not
+every possible preparatory side effect. The ordering is visible in the committed
+[daemon run path](https://github.com/89jobrien/minibox/blob/f75ef70c764b570554053f964cc1ba2deb85cb25/crates/minibox/src/daemon/handler/run.rs).
 
-I use Coursers to apply the same pattern to shell commands. Its `crs` front
-controller receives the exact command an agent proposes through a `PreToolUse`
-hook. At that point it can pass the command through unchanged, rewrite it to a
-configured preferred form, or deny it with a reason.
+The execution policy can constrain allowed and denied images, network modes,
+privileged execution, memory, and host-mount prefixes. Its decision type has
+only two outcomes: allow, or deny with a reason. See the committed
+[execution policy](https://github.com/89jobrien/minibox/blob/f75ef70c764b570554053f964cc1ba2deb85cb25/crates/minibox-domain/src/execution_policy.rs).
 
-That is more useful than asking the model to remember every shell convention.
-It is also more useful than scanning the transcript later and noticing that a
-force push, credential mutation, service stop, or database drop already
-happened.
+The architecture also uses **ports and adapters**. A port is an interface the
+core defines for something it needs, such as an image registry or container
+runtime. An adapter connects that interface to a particular external system.
+This separation makes implementations replaceable, but it also creates an
+important policy lesson: a gate on one adapter cannot protect other adapters.
+Rules that must apply to every run belong in the shared daemon path.
 
-Minibox and Coursers operate at different levels. Minibox understands domain
-capabilities such as a privileged container. Coursers understands commands and
-tool-use rules. The shared idea is the placement of the check: after intent
-becomes inspectable, before execution makes it real.
+The two Minibox gates serve different purposes:
 
-Coursers also supports more than denial. A command can be rewritten to a
-configured preferred form while the resulting command remains visible to the
-caller. A tool-choice rule can reject shell `grep` and return guidance telling
-the agent to use the dedicated Grep tool. A configured destructive-operation
-rule can stop the invocation entirely.
+1. The MCP adapter rejects disallowed agent requests early.
+2. The daemon protects the container operation regardless of which client sent
+   it.
 
-Across policy systems, I think of the outcomes as a small vocabulary. Coursers
-denies or rewrites matched actions and lets unmatched actions pass; approval
-belongs in a broader control layer when a human decision is required:
+The second gate does not make the first redundant. It makes the system less
+dependent on any single integration being perfect.
 
-- **Allow** when the action is within policy.
-- **Rewrite** when the intent is acceptable but the mechanism should change.
-- **Deny** when the capability is outside the agent's authority.
-- **Approve** when a person must accept a specific side effect.
+## Example two: Coursers command hooks
 
-Keeping those outcomes distinct makes policy easier to review. A style
-preference should not look like a denied production mutation, and an approval
-should not be hidden inside a generic retry loop.
+[Coursers](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/README.md)
+is an open-source rule engine that course-corrects shell commands proposed by
+AI coding tools. It can deny a command, rewrite it, emit a notification, run a
+configured helper, or redact output.
 
-## Record matched decisions honestly
+Coursers receives **hook events**. A hook event is a structured callback from
+the host application at a defined lifecycle point. A pre-tool-use event occurs
+after the application knows the selected tool and its input, but before it
+executes the tool. A post-tool-use event occurs after execution and can include
+the result or exit status.
 
-A policy gate should leave a reason behind. "Denied" is less useful than
-"bind mounts are disabled for agent operations." A rewrite should show the
-command that will actually run. Where a separate approval layer is involved,
-it should identify the capability being granted rather than ask for vague
-confirmation.
+The pre-tool-use boundary produces the same sequence as the opening diagram:
 
-Coursers records matched denials, rewrites, and notifications. Silent passes
-are not recorded, so it is not a complete action-decision-result audit trail.
-That limitation should be explicit rather than hidden behind the word
-"audit."
+```text
+"inspect these files"
+        -> { tool: "Bash", command: "..." }
+        -> Coursers rules: allow, deny, or rewrite
+        -> shell process starts
+```
 
-Prompts still matter. They help the agent choose sensible actions before a
-gate is involved. Audit logs still matter. They help explain what happened
-afterward. Neither replaces the narrow control point where the system can
-understand an action and still stop it.
+The command is concrete enough for rules to match, yet it has not run. A deny
+can stop destructive syntax. A rewrite can preserve the goal while selecting a
+safer or more reliable mechanism. The committed
+[pipeline types and evaluator](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/core/src/hook/pipeline.rs)
+show that the available actions form a closed set rather than arbitrary prose.
 
-## Policy needs the same path as production
+This is stronger than putting “never force-push” in a prompt because the host
+invokes policy for the actual command. It is still not universal enforcement:
+a shell launched outside the hooked application will not cross that boundary,
+and the command rule cannot replace permissions enforced by Git hosting,
+filesystem ownership, or the operating system.
 
-A gate is only real if the live execution path cannot step around it. I learned
-that while working on Coursers: a rules file can be correct and a hook can look
-configured while the actual front controller bypasses the rule set. Testing
-the policy function is not enough. The request must be exercised through the
-same command and configuration that an agent uses.
+The integration must also be tested through the configured command path. A
+unit test can prove that a regex matches while the installed front controller
+silently skips the rule set. Coursers includes an
+[end-to-end regression test](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/e2e/tests/pipeline.rs)
+that sends a pre-tool-use payload through its real command entry point and
+asserts that the entry point returns a denial. The host application is then
+responsible for honoring that protocol response and suppressing execution.
 
-The same applies to an MCP adapter. If the CLI reaches the daemon through
-policy but a second agent endpoint calls a runtime adapter directly, the
-diagram has a gate and the system does not. One authority needs to own the
-effect, and every client needs to cross it.
+## The practical design rule
 
-That operational check is what turns governance from documentation into
-infrastructure. The rule and live path must agree, and matched policy decisions
-should be recorded.
+For any automated operation, ask one question: which component can first make
+the requested effect real?
 
-## Sources
+Give that component a structured request, not prose. Normalize aliases and
+validate malformed values before policy evaluation. Put the authoritative
+decision on the path every caller must use. Return explicit outcomes and
+human-readable denial reasons.
 
-- [Minibox MCP policy](https://github.com/89jobrien/minibox/blob/main/crates/mcp/src/policy.rs)
-- [Minibox structured run arguments](https://github.com/89jobrien/minibox/blob/main/crates/mcp/src/types.rs)
-- [Minibox container request validation](https://github.com/89jobrien/minibox/blob/main/crates/mcp/src/tools/containers.rs)
-- [Minibox image mutation gate](https://github.com/89jobrien/minibox/blob/main/crates/mcp/src/tools/images.rs)
-- [Minibox daemon policy composition](https://github.com/89jobrien/minibox/blob/main/crates/minibox/src/daemon/handler/mod.rs)
-- [Minibox automatic image pulling](https://github.com/89jobrien/minibox/blob/main/crates/minibox/src/daemon/handler/run.rs)
-- [Coursers front-controller path](https://github.com/89jobrien/coursers/blob/main/crates/coursers/src/crs_commands.rs)
-- [Coursers pipeline actions](https://github.com/89jobrien/coursers/blob/main/crates/core/src/hook/pipeline.rs)
-- [Coursers decision-log schema](https://github.com/89jobrien/coursers/blob/main/crates/core/src/hook/log.rs)
-- [Coursers Grep guidance rule](https://github.com/89jobrien/coursers/blob/main/config/course-correct-rules.example.json)
-- [Coursers destructive-operation gates](https://github.com/89jobrien/coursers/blob/main/.config/crs/plugins.d/godmode.toml)
-- [Front-controller regression test](https://github.com/89jobrien/coursers/blob/main/crates/e2e/tests/pipeline.rs)
+Then add—not substitute—supporting layers:
+
+- guidance in prompts and user interfaces;
+- early checks in adapters for fast feedback;
+- authoritative checks at the effect owner;
+- least-privilege operating-system and service credentials;
+- records of the request, decision, and result;
+- end-to-end tests proving denial happens before the effect.
+
+One especially useful test installs a fake effect implementation that counts
+calls. Submit a denied request and assert that the count remains zero. Another
+uses an unreachable backend and checks that policy denial appears instead of a
+connection error. Both test ordering, not merely rule correctness.
+
+Structured requests do not solve every safety problem. A command field may
+still contain a program with complex behavior, and policy can evaluate only
+the facts it can see. The answer is to expose important capabilities as fields,
+use conservative defaults, and keep lower-level containment in place.
+
+The durable principle is simple: let automation form an intent, require it to
+state that intent as data, and give the owner of the side effect the final
+decision before anything changes.

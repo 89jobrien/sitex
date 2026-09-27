@@ -1,129 +1,197 @@
 ---
-title: Technical Depth Is Evidence, Not the Story
+title: Explain the Decision, Then Show the System
 date: 2026-09-11
-description: "How I explain systems work without making architecture detail do the job of a decision, constraint, and outcome."
+description: "A reader-first framework for explaining systems work through situation, constraint, decision, outcome, and technical evidence."
 ---
 
-I can describe a system accurately and still fail to explain why the work
-mattered.
+Systems work is easiest to understand in four parts:
 
-Consider the phrase "Rust service with hexagonal architecture, Kubernetes
-adapters, structured tracing, and typed errors." It contains useful
-information. It also makes the reader assemble the point on their own. A
-client wants to know what became
-safer or easier. An engineer wants to know which constraint forced the design.
-A hiring manager wants to know what judgment I contributed.
+1. **Situation:** What was happening, and who was affected?
+2. **Constraint:** What made the obvious solution unsafe, incomplete, or impossible?
+3. **Decision:** What trade-off did the design choose?
+4. **Outcome:** What became possible, safer, or easier to inspect?
 
-The architecture is evidence for those answers. It is not the answer by
-itself.
+Implementation details come next. They are evidence that the decision is real.
 
-## Start with the changed situation
+This order matters. “A Rust service with hexagonal architecture, typed errors,
+and structured tracing” may be accurate, but it asks the reader to infer the
+problem and the judgment. A module name cannot explain why a boundary mattered.
+A code sample cannot establish which failure was worth preventing.
 
-Internal production tooling changes how I frame technical evidence. Systems
-that support active work require operational care, so architecture decisions
-must account for rollout safety and recoverability.
+The framework gives every detail a job. The situation creates relevance. The
+constraint creates tension. The decision reveals judgment. The outcome explains
+value. Code, tests, and architecture then let a technical reader challenge the
+account instead of merely trusting it.
 
-From there I can explain a concrete decision. Perhaps an external integration
-needed a boundary so it could change without pulling production logic with it.
-Perhaps an error path needed more context so an operator could act without
-reconstructing the failure from several logs. The exact technical detail now
-supports a consequence the reader already understands.
+## A primary example: put policy before effects
 
-Compare that with leading with a list of crates, traits, and libraries. The
-list may prove complexity, but complexity is not automatically value.
+[Minibox](https://github.com/89jobrien/minibox) is an agent-controllable container
+runtime written in Rust. A client can ask its daemon to pull images and create,
+inspect, or stop containers. That definition has to come before names such as
+`handle_run`, `ContainerPolicy`, or `DaemonResponse`; without it, those names are
+just repository vocabulary.
 
-Here is the kind of hypothetical sentence I try not to stop at:
+### Situation
 
-> I introduced a port-and-adapter boundary with typed errors and structured
-> tracing around the Kubernetes integration.
+An automated client can request a container with bind mounts, elevated
+privileges, and a chosen execution priority. Those options are useful, but they
+also cross a security boundary. By the time the runtime creates the container,
+the request has already caused filesystem and process side effects.
 
-It says what changed in the code. It does not say why anybody should care. A
-stronger hypothetical account leads with the decision and consequence:
+### Constraint
 
-> Suppose operators receive failures without enough context to tell whether
-> retrying is safe. A stronger account would explain how the Kubernetes
-> boundary and tracing help them assess recovery options.
+Validation cannot be an advisory message after creation. It must happen before
+the side effect, and rejection must travel back through the same protocol as a
+successful response. Otherwise a caller could receive an error while the system
+had already changed underneath it.
 
-The second version still needs technical evidence. Which error type preserved
-the context? Where did the boundary sit? What did the trace contain? But the
-reader now knows what those details are meant to prove.
+That constraint rules out designs that validate only in the command-line client.
+Other clients use the daemon too, so the enforcement point must sit on the shared
+request path.
 
-## Keep enough detail to be believed
+### Decision
 
-Leading with the outcome does not mean replacing engineering with marketing.
-"Improved reliability" is empty unless I can show the failure mode, the
-constraint, and the mechanism that changed it.
+Minibox performs admission checks in the daemon handler before it calls the
+container-creation path. A rejected request returns immediately. Only an
+accepted request reaches `run_inner`, where creation begins.
 
-This is where technical depth belongs. Name Minibox when the point depends on
-its daemon boundary. Name `crs` when the point is that Coursers can stop a
-command before execution. Name Taskit's protocol lock when explaining how a
-quiet normalized-content change becomes a visible review point.
+Now the implementation detail has a purpose. This shortened excerpt from the
+[public request handler](https://github.com/89jobrien/minibox/blob/main/crates/minibox/src/daemon/handler/run.rs)
+shows the order:
 
-Specific tools and mechanisms make the argument verifiable. Generic phrases
-such as "an internal platform" or "a robust pipeline" often remove the very
-detail that makes the work credible.
+```rust
+if let Err(msg) = super::validate_policy(
+    &params.mounts,
+    params.privileged,
+    params.priority,
+    &effective_policy,
+) {
+    let _ = tx.send(DaemonResponse::Error { message: msg }).await;
+    return;
+}
 
-Naming is particularly important when several tools solve adjacent problems.
-"I added an agent workflow" hides whether I mean Godmode's persisted task
-graph, Crux's replayable execution model, or Coursers intercepting a proposed
-command. Those are different decisions with different outcomes. Using the name
-lets me explain the actual boundary instead of compressing everything into AI
-vocabulary.
+let response = match run_inner(params, state, deps).await {
+    Ok(id) => DaemonResponse::ContainerCreated { id },
+    Err(error) => DaemonResponse::Error {
+        message: format!("{error:#}"),
+    },
+};
+```
 
-The same rule applies to internal work, with the appropriate context.
-Production use tells the reader why rollout safety, operator clarity, and
-compatibility are part of the story without requiring confidential
-implementation detail.
+The `return` is more important to the explanation than the type names. It is the
+point at which the decision becomes enforceable: policy failure stops control
+flow before container creation.
 
-## Write around a decision
+The dependency structure supports the same decision. Image retrieval,
+lifecycle operations, command execution, builds, and events are supplied as
+separate capabilities alongside policy. The
+[shortened handler boundary](https://github.com/89jobrien/minibox/blob/main/crates/minibox/src/daemon/handler/mod.rs)
+makes those responsibilities explicit:
 
-The structure I return to is simple: a situation created a constraint; the
-constraint forced a decision; the implementation made that decision real; the
-result changed what someone could do next.
+```rust
+pub struct HandlerDependencies {
+    pub image: ImageDeps,
+    pub lifecycle: LifecycleDeps,
+    pub exec: ExecDeps,
+    pub build: BuildDeps,
+    pub events: EventDeps,
+    pub policy: ContainerPolicy,
+    // Execution-policy and checkpoint dependencies omitted.
+}
+```
 
-Not every story has a dramatic metric, and forcing one in usually makes the
-writing worse. A prevented class of mistake, a clearer failure, a migration
-contained behind one port, or an operator no longer needing a manual recovery
-step can be enough. The result should be concrete, not inflated.
+On its own, this struct would only prove that several fields exist. After the
+situation and constraint, it becomes useful evidence: policy belongs at the
+shared daemon boundary rather than in one client or one platform adapter.
 
-## Diagrams should explain the decision
+### Outcome
 
-Architecture diagrams often become inventories: boxes for services, arrows
-for calls, labels for databases. They prove that the system has parts. They do
-not necessarily explain the choice being discussed.
+A disallowed request can be rejected before the creation function runs, while
+an allowed request continues through the normal response path. Every client that
+uses the daemon receives the same enforcement behavior.
 
-For a migration story, I would rather draw the old dependency crossing several
-modules and the new dependency stopping at one adapter. For a policy story, I
-would show the proposed action crossing a gate before the side effect. For a
-recovery story, I would show completed Crux steps remaining available after a
-later step fails.
+That is a precise outcome, but not an inflated one. The source proves control-flow
+ordering and a common enforcement point. It does not prove how many incidents
+were prevented, how often callers request privileged containers, or that every
+possible container escape is blocked. Those claims would require operational or
+security evidence beyond this code.
 
-Each diagram should answer the same question as the prose. If removing it does
-not make the decision harder to understand, it may be decoration.
+## Two brief supporting examples
 
-## Different readers can share one spine
+The same structure works outside a container runtime. The examples can stay
+short when they support the framework rather than competing with the primary
+story.
 
-A mixed audience does not require separate stories. The situation,
-constraint, decision, and outcome form one spine. A decision-maker can follow
-that spine and understand the consequence. An engineer can continue into the
-error model, trait boundary, command path, or test that makes the claim
-credible.
+### Stop a bad command at the proposal boundary
 
-That is the balance I want in these posts. Name the real tool. Explain the
-human or operational problem first. Then include enough implementation detail
-that another engineer can challenge the reasoning rather than taking the
-outcome on trust.
+[Coursers](https://github.com/89jobrien/coursers) is a hook pipeline that examines
+commands proposed by coding agents before and after tool execution.
 
-Technical writing works when different readers can enter at different depths
-without losing the same story. The outcome gives the work meaning. The
-implementation proves it was not magic. The judgment connecting them is the
-part worth writing about.
+- **Situation:** An agent can repeatedly propose a shell command that violates a
+  known repository rule.
+- **Constraint:** A warning after execution is too late for commands with side
+  effects.
+- **Decision:** Extract the proposed Bash command in a pre-tool hook and run it
+  through deny and rewrite rules before the shell receives it.
+- **Outcome:** A matching command can be rejected with a readable reason before
+  execution.
 
-## Sources
+The [pre-tool hook](https://github.com/89jobrien/coursers/blob/main/crates/coursers/src/hook/pre.rs)
+is evidence for the interception point. Regexes, payload types, and hook names
+matter only after the reader knows why “before execution” is the decision.
 
-- [Minibox daemon and adapter boundaries](https://github.com/89jobrien/minibox/blob/main/crates/minibox/src/daemon/handler/mod.rs)
-- [Coursers pre-tool-use path](https://github.com/89jobrien/coursers/blob/main/crates/coursers/src/crs_commands.rs)
-- [Taskit normalized contract hashing](https://github.com/89jobrien/taskit/blob/main/crates/taskit-engine/src/protocol/contract_hash.rs)
-- [Taskit drift comparison and failure behavior](https://github.com/89jobrien/taskit/blob/main/crates/taskit-engine/src/protocol/drift.rs)
-- [Crux replay-cache semantics](https://github.com/89jobrien/crux/blob/main/crates/crux-runtime/src/replay.rs)
-- [Crux failed-run trace retention test](https://github.com/89jobrien/crux/blob/main/crates/crux/tests/agent_macro.rs)
+### Turn contract changes into review events
+
+[Taskit](https://github.com/89jobrien/taskit) is a CI pipeline runner for Rust
+workspaces. One of its checks tracks selected contract surfaces in a lockfile.
+
+- **Situation:** A shared protocol type can change inside an otherwise routine
+  code review.
+- **Constraint:** Compilation in one repository may not reveal that downstream
+  consumers depend on the previous shape.
+- **Decision:** Normalize and hash declared contract files, then fail the default
+  drift check when the current hash differs from the reviewed lock.
+- **Outcome:** An unacknowledged structural change to a tracked surface becomes
+  a visible CI failure instead of passing as an ordinary source edit.
+
+The [contract hashing code](https://github.com/89jobrien/taskit/blob/main/crates/taskit-engine/src/protocol/contract_hash.rs)
+and [drift gate](https://github.com/89jobrien/taskit/blob/main/crates/taskit-engine/src/protocol/drift.rs)
+make that mechanism inspectable. Normalization intentionally ignores comments,
+blank lines, and test modules. The gate catches tracked structural changes; it
+does not prove that every downstream migration will be correct.
+
+## A practical writing sequence
+
+When explaining a system, I now draft in this order:
+
+1. Name the user, operator, or other system facing the situation.
+2. State the failure mode or trade-off in ordinary language.
+3. Identify the constraint that eliminates simpler alternatives.
+4. Describe the decision without repository-specific nouns.
+5. State the narrowest outcome the available evidence supports.
+6. Introduce the project and define its role.
+7. Add code, tests, or diagrams that prove the mechanism.
+8. Say what the evidence does not prove.
+
+This sequence is not a demand to remove technical detail. It is a way to delay
+detail until the reader has a question for it to answer.
+
+A useful test is to hide every code block. The remaining prose should still
+explain the situation, constraint, decision, and outcome. Then hide the prose.
+The implementation should still support the claimed mechanism. If either half
+collapses, the account is incomplete.
+
+Diagrams should follow the same rule. Show the proposed action crossing the
+policy gate before the side effect, not merely boxes labeled “client,” “daemon,”
+and “runtime.” Show the contract edit diverging from its reviewed hash, not just
+a generic arrow labeled “CI.” A diagram should reveal the decision's order or
+boundary, not inventory the repository.
+
+Different readers can stop at different depths while sharing one story. A
+non-specialist can understand why enforcement must precede container creation.
+An engineer can continue into handler control flow and dependency boundaries.
+Neither reader has to reverse-engineer the point from architecture vocabulary.
+
+The story is the judgment: given this situation and this constraint, choose this
+boundary and accept this trade-off. The outcome explains why the judgment
+matters. Implementation details are the evidence that it was carried through.

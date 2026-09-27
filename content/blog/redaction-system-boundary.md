@@ -4,116 +4,239 @@ date: 2026-09-11
 description: "Why obfsck can redact data before it enters LLM prompts, staged commits, or manually prepared support artifacts."
 ---
 
-A log line can be safe on my machine and unsafe one command later. The moment
-I paste it into an issue, send it to an LLM, or attach it to a support request,
-it crosses into a system with different retention, access, and trust.
+A log line can be safe on my machine and unsafe one command later. Paste it
+into an issue, send it to a model, or attach it to a support request and it
+crosses into a system with different retention, access, and trust.
 
-If redaction happens after that point, it is not protection. It is cleanup.
+Redacting it afterward does not protect anything. That is cleanup after the
+boundary has already been crossed.
+
+This shortened excerpt shows the ordering inside the alert analyzer. Obfsck
+transforms the alert before it builds the prompt and calls the provider. Source:
+`src/analyzer/mod.rs` in Obfsck.
+
+```rust
+let (obf_output, obf_fields, mapping) =
+    obfuscate_alert(output, output_fields.as_ref(), self.obfuscation_level);
+
+let user_prompt = build_user_prompt(
+    alert,
+    &labels,
+    &obf_output,
+    &obf_fields,
+    self.obfuscation_level,
+);
+
+let analysis = self
+    .provider
+    .analyze(SYSTEM_PROMPT, &user_prompt)
+    .and_then(|raw| self.parse_analysis_response(&raw));
+```
 
 ## Put `obfsck` before the boundary
 
-I built `obfsck` to sit in the path data already takes. Its `redact` command
-accepts a file or stdin, and its alert analyzer sanitizes logs before building
-the LLM prompt. The pre-commit `scan` command checks a staged diff before a
-secret becomes repository history when it is installed as a commit hook.
+I built `obfsck` to sit in paths data already takes. The `redact` command reads
+a file or stdin. The analyzer sanitizes fetched logs before creating an LLM
+request. The scanner can inspect a staged diff before a secret enters history.
 
-Those placements matter more than the size of the pattern library. A perfect
-detector that runs after upload cannot undo the upload. A good detector on the
-outbound path can stop or transform the data while I still control it.
+Position matters more than pattern count. A detector that runs after upload
+cannot undo the upload. One on the outbound path can still block or transform
+the data.
 
-For the same reason, I do not think of redaction as a final formatting pass.
-It is an adapter at a trust boundary: local logs in, deliberately reduced data
-out.
+One stateful `Obfuscator` owns the level, mapping, counters, PII switch, and
+allowlist. Source: `src/lib.rs` in Obfsck.
+
+```rust
+#[derive(Debug)]
+pub struct Obfuscator {
+    level: ObfuscationLevel,
+    pii: bool,
+    allowlist: Allowlist,
+    map: ObfuscationMap,
+    counters: Counters,
+}
+
+pub fn obfuscate_text(
+    text: &str,
+    level: ObfuscationLevel,
+) -> (String, ObfuscationMapExport) {
+    let mut obfuscator = Obfuscator::new(level);
+    let out = obfuscator.obfuscate(text);
+    (out, obfuscator.mapping())
+}
+```
 
 ## Useful data has structure
 
-The naive version replaces everything suspicious with `[REDACTED]`. That is
-safe in one sense and nearly useless in another. If the same user appears in
-multiple lines, or an internal address repeatedly talks to the same external
-address, an investigator needs those relationships even when the original
-identities must disappear.
+Replacing every suspicious value with `[REDACTED]` removes relationships that
+matter during diagnosis. If one user retries twice from one address, I need to
+know those events share an identity even when I do not need the identity.
 
-Within one stateful obfuscation operation, `obfsck` uses stable mappings for
-that reason. The same email, username, or IP becomes the same token throughout
-the text. A person becomes `[USER-1]`; the next person becomes `[USER-2]`. The
-names are gone, but the sequence of events still makes sense.
+Obfsck keeps mappings stable within one operation. The same email, username,
+or IP receives the same numbered token each time. The names disappear while
+the sequence remains readable.
 
-For example, an incident fragment might begin like this:
+The project locks that behavior down directly. Source:
+`tests/test_obfuscation.rs` in Obfsck.
 
-```text
-login failed user=alice email=alice@corp.example src=10.1.1.5
-retry accepted user=alice email=alice@corp.example src=10.1.1.5
+```rust
+#[test]
+fn repeated_values_map_to_single_stable_token() {
+    let input = "src=10.0.0.7 dst=10.0.0.7 user=alice user=alice";
+    let (out, map) = obfuscate_text(input, ObfuscationLevel::Standard);
+
+    assert_eq!(out.matches("[IP-INTERNAL-1]").count(), 2);
+    assert_eq!(out.matches("[USER-1]").count(), 2);
+    assert_eq!(map.ips.len(), 1);
+    assert_eq!(map.users.len(), 1);
+}
 ```
 
-After redaction, the values change but the relationship survives:
+Mappings belong to that `Obfuscator` instance. They do not persist across
+separate commands or analyzer runs. Stable tokens preserve relationships
+inside one operation, not across the lifetime of a system.
 
-```text
-login failed user=[USER-1] email=[EMAIL-1] src=[IP-INTERNAL-1]
-retry accepted user=[USER-1] email=[EMAIL-1] src=[IP-INTERNAL-1]
+The allocator returns an existing token before advancing its counter. Source:
+`src/lib.rs` in Obfsck.
+
+```rust
+fn get_or_create_token(
+    counters: &mut Counters,
+    category: TokenCategory,
+    original: &str,
+    mapping: &mut HashMap<String, String>,
+) -> String {
+    if let Some(existing) = mapping.get(original) {
+        return existing.clone();
+    }
+
+    let n = counters.next(category);
+    let token = format!("[{}-{}]", category.label(), n);
+    mapping.insert(original.to_string(), token.clone());
+    token
+}
 ```
 
-The second line still tells me that the same identity retried from the same
-source. That is often the difference between a sanitized log that can support
-diagnosis and one that is technically clean but operationally empty.
+## Make the trade explicit
 
-Its `minimal`, `standard`, and `paranoid` levels make the trade explicit.
-`minimal` runs the enabled baseline patterns, primarily credentials but also
-some sensitive identifiers. `standard` adds common identifiers and personal
-data. `paranoid` goes further into paths, hostnames, and high-entropy values.
-The right level depends on where the output is going, not on a universal idea
-of "clean."
+`minimal`, `standard`, and `paranoid` describe different outbound policies.
+Minimal applies enabled baseline secret patterns. Standard adds structural PII
+such as emails, IP addresses, and users. Paranoid also processes paths,
+hostnames, and high-entropy values.
+
+More aggressive is not automatically better. Broad rules can erase the clue
+that explains an incident. The right level follows the destination.
+
+The sequence is explicit in `Obfuscator::obfuscate`. Source: `src/lib.rs` in
+Obfsck.
+
+```rust
+s = Cow::Owned(self.obfuscate_secrets(s.as_ref()));
+if self.level == ObfuscationLevel::Minimal || !self.pii {
+    return s.into_owned();
+}
+
+s = Cow::Owned(self.obfuscate_ips(s.as_ref()));
+s = Cow::Owned(self.obfuscate_emails(s.as_ref()));
+s = Cow::Owned(self.obfuscate_containers(s.as_ref()));
+
+if self.level == ObfuscationLevel::Paranoid {
+    s = Cow::Owned(self.obfuscate_paths(s.as_ref()));
+    s = Cow::Owned(self.obfuscate_hostnames(s.as_ref()));
+    s = Cow::Owned(self.obfuscate_high_entropy(s.as_ref()));
+}
+```
 
 ## Put the control in the normal path
 
-The most reliable redaction step is one I do not have to remember at the end.
-For repository changes, `scan --staged` can inspect the diff at commit
-time. For log analysis, the alert analyzer fetches from Loki or VictoriaLogs,
-obfuscates the result, and only then prepares the model request. For an ad hoc
-support bundle, `redact` can sit directly in the pipe that creates the file I
-will share.
+The reliable redaction step is the one I do not have to remember later.
+`scan --staged` gets the staged diff itself. An installed commit hook can stop
+a matching addition before Git records it.
 
-These are deliberately different integrations around the same boundary. A
-pre-commit scan may block because a credential should never enter history. A
-log pipeline usually transforms because the sanitized structure is still
-valuable. The policy should match the consequence of crossing the boundary.
+The scanner does not prove the repository is clean. It checks added lines in a
+unified diff. That scope is useful at commit time, but it is not a full audit.
 
-The alert analyzer also has a real dry-run path. With JSON output enabled, it
-returns the sanitized prompt plus a local mapping without calling the model,
-so I can inspect the prompt the model would receive. The standalone `redact`
-command transforms its output even in audit mode, so it should not be
-described as a dry run.
+This shortened excerpt is the scanner's actual boundary. Source:
+`src/bin/scan.rs` in Obfsck.
+
+```rust
+for (line_no, line) in diff.lines().enumerate() {
+    if let Some(path) = line.strip_prefix("+++ ") {
+        current_path = diff_path(path);
+        continue;
+    }
+    if line.starts_with("@@ ") {
+        next_source_line = hunk_new_line_start(line);
+        continue;
+    }
+    if !line.starts_with('+') {
+        continue;
+    }
+
+    let content = &line[1..];
+    let source_line = next_source_line.unwrap_or(line_no + 1);
+```
+
+The analyzer has a real dry-run path. It returns the sanitized prompt and a
+local mapping without calling the model. The standalone `redact` command is
+different. Audit mode still writes transformed output.
+
+The analyzer's early return is the proof. Source: `src/analyzer/mod.rs` in
+Obfsck.
+
+```rust
+if dry_run {
+    info!("Dry run - skipping LLM analysis");
+    return json!({
+        "obfuscated_prompt": user_prompt,
+        "obfuscation_mapping": mapping_json,
+        "note": "Dry run - no LLM call made"
+    });
+}
+```
 
 ## Treat failure honestly
 
-Redaction cannot prove that arbitrary text contains no sensitive information.
-Patterns miss unfamiliar formats, and aggressive rules can erase the clue
-that would have explained an incident. That is why placement and policy still
-matter even with a capable scanner.
+Regexes cannot prove arbitrary text contains no sensitive information.
+Project names, customer identifiers, and unfamiliar credentials can miss
+built-in patterns. Entropy rules can also erase useful evidence.
 
-The safest workflow combines both: reduce what can leave, run `obfsck` before
-it leaves, preserve stable relationships where they are needed, and let the
-destination determine how aggressive the transformation should be.
+The CLI accepts custom YAML patterns and allowlists, but configuration is not
+uniform across every entry point. The CLI applies runtime YAML patterns and
+then the library's compiled definitions. The scanner, analyzer, library, and
+MCP paths do not yet share one injected pattern engine.
 
-I also assume patterns will miss things. Project names, customer-specific
-identifiers, and novel token formats may be sensitive without matching a
-built-in rule. The `redact` CLI supports custom YAML groups and allowlists;
-the scanner, library, analyzer, and MCP paths are only partially configurable.
-Those controls are maintenance tools, not a proof that free-form text is safe.
-The less data the workflow collects in the first place, the less a redactor
-has to recognize perfectly.
+That limitation is recorded beside the bundled pass. Source: `src/lib.rs` in
+Obfsck.
 
-Mappings also do not persist automatically between separate operations, and
-`scan` examines added lines from a unified diff rather than proving an entire
-repository clean. Those limits are another reason to treat redaction as one
-boundary control rather than a certificate of safety.
+```rust
+fn obfuscate_secrets(&mut self, text: &str) -> String {
+    // TODO(roadmap-pattern-engine): Inject one configurable pattern set across all entry points.
+    let mut s: Cow<'_, str> = Cow::Borrowed(text);
+    for pat in secret_patterns() {
+        // Pattern level checks and replacement happen here.
+    }
+    s.into_owned()
+}
+```
 
-That is a system boundary, not a cosmetic one. By the time the text needs
-cleaning up somewhere else, the important decision has already been made.
+Redaction is one boundary control, not a safety certificate. Collect less,
+transform before release, preserve only the relationships needed for
+diagnosis, and assume patterns will miss something.
+
+The scanner test checks that a finding reports its location without echoing
+the matched secret. Source: `tests/test_scan_cli.rs` in Obfsck.
+
+```rust
+assert_eq!(output.status.code(), Some(1), "stderr: {stderr}");
+assert!(!stderr.contains(&secret), "secret leaked in stderr: {stderr}");
+assert!(stderr.contains("config.txt:7"), "missing source location: {stderr}");
+```
 
 ## Sources
 
 - [Obfsck levels and stable mappings](https://github.com/89jobrien/obfsck/blob/main/src/lib.rs)
+- [Redaction CLI and custom configuration](https://github.com/89jobrien/obfsck/blob/main/src/cli.rs)
 - [Staged-diff scanner](https://github.com/89jobrien/obfsck/blob/main/src/bin/scan.rs)
 - [Alert analyzer redaction boundary](https://github.com/89jobrien/obfsck/blob/main/src/analyzer/mod.rs)
-- **Redaction CLI and custom configuration:** `src/cli.rs` in the audited local Obfsck checkout; public `main` has not yet synchronized this implementation.
 - [Redaction pattern configuration](https://github.com/89jobrien/obfsck/blob/main/config/secrets.yaml)

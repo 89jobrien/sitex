@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/praxis"
 ---
 
-# praxis
-
 Self-improving agent runtime for the [crux](https://github.com/89jobrien/crux) agentic DSL.
 Closes the loop between execution traces, evaluation, and strategy evolution so agents get better at their job across sessions.
 
@@ -32,7 +30,7 @@ If a strategy change causes a regression, it can be rolled back.
 
 ## Demo
 
-```
+```text
 $ cargo xtask demo
 
 praxis -- self-improving agent runtime demo
@@ -117,7 +115,7 @@ produces findings for low success rate, low confidence, and high error rate.
 
 Hexagonal (ports/adapters). Domain logic as traits, adapters are swappable. The `ImprovementLoop` is thread-safe, cloneable, and supports both sequential and concurrent trace evaluation.
 
-```
+```text
 praxis/
   crates/
     praxis-core/       port traits (zero async, zero adapters)
@@ -145,7 +143,7 @@ praxis/
 
 ### Dependency direction
 
-```
+```text
 praxis -> crux-improve -> crux-runtime, crux-types, crux-planner
 ```
 

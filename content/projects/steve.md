@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/steve"
 ---
 
-# steve
-
 Centralized repository for Claude Code agent configurations, hooks, commands, skills, and templates.
 
 ## Project Status
@@ -62,7 +60,7 @@ This repository provides a well-organized collection of reusable components for 
 
 ## Repository Structure
 
-```
+```text
 steve/
 ├── agents/              # Sub-agent configurations
 │   ├── core/           # Core system agents

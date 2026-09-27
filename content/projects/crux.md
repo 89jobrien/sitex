@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/crux"
 ---
 
-# crux
-
 Agentic workflows as YAML pipelines, backed by a typed Rust runtime.
 
 - **Write pipelines in YAML.** Define steps, fan-out, piping, and

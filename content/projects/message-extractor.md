@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/message-extractor"
 ---
 
-# Message Extractor
-
 A Rust-based system for extracting, monitoring, and visualizing conversations from AI coding assistants in real-time.
 
 ## Overview

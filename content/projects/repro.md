@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/repro"
 ---
 
-# repro
-
 [![Crates.io](https://img.shields.io/crates/v/repro)](https://crates.io/crates/repro)
 [![CI](https://github.com/89jobrien/repro/actions/workflows/ci.yml/badge.svg)](https://github.com/89jobrien/repro/actions/workflows/ci.yml)
 [![License](https://img.shields.io/crates/l/repro)](LICENSE)
@@ -101,7 +99,7 @@ CLI flags take precedence over environment variables.
 
 Hexagonal architecture with injected dependencies for testability.
 
-```
+```text
 src/
   main.rs              CLI entry point (clap)
   lib.rs               Public API re-exports

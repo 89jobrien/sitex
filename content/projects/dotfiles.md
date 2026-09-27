@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/dotfiles"
 ---
 
-# Archived
-
 This repo is superseded by [`~/.notfiles`](https://github.com/89jobrien/notfiles), managed with
 the `notfiles` symlink-based dotfiles manager. Active tooling (mise tasks, scripts, secrets,
 Brewfiles, etc.) now lives at `~/.dotfiles-tools`, linked in from `~/.notfiles/dotfiles-tools`.

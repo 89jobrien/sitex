@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/kgx"
 ---
 
-# kgx
-
 Three-layer knowledge graph toolkit in Rust.
 
 JSON-backed, zero-dependency storage. No external database required --
@@ -15,7 +13,7 @@ entities, relations, documents, and wiki pages all persist as plain files.
 
 ## Architecture
 
-```
+```text
                     +-----------------+
                     |    kgx-cli      |  CLI binary
                     +--------+--------+
@@ -68,7 +66,7 @@ kgx --root ./my-kb graph search "Rust"
 
 ### Write and search wiki pages
 
-```
+```text
 kgx --root ./my-kb wiki write --category entity --title "Rust" \
     --summary "A systems language" < rust.md
 kgx --root ./my-kb wiki search "memory"
@@ -137,7 +135,7 @@ documents, wiki pages) to a target directory.
 
 The markdown export creates:
 
-```
+```text
 output/
   entities/       # One .md per entity with frontmatter, relations, chunks
   documents/      # One .md per document with chunk boundaries

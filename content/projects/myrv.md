@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/myrv"
 ---
 
-# myrv
-
 Telemetry system for a 2015 Leprechaun 260DS RV. Reads OBD-II chassis data, house battery
 state, and generator state; builds a typed snapshot for display or assistant queries.
 
@@ -15,7 +13,7 @@ state, and generator state; builds a typed snapshot for display or assistant que
 
 Hexagonal layout — the domain model never imports adapters:
 
-```
+```text
 TelemetrySource (port)
   ├── ManualSource   crates/manual-source   TOML file, dev/field overrides
   └── ObdSource      crates/obd-source      ELM327 over serial or TCP

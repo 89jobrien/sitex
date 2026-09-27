@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/numcp"
 ---
 
-# numcp
-
 An MCP server that exposes Nushell tool handlers as [Model Context Protocol](https://modelcontextprotocol.io/) tools.
 
 `numcp` is the bridge between Nu-defined tool closures (e.g. `kubectl`, `web_search`,
@@ -16,7 +14,7 @@ call local tools during a reasoning loop.
 
 ## Overview
 
-```
+```text
 LLM agent daemon
   │  MCP stdio transport
   ▼

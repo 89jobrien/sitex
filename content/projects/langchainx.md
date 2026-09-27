@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/langchainx"
 ---
 
-# langchainx
-
 Building applications with LLMs through composability, with Rust.
 
 > **Upstream credit:** This crate is based on the work in [langchain-rust](https://github.com/Abraxas-365/langchain-rust) and the engineers who work on the official Langchain project.

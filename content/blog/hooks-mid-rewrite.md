@@ -1,199 +1,239 @@
 ---
-title: The guardrails watching this session are not the newest code
+title: "Coursers: a runtime control plane for coding agents"
 date: 2026-08-23
-description: "Why a finished hook rewrite can remain inactive, and what that reveals about installation, verification, and operational truth."
+description: "How Coursers turns agent hook events into deterministic policy, command rewrites, output filtering, failure learning, and replayable evidence."
 ---
 
-Every Bash command I run through Claude Code passes through a single
-compiled binary first. It decides whether the command runs as written,
-gets rewritten, or gets blocked outright. Right now, while I am writing
-this sentence, that binary is running code from months ago. A newer,
-architecturally cleaner replacement for the exact same logic finished
-landing three days before this post, and it is sitting there, fully built
-and fully tested, doing nothing.
+A prompt can ask an agent not to run a dangerous command. Coursers can stop
+the command before it executes.
 
-## What is actually live
+That difference is the reason the project exists.
 
-`~/.claude/settings.json` wires four hook events to one command each.
+Coursers is a compiled hook pipeline for coding agents. It sits between an
+agent's tool request and the machine, where it can deny a command, rewrite it,
+observe the result, reduce noisy output, and learn from repeated failures.
+The model proposes an action. Coursers applies deterministic policy around it.
 
+```text
+agent intent
+    │
+    ▼
+pre-hook ──► deny | rewrite | allow
+    │
+    ▼
+tool execution
+    │
+    ▼
+post-hook ─► filter | learn | log
 ```
-PreToolUse:  crs hook pre-tool-use
-PostToolUse: crs hook post-tool-use
-Stop:        crs hook stop
-SessionEnd:  crs hook session-end
-```
 
-`crs` and `coursers` come from the same crate but are two separate thin
-binaries that both call one shared library function.
+This is not another instruction layer in the prompt. It is a runtime control
+plane for the side effects an agent can produce.
 
-```rust
-// crates/coursers/src/bin/crs.rs
-fn main() {
-    let cli = Cli::parse();
-    coursers::run(cli);
+## Policy before execution
+
+The pre-hook receives the real tool payload over stdin and extracts the Bash
+command. Static rules can match it with regular expressions, exempt known-safe
+forms, and return a protocol-native denial with a useful alternative.
+
+A minimal rule looks like this:
+
+```json
+{
+  "id": "no-grep-use-tool",
+  "pattern": "\\bgrep\\b|\\brg\\b",
+  "exceptions": ["\\| grep", "\\| rg"],
+  "message": "Use the Grep tool instead of shell grep/rg."
 }
 ```
 
-For a Bash `PreToolUse` event, that shared path calls
-`crate::hook::pre::run_with`, described in its own comment as "the same
-logic as the standalone `crs pre`." That function reads a rules file and
-checks the command against each rule in order, letting it through,
-rewriting it, or denying it with a message.
+The important part is not the specific command. The rule converts a local
+engineering convention into an executable constraint. The agent does not need
+to remember which tools are preferred, which operations are forbidden, or
+which exceptions are legitimate on every turn.
 
-```
-~/.config/coursers/course-correct-rules.json
-  tool-avoidance nudges: grep -> Grep, cat -> Read, cd -> forbidden
+Coursers also handles compound commands rather than treating a shell pipeline
+as an opaque string. It can evaluate individual stages while retaining
+whole-command matching for rules that care about shell structure.
 
-~/.config/crs/plugins.d/godmode.toml
-  destructive-action hard stops: force-push, DROP TABLE, op item edit
-```
+Not every correction needs to be a denial. Rewrite rules can replace a valid
+but inefficient command before execution. They are applied in file order, so
+composition is explicit and testable rather than left to another model turn.
 
-Different file, different stakes, same dispatch path.
-
-This is what governs every command in this session. It has governed every
-command in every session since before this rewrite existed.
-
-## The live path was itself silently broken, until three days before the rewrite
-
-Before trusting any of that, I wanted proof it actually runs. Piping a
-disallowed command straight into the installed binary confirms it.
-
-```
-$ echo '{"tool_name":"Bash","tool_input":{"command":"grep foo bar.txt"}}' \
-    | crs hook pre-tool-use
-
-exit 2
-{"hookSpecificOutput":{"permissionDecision":"deny",
-  "permissionDecisionReason":"Use the Grep tool instead. ...
-  Blocked command: `grep foo bar.txt`"}}
+```toml
+[[rewrites]]
+pattern = "^cargo build$"
+replace = "cargo build --message-format json"
 ```
 
-It denies. Good. But that same rule was not always reachable through this
-exact path, and the commit that fixed it says so plainly.
+The distinction matters:
 
-> settings.json wires PreToolUse to the consolidated entry point, but it
-> only ran the TOML pipeline. Every course-correct rule (no-grep,
-> no-bash-use-nu, ...) was dead through the real hook path.
+- **Deny** when the action must not happen.
+- **Rewrite** when the intent is valid but the command should change.
+- **Allow** when policy has nothing to add.
 
-That is the commit message for `f3c380b`, landed August 17, the same day
-`hc-a` starts the port-trait rewrite. The rules file was correct, the
-config pointed at it, and none of it fired, because an earlier
-consolidation had routed Claude's hooks through a single front controller
-originally built for something else.
+That gives the hook a small decision surface with observable outcomes.
 
-```
-May 15   settings.json wires crs rewrite and crs filter directly, per event
-Jun 28   crs and coursers merge into one crate
-Jul 1    a single front controller is built to route Codex hooks
-  ?      Claude's settings.json is switched to the same front controller,
-         course-correct rules go silently unreachable
-Aug 17   the gap is found and closed, same day the HookChain rewrite starts
-```
+## Context control after execution
 
-The exact date of the silent break is not recoverable. `~/.claude/settings.json`
-is not version-controlled, so there is no diff to point at, only the
-commit that noticed and fixed it, closing a tracked todo. What is
-recoverable is that a guardrail can look fully wired, file present, config
-pointing at it, and still not run, for an unknown stretch of time, until
-someone tests the actual path instead of reading the config.
+Agent reliability is also affected by what comes back from a tool. A successful
+build can emit hundreds of lines that add little value to the next model turn.
+A failed command can hide its useful diagnostic inside the same volume.
 
-## What is built but not running
+Coursers applies post-hook filters with five modes:
 
-<svg viewBox="0 0 640 210" role="img" aria-label="Timeline of the HookChain rewrite. April, first hook chain wiring. May, crs rewrite and crs filter added. Three month gap. August 17 to 20, four staged commits hc-a through hc-d build a port trait based replacement. It lands gated behind an environment variable, not yet the default." style="width:100%;height:auto;font-family:inherit;">
-  <line x1="30" y1="100" x2="610" y2="100" stroke="#3a3f47" stroke-width="1.5"/>
-  <g fill="#7dd3fc">
-    <circle cx="60" cy="100" r="4"/>
-    <circle cx="140" cy="100" r="4"/>
-    <circle cx="420" cy="100" r="4"/>
-    <circle cx="470" cy="100" r="4"/>
-    <circle cx="520" cy="100" r="4"/>
-    <circle cx="570" cy="100" r="4"/>
-  </g>
-  <g fill="#e6e6e6" font-size="11" text-anchor="middle">
-    <text x="60" y="80">Apr 6</text>
-    <text x="140" y="80">May 15</text>
-    <text x="420" y="80">Aug 17</text>
-    <text x="470" y="80">Aug 18</text>
-    <text x="520" y="80">Aug 20</text>
-    <text x="570" y="80">Aug 20</text>
-  </g>
-  <g fill="#9aa0a6" font-size="10" text-anchor="middle">
-    <text x="60" y="125">docs</text>
-    <text x="140" y="125">rewrite/filter</text>
-    <text x="420" y="125">hc-a traits</text>
-    <text x="470" y="125">hc-b adapters</text>
-    <text x="520" y="125">hc-c config</text>
-    <text x="570" y="125">hc-d wired</text>
-  </g>
-  <text x="300" y="160" text-anchor="middle" fill="#9aa0a6" font-size="11">three month gap between May and August</text>
-  <text x="570" y="145" text-anchor="middle" fill="#7dd3fc" font-size="10">flag off by default</text>
-</svg>
+- pass output through unchanged;
+- suppress successful output;
+- retain only error lines;
+- truncate to a configured limit;
+- retain lines matching a regular expression when the command succeeds, while
+  passing failures through intact.
 
-The dormant code lives in `crates/core/src/hook/chain.rs` and
-`crates/coursers/src/hook/chain_runner.rs`. Its own doc comment draws the
-pipeline it replaces.
+This is context engineering at the process boundary. The command still runs
+normally, but the agent receives the part of the result that can change its
+next decision.
+
+Post-hooks also feed failure learning. Coursers records genuine non-zero exits
+in a rolling window, excluding signal exits and recognizable intentional
+failures. When the same command crosses a configured threshold, the next
+pre-hook blocks another identical attempt.
+
+Static rules encode known policy. Failure learning catches local loops that no
+one wrote a rule for.
 
 ```text
-PreToolUse  ─►  [PreHook₁, PreHook₂, …]  ─►  outcome (Allow | Deny | Rewrite)
-PostToolUse ─►  [PostHook₁, PostHook₂, …] ─►  outcome (Allow | Filter)
-            ─►  [Observer₁, Observer₂, …] ─►  side-effects only (no blocking)
+attempt 1 ─► fail ─► record
+attempt 2 ─► fail ─► record
+attempt 3 ─► fail ─► threshold reached
+attempt 4 ─► blocked before execution
 ```
 
-It is the same rule-block, rewrite, and filter logic that already runs,
-now expressed as composable ports instead of one function that does
-everything inline. It landed in four commits over four days, each one
-scoped to a single step and explicit about what it left out.
+That state lives outside the model. A fresh context window does not erase the
+fact that the command already failed three times.
 
-| Commit | Date              | Scope                                                                                     | What it explicitly excludes                                                     |
-| ------ | ----------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `hc-a` | Aug 17            | Four traits, 11 unit tests                                                                | "no concrete implementations, no wiring"                                        |
-| `hc-b` | Aug 18            | Adapter structs wrapping existing rule/rewrite/filter logic                               | "all algorithms remain in their existing modules, concrete.rs is adapters only" |
-| `hc-c` | Aug 20, afternoon | Unified config loading for rules, failure state, filters/rewrites                         | wiring into the binaries                                                        |
-| `hc-d` | Aug 20, evening   | Wires the chain into `coursers pre`/`coursers post`, gated behind `COURSERS_HOOK_CHAIN=1` | "the legacy path is unchanged, zero risk to the default live behavior"          |
+## One pipeline, more than one agent
 
-Three of the four commits, `hc-a` through `hc-c`, carry a `Claude-Session`
-link. The system that decides what Claude Code is allowed to run was
-mostly rebuilt, port by port, by Claude Code.
+Coursers started around Claude Code's `PreToolUse` and `PostToolUse` events,
+but the policy engine is not tied to one hook protocol.
 
-## Why the flag is still off
+The generic pipeline covers eleven lifecycle events and supports actions for
+denial, rewriting, external side effects, notifications, and output redaction.
+Configuration loads global rules first, followed by sorted plugin files and
+project-local rules. The later files extend the pipeline; they do not override
+an earlier matching denial.
 
-The module doc comment on `chain_runner.rs` does not hedge about this.
+The adapters handle the protocol edges:
 
-> This path is not yet enabled in production. A follow-up commit will flip
-> the switch after validation that outcomes are equivalent.
+- **Claude Code** sends native hook JSON to the default `crs hook` target.
+- **OpenCode** uses a TypeScript plugin that normalizes its events into a
+  harness-neutral JSON contract consumed by the Rust adapter.
+- **Codex** uses target-specific dispatch and validation, then delegates to its
+  configured Crux hook backends.
 
-Then it lists what is not yet equivalent.
+The policy does not need to be rewritten because an agent framework names an
+event differently. Protocol translation belongs at the boundary; matching,
+state transitions, filtering, and logging remain in the core.
 
-```text
-signal exit codes (130, 137, 143)
-  legacy: excluded from failure-learning
-  chain:  not excluded yet, inherits observer default
+## Two command names, one implementation
 
-deny-message enrichment
-  legacy: directory listing attached when a find-style command is blocked
-  chain:  bare rule message, no enrichment
+The project installs both `coursers` and `crs`, but there is no separate `crs`
+crate. The `coursers` package owns both binaries. For normal subcommands, both
+parse the same CLI model and dispatch through the same library runner;
+`coursers` alone intercepts shell-completion generation at its entrypoint.
 
-fine-tuning capture store
-  legacy: denied and rewritten commands recorded
-  chain:  not wired in at all
+```rust
+use clap::Parser;
+use coursers::{Cli, run};
+
+fn main() {
+    let cli = Cli::parse();
+    run(cli);
+}
 ```
 
-None of these are bugs exactly. They are places where the new
-architecture is correct in shape but has not yet been proven to produce
-the same outcomes as the thing it replaces, and the three-day-old code
-says so in plain language instead of shipping quietly and finding out
-later.
+The two names make hook configuration readable without splitting behavior
+across duplicate implementations. `coursers` describes the system. `crs` is
+the short front-controller command used in hook wiring.
 
-## The point
+Underneath that CLI is a five-crate Rust workspace:
 
-I did not find a flipped switch when I went looking for one. I found a
-guardrail that had already gone silently dead once, caught only when
-someone tested the real path instead of reading the config, and a
-finished migration standing next to the fix, not yet allowed to replace
-it, with the exact reasons why written into the code that would do the
-replacing. That is a more honest state for a rewrite to be in than most
-rewrites reach. It would have been easy to merge `hc-d` and call the
-migration done. Instead the default stayed unchanged, the gaps got named
-instead of hidden, and the thing actually intercepting my commands right
-now is still the version that was fixed three days ago, not the version
-that replaces it.
+- `coursers-types` owns domain records and port contracts;
+- `coursers-core` owns policy, state, filtering, rewriting, analysis, replay,
+  and shared hook behavior;
+- `coursers` owns CLI dispatch and protocol adapters;
+- `coursers-e2e` verifies complete hook scenarios;
+- `xtask` owns workspace quality gates.
+
+The boundary is deliberate. Command-history sources, rule loading, and state
+persistence have explicit port traits. Those dependencies can be tested with
+injected adapters instead of pretending the filesystem is the domain.
+
+That also keeps the public protocol thin. Hook stdout must remain valid for the
+calling agent. Diagnostics that need to be surfaced belong on stderr rather
+than corrupting the hook response.
+
+## Guardrails need evidence
+
+A hook that appears in a settings file is not automatically working. Coursers
+ships tools for inspecting the actual path:
+
+- `validate` checks rule patterns, triggers, exceptions, and required tools;
+- `validate-hooks` checks installed wiring and target-specific requirements;
+- `probe` explains which rule would decide a command;
+- `log` queries recorded hook executions and outcomes;
+- `replay` evaluates commands from a prior session against the current rules;
+- `discover`, `history`, and `heat` expose missed commands and rule activity.
+
+Replay is especially important. It extracts Bash commands from a prior session
+and evaluates the current static block rules without mutating failure-learning
+state. It does not replay rewrites, filters, learned failures, or generic
+pipeline actions. Within that boundary, historical sessions become a useful
+regression corpus.
+
+The project treats installation as part of verification too. Building the
+workspace does not replace the binary on `PATH`; live hook checks only mean
+something after the intended binary has been installed and the configured
+entrypoint has been exercised end to end.
+
+## Hooks are infrastructure
+
+The useful mental model for agent hooks is not "a few scripts around the
+prompt." They are infrastructure between probabilistic intent and real side
+effects.
+
+That infrastructure needs the same properties as any other control plane:
+
+- deterministic decisions;
+- explicit ordering;
+- protocol-safe interfaces;
+- durable state;
+- layered configuration;
+- observable outcomes;
+- replayable evidence;
+- tests at the real process boundary.
+
+Coursers puts those properties in one system. Prompts still guide the agent,
+but guidance is not asked to carry the full burden of safety, efficiency, and
+operational memory.
+
+The model can forget. The control plane should not.
+
+## Sources
+
+- [Coursers repository](https://github.com/89jobrien/coursers)
+- [Workspace architecture](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/Cargo.toml)
+- [Shared CLI and dispatch](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/coursers/src/lib.rs)
+- [`coursers` entrypoint](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/coursers/src/main.rs)
+- [`crs` entrypoint](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/coursers/src/bin/crs.rs)
+- [Rule-loading ports](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/core/src/loader.rs)
+- [State-store ports](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/core/src/store.rs)
+- [Command-history ports](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/core/src/analyze/history.rs)
+- [Rule model and matching](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/core/src/rules.rs)
+- [Rewrite engine](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/core/src/hook/rewrite.rs)
+- [Output filtering](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/core/src/hook/filter_logic.rs)
+- [Failure-learning state](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/core/src/state.rs)
+- [Generic hook pipeline](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/core/src/hook/pipeline.rs)
+- [Execution log](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/core/src/hook/log.rs)
+- [Replay engine](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/core/src/replay.rs)
+- [OpenCode adapter](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/docs/opencode.md)
+- [Codex adapter](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/docs/codex-profile.md)

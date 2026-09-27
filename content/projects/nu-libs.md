@@ -6,13 +6,11 @@ extra:
   repo: "https://github.com/89jobrien/nu_libs"
 ---
 
-# nu_libs
-
 A library of Nushell modules organized by category.
 
 ## Structure
 
-```
+```text
 lib/
   mod.nu      top-level re-export of all categories
   git/        Git helpers: log stats, branch age/cleanup, gone branches, hooks

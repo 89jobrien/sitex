@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/sparkfile"
 ---
 
-# sparkfile
-
 Project scaffolding CLI for creating new projects with consistent workspace conventions.
 
 ## Usage

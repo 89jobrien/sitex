@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/hj"
 ---
 
-# hj
-
 `hj` tracks work-in-progress across sessions using structured YAML handoff files. Each repo
 gets a `.ctx/HANDOFF.<project>.<repo>.yaml` that holds open items, priorities, and a session
 log. The CLI reads that file to triage at session start, appends log entries at session end,
@@ -127,7 +125,7 @@ hj update
 
 `hj handoff` / `hj close`:
 
-```
+```text
 --log-summary <TEXT>   Session summary appended to the log
 --commit <SHA>         Commit SHA(s) to attach (repeatable)
 --build <STATUS>       Build state to record (e.g. clean, failing)
@@ -141,7 +139,7 @@ hj update
 
 `hj detect`:
 
-```
+```text
 --name     Print the inferred project name
 --root     Print the repo root
 --project  Print the resolved project slug

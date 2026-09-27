@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/neusym"
 ---
 
-# neusym
-
 An MCP server and CLI that bridges **Jira** and **Linear** for bidirectional issue sync.
 Built in Rust with [`rmcp`](https://crates.io/crates/rmcp) over stdio transport and the
 [crux](https://github.com/89jobrien/crux) runtime-trace model.
@@ -40,7 +38,7 @@ See `docs/ARCHITECTURE.md` in the local checkout for the full map.
 `crux-types` is a path dependency at `../crux/crates/crux-types`. Clone
 [crux](https://github.com/89jobrien/crux) alongside this repo:
 
-```
+```text
 ~/dev/crux      # https://github.com/89jobrien/crux
 ~/dev/neusym    # this repo
 ```

@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/taskit"
 ---
 
-# taskit
-
 Config-driven CI pipeline runner with affected-crate detection, protocol-drift tracking,
 and pipeline orchestration for Rust workspaces.
 

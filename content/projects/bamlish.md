@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/bamlish"
 ---
 
-# bamlish
-
 Structured LLM output library for the dev workspace. Defines BAML schemas and exposes a generated
 Rust client (`baml_client`) for calling AI functions with type-safe return values.
 

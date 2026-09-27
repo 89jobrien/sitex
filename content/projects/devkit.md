@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/devkit"
 ---
 
-# devkit
-
 AI-powered dev workflow toolkit. Extracts a self-correcting CI/agent loop into a reusable scaffold for any project.
 
 ## What it does

@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/looprs"
 ---
 
-# looprs
-
 A Rust LLM agent loop CLI. Tools, loops, and conditions — no convoluted markdown parsing system.
 
 ## Install
@@ -68,7 +66,7 @@ cargo install ripgrep fd-find
 
 Reference files in prompts with `@filename` syntax — contents are injected into the conversation.
 
-```
+```text
 Refactor @crates/looprs-cli/src/main.rs for better error handling
 Compare @crates/looprs/src/agent.rs and @crates/looprs/src/api.rs
 ```
@@ -77,7 +75,7 @@ Compare @crates/looprs/src/agent.rs and @crates/looprs/src/api.rs
 
 The `.looprs/` directory defines repo-local agent configuration. All extension points support dual-source loading: user-level (`~/.looprs/`) and repo-level (`.looprs/`), with repo taking precedence.
 
-```
+```text
 .looprs/
 ├── provider.json          # Provider/model settings
 ├── config.json            # Runtime defaults, file refs, pipeline, agents, paths

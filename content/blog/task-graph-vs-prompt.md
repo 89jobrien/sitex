@@ -4,127 +4,300 @@ date: 2026-09-11
 description: "Why I moved the important parts of an agent workflow out of instructions and into godmode's locally persisted task state."
 ---
 
-I can put **run the tests before committing** in an agent prompt. I can put it
-in `CLAUDE.md`, repeat it in a skill, and write it in capital letters. It is
-still a request made to a model in a conversation. Once that conversation
-ends, the request has no memory and no authority.
+A prompt cannot remember that work stopped halfway through. It can say what
+should happen, but it cannot record what happened.
 
-This is the gap that led me to build a task graph into `godmode`.
+That matters after a context window closes. "Run tests before committing"
+remains prose. "The regression test is still failing" is state. Godmode gives
+that state a small model instead of asking the next agent to infer it.
+
+Shortened excerpt from
+`/Users/joe/dev/godmode/crates/godmode-core/src/model.rs`.
+
+```rust
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Status {
+    Pending,
+    Running,
+    Done,
+    Blocked,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Task {
+    pub id: String,
+    pub title: String,
+    pub status: Status,
+    #[serde(default)]
+    pub depends_on: Vec<String>,
+    #[serde(default)]
+    pub notes: String,
+    pub commit: Option<String>,
+    pub run: Option<String>,
+}
+```
 
 ## A prompt describes the workflow
 
-Prompts are good at intent. They can tell an agent what "done" means, explain
-why tests matter, and ask it to work in small steps. Most of my agent tooling
-starts there because prose is easy to change and models are good at following
-it.
+Prompts are good at intent. They explain why a check matters, what style to use,
+and what done should mean. They are bad at answering current-state questions.
 
-The trouble starts when the workflow crosses a session boundary. A new agent
-does not know that the previous one wrote a failing test but never made it
-pass. It may see a plausible diff, run a quick check, and commit the work. The
-instruction survived in a file; the state of the work did not.
+A task graph can answer whether work is ready without model interpretation. A
+pending task is runnable only when every recorded dependency is done.
 
-There is also no useful answer to "what is blocked?" in a prompt. The prompt
-can define blocking, but it cannot say which task is blocked right now or what
-must finish before it can resume.
+Exact excerpt from
+`/Users/joe/dev/godmode/crates/godmode-core/src/graph.rs`.
 
-## `godmode` records the workflow
+```rust
+pub fn runnable(graph: &TaskGraph) -> Vec<&Task> {
+    let done_ids = graph.done_ids();
 
-`godmode` stores tasks in `.ctx/godmode/tasks.yaml`. Each task has a status and
-can depend on another task. A test task can come before implementation, and
-verification can depend on both. When a session stops halfway through, the
-next session in the same checkout reads the same graph instead of
-reconstructing progress from chat history and git changes.
-
-That makes simple questions answerable:
-
-- `godmode task next` shows pending tasks whose recorded dependencies are done.
-- `godmode handon` shows running and blocked work at the start of a session.
-- `godmode handoff` reports and records unfinished state when a session ends.
-
-More importantly, the task state can reach outside the conversation.
-Godmode's Rust pre-commit action and Claude command gate can block unresolved
-tasks before a commit. The older installed Git-hook path currently relies on
-`handoff` returning an error even though `handoff` only warns, so that path
-does not enforce the same rule yet. The distinction is important: an
-enforcement mechanism is only real on paths that actually invoke it.
-
-The file behind that behavior is intentionally ordinary YAML:
-
-```yaml
-tasks:
-  - id: regression-test
-    title: Reproduce the session-resume bug
-    status: done
-    depends_on: []
-
-  - id: implementation
-    title: Preserve task state across restart
-    status: running
-    depends_on: [regression-test]
-
-  - id: verification
-    title: Run the full workspace checks
-    status: pending
-    depends_on: [implementation]
+    graph
+        .tasks
+        .iter()
+        .filter(|task| {
+            task.status == Status::Pending
+                && task
+                    .depends_on
+                    .iter()
+                    .all(|dep| done_ids.contains(dep.as_str()))
+        })
+        .collect()
+}
 ```
 
-There is no model interpretation required to answer whether verification is
-ready. It is not. The implementation task is still running, so the dependency
-chain has a concrete state that a CLI, hook, or future session can read.
+Godmode also rejects a direct attempt to start work with unmet dependencies.
+The prompt may recommend an order. The graph calculates and enforces it.
 
-## The failure mode is usually mundane
+Shortened excerpt from
+`/Users/joe/dev/godmode/crates/godmode-core/src/graph.rs`.
 
-The problems this prevents are rarely dramatic. An agent reaches the end of
-its context window after fixing most of a bug. I open a new session later. The
-working tree contains code and a test, but neither tells me whether the test
-was deliberately left red, whether a platform-specific check remains, or
-whether the previous agent simply stopped.
+```rust
+pub fn start(graph: &mut TaskGraph, id: &str) -> Result<()> {
+    let unmet: Vec<String> = {
+        let done_ids = graph.done_ids();
+        let task = graph.tasks.iter().find(|task| task.id == id)?;
 
-Without durable state, the new session has to infer intent from artifacts. It
-may infer correctly. It may also decide the diff looks complete and move on.
-The task graph replaces that guess with a small amount of explicit bookkeeping.
+        task.depends_on
+            .iter()
+            .filter(|dep| !done_ids.contains(dep.as_str()))
+            .cloned()
+            .collect()
+    };
 
-This is also useful when work branches. A documentation task and a test task
-can proceed independently, while release verification waits for both. The
-graph does not make the work parallel or prove semantic safety. It records
-which work the declared dependencies permit to run independently.
-Coordinating separate worktrees still needs an orchestration step because each
-checkout keeps its own gitignored task file.
+    if !unmet.is_empty() {
+        bail!("task has unmet dependencies: {}", unmet.join(", "));
+    }
+
+    graph.tasks.iter_mut().find(|task| task.id == id)?.status =
+        Status::Running;
+    Ok(())
+}
+```
+
+The invariant is tested at two levels. Unit tests check concrete chains.
+Property tests check that `runnable()` never returns a task whose dependencies
+are not done.
+
+Shortened excerpt from
+`/Users/joe/dev/godmode/tests/conformance/src/property_tests.rs`.
+
+```rust
+proptest! {
+    #[test]
+    fn runnable_always_has_satisfied_deps(
+        ids in prop::collection::vec("[a-z]{2}", 1..6)
+    ) {
+        let mut graph = TaskGraph::default();
+        for id in ids {
+            graph.tasks.push(Task::new(id, "x"));
+        }
+
+        let done_ids: HashSet<&str> = graph.tasks.iter()
+            .filter(|task| task.status == Status::Done)
+            .map(|task| task.id.as_str())
+            .collect();
+
+        for task in graph::runnable(&graph) {
+            for dep in &task.depends_on {
+                prop_assert!(done_ids.contains(dep.as_str()));
+            }
+        }
+    }
+}
+```
+
+## Godmode records the workflow
+
+The graph lives in `.ctx/godmode/tasks.yaml`. Loading an absent file returns an
+empty graph. Saving creates the local state directory and writes YAML. The file
+is gitignored, so persistence is local to that checkout.
+
+That scope is useful across sessions. It is not a distributed coordinator.
+Separate worktrees need an orchestration layer to reconcile their graphs.
+
+Shortened excerpt from
+`/Users/joe/dev/godmode/crates/godmode-core/src/graph.rs`.
+
+```rust
+pub fn load(root: &Path) -> Result<TaskGraph> {
+    let path = task_file(root);
+    if !path.exists() {
+        return Ok(TaskGraph::default());
+    }
+
+    let raw = std::fs::read_to_string(&path)?;
+    Ok(serde_yaml::from_str(&raw)?)
+}
+
+pub fn save(root: &Path, graph: &TaskGraph) -> Result<()> {
+    let path = task_file(root);
+    std::fs::create_dir_all(path.parent().unwrap())?;
+    std::fs::write(path, serde_yaml::to_string(graph)?)?;
+    Ok(())
+}
+```
+
+Session transitions save after changing state. Starting records a timestamp.
+Completing can record a commit SHA and notes. Blocking records the reason the
+next session needs.
+
+Shortened excerpt from
+`/Users/joe/dev/godmode/crates/godmode-core/src/session.rs`.
+
+```rust
+pub fn start_task(&mut self, id: &str) -> Result<()> {
+    graph::start(&mut self.graph, id)?;
+
+    if let Some(task) = self.graph.tasks.iter_mut().find(|task| task.id == id) {
+        task.started_at = Some(Utc::now());
+    }
+
+    self.auto_save();
+    Ok(())
+}
+
+pub fn block_task(&mut self, id: &str, reason: &str) -> Result<()> {
+    graph::block(&mut self.graph, id, reason)?;
+    self.auto_save();
+    Ok(())
+}
+```
+
+## Enforcement must be on the real path
+
+Recorded state becomes enforcement only when the command path reads it. The
+Rust pre-commit action blocks running and blocked tasks before Cargo gates.
+
+Shortened excerpt from the locally audited
+`/Users/joe/dev/godmode/crates/godmode-core/src/hooks/pre_commit.rs`.
+
+```rust
+fn check_task_state(root: &Path) -> Result<(), String> {
+    let task_graph = graph::load(root).map_err(|error| error.to_string())?;
+
+    let running: Vec<&str> = task_graph.tasks.iter()
+        .filter(|task| task.status == Status::Running)
+        .map(|task| task.id.as_str())
+        .collect();
+
+    if !running.is_empty() {
+        return Err(format!("tasks still running: {}", running.join(", ")));
+    }
+
+    let blocked = task_graph.tasks.iter()
+        .any(|task| task.status == Status::Blocked);
+    if blocked {
+        return Err("blocked tasks must be resolved before committing".into());
+    }
+
+    Ok(())
+}
+```
+
+The older installed Nushell hook is weaker. It expects `godmode handoff --json`
+to exit nonzero for running tasks. The current Rust command handler returns
+`Ok(())` after printing the handoff output, so that path does not enforce the
+running-task rule. Its separate blocked-task query still runs.
+
+An enforcement mechanism is only real on paths that invoke it and propagate its
+failure.
+
+Exact excerpt from
+`/Users/joe/dev/godmode/crates/godmode-cli/src/commands/handoff.rs`.
+
+```rust
+pub fn handle(command: Cmd, root: &Path, json: bool, _sarif: bool) -> Result<()> {
+    match command {
+        Cmd::Handoff => {
+            let out = integrations::handoff(root)?;
+            if json {
+                println!("{}", serde_json::to_string_pretty(&out)?);
+            } else {
+                print!("{}", out.human);
+            }
+            Ok(())
+        }
+        _ => unreachable!("dispatcher sent command to the wrong handler"),
+    }
+}
+```
 
 ## The graph should stay small
 
-Not every sentence in a prompt belongs in durable state. Tone, preferred code
-style, and explanations of the repository are still better as prose. Turning
-all of that into a state machine would make the workflow harder to use without
-making it safer.
+Tone, architecture notes, and coding preferences still belong in prose. Durable
+state is for facts whose loss could make the next action wrong.
 
-I use a simpler boundary: if losing a fact at the end of the session could
-make the next action wrong, it probably belongs in state. "Prefer concise
-output" can remain an instruction. "The regression test is still failing"
-cannot.
+The graph also has to stay honest. Marking a task done stores a transition and
+an optional SHA. It does not inspect that commit or prove the acceptance
+criteria.
 
-Prompts remain the best place to explain how I want an agent to work.
-`godmode` exists for the smaller set of rules where explanation is not enough.
-The prompt asks for discipline; the task graph remembers whether the work
-earned it.
+Shortened excerpt from
+`/Users/joe/dev/godmode/crates/godmode-core/src/graph.rs`.
 
-There is a cost. Somebody has to keep the state honest. A gate that reads a
-task left marked as running can block a legitimate commit, and a task marked
-done too early can create false confidence. Godmode does not solve that by
-inventing more states. It keeps the graph visible and makes transitions
-explicit. A task can record a commit SHA, but completion does not validate or
-prove that commit.
+```rust
+pub fn complete(
+    graph: &mut TaskGraph,
+    id: &str,
+    commit: Option<&str>,
+    notes: Option<&str>,
+) -> Result<()> {
+    let task = graph.tasks.iter_mut().find(|task| task.id == id)?;
 
-That trade is worth it for work that crosses sessions or agents. I do not need
-the graph to understand every thought. I need it to preserve the few facts
-that must still be true when the conversation that produced them is gone.
+    if task.status != Status::Running {
+        bail!("only running tasks can be completed");
+    }
+
+    task.status = Status::Done;
+    task.completed_at = Some(Utc::now());
+    task.commit = commit.map(str::to_owned);
+    task.notes = notes.unwrap_or_default().to_owned();
+    Ok(())
+}
+```
+
+Prompts remain the right place to explain how work should happen. The graph
+keeps the few facts that must survive after the explanation is gone. It does
+not replace judgment. It replaces guessing about declared state.
+
+Exact excerpt from
+`/Users/joe/dev/godmode/crates/godmode-core/src/graph.rs`.
+
+```rust
+#[test]
+fn start_fails_on_unmet_deps() {
+    let mut graph = graph_with_chain();
+    let error = start(&mut graph, "t2").unwrap_err();
+    assert!(error.to_string().contains("unmet dependencies"));
+}
+```
 
 ## Sources
 
-- [Godmode task model](https://github.com/89jobrien/godmode/blob/main/crates/godmode-core/src/model.rs)
-- [Dependency readiness and graph persistence](https://github.com/89jobrien/godmode/blob/main/crates/godmode-core/src/graph.rs)
-- [Session handon and handoff behavior](https://github.com/89jobrien/godmode/blob/main/crates/godmode-core/src/session.rs)
-- [HANDOFF state recording](https://github.com/89jobrien/godmode/blob/main/crates/godmode-core/src/integrations/handoff_yaml.rs)
-- [Rust pre-commit state checks](https://github.com/89jobrien/godmode/blob/main/crates/godmode-core/src/hooks/pre_commit.rs)
-- [Installed Git-hook path](https://github.com/89jobrien/godmode/blob/main/hooks/pre-commit.nu)
-- [Gitignored local task state](https://github.com/89jobrien/godmode/blob/main/.gitignore)
+- [Godmode task model](https://github.com/89jobrien/godmode/blob/ce4128718f96fb668fe23025d48c4fa72ef88fe4/crates/godmode-core/src/model.rs)
+- [Godmode graph persistence and readiness](https://github.com/89jobrien/godmode/blob/ce4128718f96fb668fe23025d48c4fa72ef88fe4/crates/godmode-core/src/graph.rs)
+- [Godmode session transitions](https://github.com/89jobrien/godmode/blob/ce4128718f96fb668fe23025d48c4fa72ef88fe4/crates/godmode-core/src/session.rs)
+- [Godmode handoff command](https://github.com/89jobrien/godmode/blob/ce4128718f96fb668fe23025d48c4fa72ef88fe4/crates/godmode-cli/src/commands/handoff.rs)
+- [Installed pre-commit hook](https://github.com/89jobrien/godmode/blob/ce4128718f96fb668fe23025d48c4fa72ef88fe4/hooks/pre-commit.nu)
+- Local Rust pre-commit audit: `/Users/joe/dev/godmode/crates/godmode-core/src/hooks/pre_commit.rs` at `c7f001f8685c12937865271278353565664cfeb1`

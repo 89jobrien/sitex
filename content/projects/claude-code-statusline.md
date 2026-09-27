@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/claude-code-statusline"
 ---
 
-# Claude Code Statusline
-
 <p align="center">
   <img src="assets/statusline-logo.png" alt="Claude Code Statusline" width="300">
 </p>

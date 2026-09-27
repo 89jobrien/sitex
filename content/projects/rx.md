@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/rx"
 ---
 
-# rx
-
 `rx` installs compatible scripts from local paths or remote URLs into a local command
 directory and records what it installed in a JSON registry.
 

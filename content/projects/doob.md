@@ -6,8 +6,6 @@ extra:
   repo: "https://github.com/89jobrien/doob"
 ---
 
-# doob
-
 Modern, agent-first todo CLI built with Rust and SurrealDB.
 
 ## Features
