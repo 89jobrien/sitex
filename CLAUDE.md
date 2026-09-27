@@ -21,20 +21,20 @@ currently connected.
 <commands>
 ```
 zola serve                # local preview with live reload
-zola serve --open         # same, opens it in the default browser
+zola serve --open # same, opens it in the default browser
 zola build                # build to public/ (gitignored)
-zk new-project --title "Some Project"   # creates content/projects/<slug>.md
-zk new-post --title "Some Post"         # creates content/blog/<slug>.md
-zk list-projects          # list notes in content/projects (excludes _index.md)
-zk list-posts             # list notes in content/blog, sorted by zk creation time desc
-zk new-idea --title "Some Idea"       # creates ideas/queue/some-idea.md
-zk list-ideas                          # list active pitches with priority and status
-crux run Cruxfile format  # rewrite content Markdown and Sass with Prettier
+zk new-project --title "Some Project" # creates content/projects/<slug>.md
+zk new-post --title "Some Post" # creates content/blog/<slug>.md
+zk list-projects # list notes in content/projects (excludes _index.md)
+zk list-posts # list notes in content/blog, sorted by zk creation time desc
+zk new-idea --title "Some Idea" # creates ideas/queue/some-idea.md
+zk list-ideas # list active pitches with priority and status
+crux run Cruxfile format # rewrite content Markdown and Sass with Prettier
 crux run Cruxfile format-check # non-mutating Prettier check
 crux run Cruxfile lint    # non-mutating repository Markdown lint
-crux run Cruxfile check   # workflow, zk, fail-fast, Zola, and external-link checks
-crux run Cruxfile build   # isolated build and prefix-safe output smoke checks
-crux run Cruxfile ci      # non-mutating aggregate; each quality gate runs once
+crux run Cruxfile check # workflow, zk, fail-fast, Zola, and external-link checks
+crux run Cruxfile build # isolated build and prefix-safe output smoke checks
+crux run Cruxfile ci # non-mutating aggregate; each quality gate runs once
 ```
 
 `zk` aliases are defined in `.zk/config.toml` under `[alias]`.
@@ -70,12 +70,14 @@ crux run Cruxfile ci      # non-mutating aggregate; each quality gate runs once
   explicit local target outside CI. Repository Markdown scope includes the root docs,
   `content/**/*.md`, `docs/**/*.md`, and `ideas/**/*.md`; `.zk/templates/*.md` remains excluded
   from Prettier and is checked by `scripts/check-zk-templates.sh` instead.
-- Tested workflow versions are Zola `0.19.2`, zk `0.15.6` or newer, Rust `1.89` or newer,
+- Tested workflow versions are Zola `0.19.2`, zk `0.15.6` or newer, Nushell `0.111.0`, Rust `1.89` or newer,
   `crux-agentic` `0.3.1` at revision `8d54a65`, lychee `0.24.2`, Node.js `22` or newer, Prettier `3.8.3`, and
-  `markdownlint-cli2` `0.22.0`. Use `npm install --ignore-scripts` for the exact top-level Node tools. Zola
-  validates local content without network access; lychee owns bounded concurrent HTTP(S) checks.
+  `markdownlint-cli2` `0.23.2`. Use `npm install --ignore-scripts` for the exact top-level Node tools. Zola
+  validates local content without network access; lychee owns bounded concurrent HTTP(S) checks
+  and accepts timeouts plus HTTP 403 and 429 responses as network-policy and rate-limit
+  exceptions while failing other confirmed HTTP errors.
 - `config.toml` enables the Atom feed at `atom.xml`.
-- `config.toml` sets the deployed base URL to `https://89jobrien.github.io/sitex`.
+- `config.toml` sets the deployed base URL to `<https://89jobrien.github.io/sitex>`.
 </architecture>
 
 ## Deployment

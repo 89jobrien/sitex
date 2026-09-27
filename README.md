@@ -11,6 +11,7 @@ tags), Zola builds it as pages. Kept intentionally separate from
 - Zola `0.19.2`, matching validation and deployment.
 - zk `0.15.6` or newer for note creation and listing.
 - Rust `1.89` or newer and `crux-agentic` `0.3.1` for the `crux` workflow runner.
+- Nushell `0.111.0` for zk rendering and editorial contract checks.
 - lychee `0.24.2` for concurrent external-link validation.
 - Node.js `22` or newer; `npm install --ignore-scripts` installs exact top-level Prettier and
   `markdownlint-cli2` versions from `package.json`.
@@ -50,7 +51,7 @@ Fill in `extra.repo` in a project note to link to its GitHub repo.
 
 ## Preview
 
-```
+```text
 zola serve          # http://127.0.0.1:1111
 zola serve --open   # same, and opens it in your default browser
 ```
@@ -76,11 +77,12 @@ crux run Cruxfile ci            # non-mutating aggregate; runs each gate exactly
 Formatting and linting cover `README.md`, `CLAUDE.md`, `content/**/*.md`, `docs/**/*.md`, and
 `ideas/**/*.md`; formatting also covers `sass/**/*.scss`. `.zk/templates/*.md` is deliberately
 excluded from Prettier because rewriting its template expressions breaks zk. The check target
-validates every `.crux` file and Cruxfile target plan, all four zk templates, disposable
+validates every `.crux` file and Cruxfile target plan, all four zk templates and their dry-run
+rendering, the private editorial workflow, disposable
 fail-fast propagation, Zola content, and external links. Zola checks site-local content without
-network access; lychee checks HTTP(S) links concurrently with bounded timeouts. If a slot-provided
-editorial checker exists under a supported `scripts/check-editorial*` name, the zk wrapper invokes
-it too.
+network access; lychee checks HTTP(S) links concurrently with bounded timeouts. Timeouts plus
+HTTP 403 and 429 responses are accepted as network-policy and rate-limit exceptions; other
+confirmed HTTP errors fail the check.
 
 `crux run Cruxfile build` writes to a temporary directory, verifies prefix-safe project/blog
 links, representative project and post pages, and `atom.xml`, then removes the output.

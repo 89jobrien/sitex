@@ -1,7 +1,11 @@
 # Design: Standalone Crux Workflow Pipelines
 
-> **Status (2026-09-12): Planned.** Current main has only `scripts/format.crux` and
-> `scripts/lint.crux`; `Cruxfile` still owns check, build, serve, and CI composition.
+> **Status (2026-09-12): Implemented with an expanded validation contract.** Every target
+> now dispatches to `scripts/*.crux`; the implementation also adds non-mutating format checks,
+> workflow validation, zk rendering and editorial checks, external-link checks, isolated builds,
+> and smoke tests.
+> The sections below preserve the approved baseline design; `README.md` and `CLAUDE.md`
+> describe current operations.
 
 ## Goal
 
