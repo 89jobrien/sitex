@@ -24,6 +24,7 @@
   <header class="site-header">
     <a class="site-title" href="{{ get_url(path="/") }}">{{ config.title }}</a>
     <nav>
+      <a href="{{ get_url(path="/about/") }}">About</a>
       <a href="{{ get_url(path="/projects/") }}">Projects</a>
       <a href="{{ get_url(path="/blog/") }}">Blog</a>
     </nav>
@@ -33,9 +34,12 @@
   </main>
   <footer class="site-footer">
     <span>&copy; {{ now() | date(format="%Y") }} Joseph O'Brien</span>
-    {% if config.generate_feeds %}
-    <a href="{{ get_url(path="atom.xml") }}">Atom feed</a>
-    {% endif %}
+    <span class="footer-links">
+      <a href="https://github.com/89jobrien" rel="noreferrer">GitHub</a>
+      {% if config.generate_feeds %}
+      <a href="{{ get_url(path="atom.xml") }}">Atom feed</a>
+      {% endif %}
+    </span>
   </footer>
 </body>
 </html>

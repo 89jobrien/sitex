@@ -3,30 +3,39 @@ title: "Joseph O'Brien"
 sort_by: date
 template: index.html
 extra:
-  role: "Systems architect & agentic-tooling builder"
+  role: "Agentic Systems Architect"
   focus:
-    - Rust
-    - Hexagonal architecture
-    - Agentic dev workflows
-    - CI/CD & health gates
-    - Nushell
+    - Agentic systems
+    - Rust platforms
+    - AI and LLM infrastructure
+    - Developer tooling
+    - Reliability engineering
   featured_projects:
     - minibox
-    - godmode
     - crux
+    - taskit
 ---
 
-I build the infrastructure that makes autonomous dev workflows observable, safe,
-and fast to trust — CI health gates, command-rewrite guardrails, and governance
-tooling for agent-driven pipelines, mostly in Rust.
+I design and build agentic systems, developer platforms, and the infrastructure
+that makes them dependable. My work covers LLM agents, container runtimes,
+workflow engines, API tooling, and the safety controls that keep automated
+systems observable and under human control.
 
-Most of what I ship lives at the intersection of systems engineering and
-developer ergonomics: container runtimes, hexagonal architectures, and
-terminal-first tooling (Nushell, MCP, custom CLIs) that treats the shell, CI,
-and the runtime as one governed system rather than three separate concerns.
-Lately that's meant building the scaffolding for agents to work inside that
-system safely — verification pipelines, drift detection, and evidence-based
-gates that catch regressions before they merge.
+Most of my systems work is in Rust. I also use Python for AI and data workflows,
+Go for services and tooling, and Nushell for automation. I favor hexagonal
+architecture, explicit error handling, strong tests, and adapters that let
+external services change without pulling the core system apart.
+
+I am most interested in the gap between a promising prototype and a system
+people can actually operate. That means tracing decisions, recovering from
+failed steps, enforcing policy around tool use, detecting drift, and giving
+operators enough evidence to understand what happened.
+
+My current projects explore those problems from several directions. They
+include an agent-controllable container runtime, a typed workflow runtime for
+agent pipelines, a Rust CI and task engine, code quality systems, secret
+detection, semantic retrieval, and tools that turn APIs into usable command
+interfaces.
 
 See [projects](@/projects/_index.md) for write-ups, or [the blog](@/blog/_index.md) for
 longer-form notes.

@@ -222,6 +222,11 @@ blockquote {
   border-top: 1px solid var(--border);
   color: var(--muted);
   font-size: 0.85em;
+
+  .footer-links {
+    display: flex;
+    gap: 1rem;
+  }
 }
 
 @media (max-width: 640px) {

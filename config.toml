@@ -1,6 +1,6 @@
 base_url = "https://89jobrien.github.io/sitex"
 title = "Joseph O'Brien"
-description = "Projects and writing"
+description = "Agentic systems, Rust platforms, AI infrastructure, and developer tooling by Joseph O'Brien."
 author = "Joseph O'Brien"
 default_language = "en"
 compile_sass = true
