@@ -1,7 +1,7 @@
 ---
 title: "sandbox"
 date: 2026-08-18
-description: "Rust workspace implementing a virtual bash interpreter over an in-memory VFS, with capability-based permissions and hard execution limits, for safely embedding shell-script evaluation in applications."
+description: "Rust workspace implementing a virtual bash interpreter over an in-memory VFS, with default-deny capability permissions and operation-count execution limits, for safely embedding shell-script evaluation in applications."
 taxonomies:
   tags: [security, shell-tooling, systems-software]
 extra:
@@ -52,8 +52,10 @@ cargo run -p sandbox-cli -- -c 'for i in a b c; do echo $i; done'
 herestrings (`<<<`)
 
 **Expansion:** `$VAR`, `${VAR}`, `${VAR:-default}`, `${VAR:+alt}`,
-`${#VAR}`, `$?`, `$0`..`$9`, `$@`, `$#`, command substitution (`$(...)`,
-`` `...` ``), double-quoted interpolation
+`${#VAR}`, `$?`, `$0`..`$9`, `$@`, `$#`, double-quoted interpolation
+
+Command substitution is **parsed but not executed** -- see
+[Not supported](#not-supported).
 
 **Assignments:** `VAR=value`, `export VAR=value`, prefix assignments
 
@@ -65,29 +67,31 @@ herestrings (`<<<`)
 | ---------- | -------------------------------------------- |
 | Core       | echo, printf, cat, read, head, tail, test, [ |
 | Navigation | cd, pwd, ls                                  |
-| File       | mkdir, rm, cp, mv, touch                     |
+| File       | mkdir, rm, cp, mv, touch, find               |
 | Flow       | true, false, exit                            |
 | Variables  | export, set, unset                           |
+| Text       | wc, basename, dirname, sort, uniq, tee, grep |
 
-Unknown commands return exit code 127. Implement the `ExecHandler` trait to
-intercept and handle external commands, or register custom builtins via
-`shell.register_builtin(impl Builtin)`.
+28 builtins total. Unknown commands return exit code 127. Implement the
+`ExecHandler` trait to intercept and handle external commands, or register
+custom builtins via `shell.register_builtin(impl Builtin)`.
 
 ## Capabilities
 
 The shell uses a capability-based permission model. Each `Shell` instance has
 a `CapabilitySet` that controls what operations are allowed:
 
-| Capability | Controls                          |
-| ---------- | --------------------------------- |
-| ReadFs     | Reading files and listing dirs    |
-| WriteFs    | Writing, creating, removing files |
-| EnvRead    | Reading environment variables     |
-| EnvWrite   | Modifying environment variables   |
-| RealFs     | Host filesystem access (future)   |
-| Network    | Network operations (future)       |
-| Exec       | Spawning real processes (future)  |
-| Signal     | Signal handling (future)          |
+| Capability   | Controls                                      |
+| ------------ | --------------------------------------------- |
+| ReadFs       | Reading files and listing dirs                |
+| WriteFs      | Writing, creating, removing files             |
+| EnvRead      | Reading environment variables                 |
+| EnvWrite     | Modifying environment variables               |
+| RealFs       | Host filesystem access (declared, unused)     |
+| Network      | Network operations (declared, unused)         |
+| NetAllowlist | Per-host network allowlist (declared, unused) |
+| Exec         | Spawning real processes (declared, unused)    |
+| Signal       | Signal handling (declared, unused)            |
 
 Default set: `ReadFs`, `WriteFs`, `EnvRead`, `EnvWrite`. Restrict with:
 
@@ -101,18 +105,34 @@ let shell = Shell::builder()
 
 ## Execution Limits
 
-All limits have hard caps that cannot be exceeded:
+Limits are **operation-count** bounds. The table below marks which are
+actually enforced; the remainder are declared and clamped but never checked.
 
-| Limit                | Default | Hard cap  |
-| -------------------- | ------- | --------- |
-| Commands             | 10,000  | 1,000,000 |
-| Loop iterations      | 10,000  | 1,000,000 |
-| AST depth            | 100     | 100       |
-| Parser fuel (tokens) | 100,000 | 1,000,000 |
-| Stdout               | 1 MB    | 100 MB    |
-| Input size           | 10 MB   | 100 MB    |
-| VFS size             | 100 MB  | 1 GB      |
-| Timeout              | 30s     | 3,600s    |
+| Limit                 | Default   | Hard cap   | Enforced |
+| --------------------- | --------- | ---------- | -------- |
+| Commands              | 10,000    | 1,000,000  | yes      |
+| Loop iterations       | 10,000    | 1,000,000  | yes      |
+| Total loop iterations | 1,000,000 | 10,000,000 | yes      |
+| AST depth             | 100       | 100        | yes      |
+| Parser fuel (tokens)  | 100,000   | 1,000,000  | yes      |
+| Stdout                | 1 MB      | 100 MB     | yes      |
+| Input size            | 10 MB     | 100 MB     | yes      |
+| Function depth        | 100       | 100        | **no**   |
+| Substitution depth    | 32        | 64         | **no**   |
+| Var size              | 1 MB      | 10 MB      | **no**   |
+| VFS size              | 100 MB    | 1 GB       | **no**   |
+| Stderr                | 1 MB      | 100 MB     | **no**   |
+| Timeout               | 30s       | 3,600s     | **no**   |
+
+**There is no wall-clock timeout.** `ShellError::Timeout` is declared but never
+constructed anywhere in the crate. Termination comes from operation counting --
+`tick_command` and `tick_loop` return `Err` above their limit, and every loop
+construct's first statement is a fallible tick, so `while true; do echo x; done`
+is killed. This bounds _steps_, not elapsed time: a single builtin that does
+real work is not bounded in duration.
+
+`crates/sandbox-bench` contains no benchmarks yet, so interpretation overhead
+is **unmeasured**.
 
 ```rust
 use sandbox::limits::ExecutionLimits;
@@ -124,6 +144,43 @@ let shell = Shell::builder()
     })
     .build();
 ```
+
+## Not supported
+
+Verified against `main` @ `53c1e7f`.
+
+- **Command substitution.** `$(...)` and backticks parse into the AST, then
+  expand to an empty string (`interpreter/expansion.rs:25,29` -- both read
+  `// handled by interpreter`, and no interpreter path exists). `echo $(whoami)`
+  yields `echo ` with exit code 0. This fails closed, but it is a silent wrong
+  answer.
+- **Globbing.** Word expansion is variables-only, so `echo *.txt` emits the
+  literal `*.txt`. The only glob matcher is a predicate for `find -name`.
+- **Background execution.** `&` is refused explicitly with exit code 1.
+- **Real programs.** There is no `gcc`, `git`, `python`, or `curl`. To run a
+  real program you must inject an `ExecHandler`, which is the one escape hatch
+  the design otherwise forecloses.
+- **Unbounded recursion.** Function-depth is not enforced; recursion is bounded
+  only indirectly through the command counter.
+
+## Why it is safe
+
+The safety argument is structural rather than configurational, and greppable:
+
+- The library crate contains **zero** references to `std::process`,
+  `Command::new`, `libc`, or `nix`. Its dependency list has no process crate.
+- `DefaultExecHandler::handle` returns `None` unconditionally -- unknown
+  commands cannot reach outside.
+- The filesystem root is a `MemoryFS`; path normalization pops a stack on
+  `..`, so no path can ascend above root, and there is no host filesystem
+  underneath to escape into.
+- No `std::env` access -- the shell's environment is seeded only by the builder.
+- `CapabilitySet::check` is default-deny: denial is the `else` branch, so
+  granting requires positive insertion. Five of nine capabilities (`RealFs`,
+  `Network`, `NetAllowlist`, `Exec`, `Signal`) are declared but never consumed
+  anywhere, which means the grants that would open escape hatches are inert.
+- 3 `cargo-fuzz` targets with 5,162 corpus entries, and 11 `proptest!`
+  properties including arbitrary-Unicode parser input.
 
 ## Custom Builtins
 

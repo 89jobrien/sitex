@@ -1,7 +1,7 @@
 ---
 title: "kgx"
 date: 2026-08-18
-description: "Three-layer knowledge graph toolkit in Rust with zero-dependency, JSON-backed storage -- a GraphStore (BFS traversal, confidence filtering), DocumentStore (chunking and provenance), and WikiStore (markdown pages with wikilinks) behind a kgx library and kgx-cli binary, no external database required."
+description: "Three-layer knowledge graph toolkit in Rust with JSON-backed storage and no external database -- a GraphStore (BFS traversal, confidence filtering), DocumentStore (chunking with document-level source links), and WikiStore (markdown pages with wikilinks) behind a kgx library and kgx-cli binary."
 taxonomies:
   tags: [cli, knowledge-systems, observability]
 extra:
@@ -11,8 +11,10 @@ extra:
 
 Three-layer knowledge graph toolkit in Rust.
 
-JSON-backed, zero-dependency storage. No external database required --
-entities, relations, documents, and wiki pages all persist as plain files.
+JSON-backed storage with no external database required -- entities,
+relations, documents, and wiki pages all persist as plain files. See
+[Known limitations](#known-limitations) before relying on the
+provenance claims.
 
 ## Architecture
 
@@ -28,15 +30,16 @@ entities, relations, documents, and wiki pages all persist as plain files.
   | graph.json   |  | documents.json|  | wiki/        |
   +--------------+  +---------------+  +--------------+
    BFS traversal       Chunking &       Markdown pages
-   Confidence filter    Provenance       [[wikilinks]]
+   Confidence filter    Doc-level       [[wikilinks]]
+                       source links
 ```
 
-| Layer         | Storage               | Purpose                                             |
-| ------------- | --------------------- | --------------------------------------------------- |
-| **Graph**     | `data/graph.json`     | Entity-relation graph, BFS traversal, confidence    |
-| **Documents** | `data/documents.json` | Immutable document store with chunking & provenance |
-| **Wiki**      | `wiki/`               | Markdown pages with `[[wikilinks]]`, search, lint   |
-| **Export**    | (output dir)          | JSON or Markdown export of the full context graph   |
+| Layer         | Storage               | Purpose                                                                                                |
+| ------------- | --------------------- | ------------------------------------------------------------------------------------------------------ |
+| **Graph**     | `data/graph.json`     | Entity-relation graph, BFS traversal, confidence                                                       |
+| **Documents** | `data/documents.json` | Chunked document store with document-level source links; re-ingesting a `doc_id` replaces the document |
+| **Wiki**      | `wiki/`               | Markdown pages with `[[wikilinks]]`, search, lint                                                      |
+| **Export**    | (output dir)          | JSON or Markdown export of the full context graph                                                      |
 
 ## Quick Start
 
@@ -158,10 +161,50 @@ Obsidian vault.
 | `MIN_CONFIDENCE`  | 0.6   | Edges below this are rejected |
 | `MAX_NODES`       | 50    | Max nodes returned per query  |
 
+An edge that fails the confidence threshold is discarded at write time and
+never recorded. Omitting `--confidence` defaults to `1.0`, the maximum, so
+an unspecified score always passes the gate.
+
+## Known limitations
+
+Verified against `main` @ `0c08171`. These are behavioral facts, not plans.
+
+- **Provenance is document-level, not span-level.** Nodes and edges carry a
+  `source_doc` id; nothing references a specific chunk. `QueryResult.supporting_chunks`
+  is a flat list of every chunk of every cited document, with no back-pointer
+  to the node or edge it supposedly supports.
+- **Re-ingestion orphans citations.** `DocumentStore::ingest` replaces the
+  document, destroying the previous text and its chunk ids. Entities and
+  relations derived from the old revision survive and keep citing the same
+  `doc_id`, which now points at text that no longer contains the claim.
+- **Edges do not deduplicate on ingest.** `add_node` merges by lowercased
+  name; `add_edge` always appends. Re-ingesting a document duplicates every
+  relation. `MergeOp` implements dedup but is unreachable from the CLI, and
+  its key omits `source_doc`, so merging two documents that assert the same
+  edge silently discards the second document's citation.
+- **No timestamps, content hashes, line ranges, versioning, or decay.** Every
+  record is last-write-wins.
+- **Confidence is uncalibrated.** All 30 edges in the bundled dataset sit at
+  exactly `1.0`.
+- **GitLab, local-git, and two GitHub sources are placeholders.**
+- **No indexing.** `bfs_subgraph` scans the full edge list per dequeued node
+  and `save()` rewrites the whole file, so cost grows with `O(nodes x edges)`.
+
 ## Code Quality
 
-100% `rustqual` score across all
-six dimensions: IOSP, Complexity, DRY, SRP, Coupling, Test Quality.
+Measured with `rustqual 1.2.0` on `main` @ `0c08171`:
+
+| Dimension       | Result                                                    |
+| --------------- | --------------------------------------------------------- |
+| `iosp_score`    | 100%                                                      |
+| `quality_score` | 84.2%                                                     |
+| Test quality    | 0 untested warnings, 0 missing-assertion warnings         |
+| Coupling        | 0 warnings, 0 cycles                                      |
+| Dead code       | 0 warnings (per-crate; CLI-unreachable ops count as used) |
+
+Open warnings: 3 complexity, 6 function-length, 8 magic-number,
+13 boilerplate, 2 module-SRP, 1 parameter-SRP, 2 error-handling,
+and 3 active suppressions.
 
 ## License
 
