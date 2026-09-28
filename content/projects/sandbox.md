@@ -152,8 +152,8 @@ Verified against `main` @ `53c1e7f`.
 - **Command substitution.** `$(...)` and backticks parse into the AST, then
   expand to an empty string (`interpreter/expansion.rs:25,29` -- both read
   `// handled by interpreter`, and no interpreter path exists). `echo $(whoami)`
-  yields `echo ` with exit code 0. This fails closed, but it is a silent wrong
-  answer.
+  prints the word `echo` and nothing else, with exit code 0. This fails closed,
+  but it is a silent wrong answer.
 - **Globbing.** Word expansion is variables-only, so `echo *.txt` emits the
   literal `*.txt`. The only glob matcher is a predicate for `find -name`.
 - **Background execution.** `&` is refused explicitly with exit code 1.
