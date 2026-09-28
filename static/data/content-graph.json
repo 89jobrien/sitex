@@ -332,26 +332,6 @@
       ],
       "related": [
         {
-          "id": "post:policy-between-intent-and-effects",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "post:grounding-survives-summarization"
-            },
-            {
-              "kind": "link",
-              "declaredBy": "post:grounding-survives-summarization"
-            },
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-harness",
-                "automation"
-              ]
-            }
-          ]
-        },
-        {
           "id": "post:prompts-as-interfaces",
           "reasons": [
             {
@@ -369,20 +349,32 @@
           ]
         },
         {
-          "id": "project:devkit",
+          "id": "post:policy-between-intent-and-effects",
           "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:grounding-survives-summarization"
+            },
             {
               "kind": "tag",
               "sharedTags": [
                 "agent-harness",
-                "automation",
-                "observability"
+                "automation"
               ]
             }
           ]
         },
         {
-          "id": "project:updog",
+          "id": "project:episteme",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:episteme"
+            }
+          ]
+        },
+        {
+          "id": "project:devkit",
           "reasons": [
             {
               "kind": "tag",
@@ -727,26 +719,6 @@
       ],
       "related": [
         {
-          "id": "post:grounding-survives-summarization",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "post:grounding-survives-summarization"
-            },
-            {
-              "kind": "link",
-              "declaredBy": "post:grounding-survives-summarization"
-            },
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-harness",
-                "automation"
-              ]
-            }
-          ]
-        },
-        {
           "id": "post:hooks-mid-rewrite",
           "reasons": [
             {
@@ -803,13 +775,25 @@
               ]
             }
           ]
+        },
+        {
+          "id": "post:grounding-survives-summarization",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:grounding-survives-summarization"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation"
+              ]
+            }
+          ]
         }
       ],
-      "backlinks": [
-        {
-          "id": "post:grounding-survives-summarization"
-        }
-      ]
+      "backlinks": []
     },
     {
       "id": "post:prompts-as-interfaces",
@@ -2431,6 +2415,71 @@
       "backlinks": []
     },
     {
+      "id": "project:episteme",
+      "kind": "project",
+      "title": "episteme",
+      "description": "Local-first document ingestion and intelligence pipeline in Rust: spans are numbered at the boundary, models select span IDs instead of writing quotes, Rust reconstructs verbatim evidence and re-verifies it against the source before anything is written to DuckDB or an Obsidian vault.",
+      "date": "2026-09-28",
+      "route": "/projects/episteme/",
+      "tags": [
+        "cli",
+        "knowledge-systems",
+        "security"
+      ],
+      "related": [
+        {
+          "id": "project:kgx",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:episteme"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "cli",
+                "knowledge-systems"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:grounding-survives-summarization",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:episteme"
+            }
+          ]
+        },
+        {
+          "id": "project:notfiles",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "cli",
+                "security"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:obfsck",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "cli",
+                "security"
+              ]
+            }
+          ]
+        }
+      ],
+      "backlinks": []
+    },
+    {
       "id": "project:godmode",
       "kind": "project",
       "title": "godmode",
@@ -2685,6 +2734,22 @@
               "sharedTags": [
                 "knowledge-systems",
                 "observability"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:episteme",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:episteme"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "cli",
+                "knowledge-systems"
               ]
             }
           ]
@@ -3378,19 +3443,19 @@
           ]
         },
         {
-          "id": "project:hj",
+          "id": "project:episteme",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
-                "automation",
-                "cli"
+                "cli",
+                "security"
               ]
             }
           ]
         },
         {
-          "id": "project:maid",
+          "id": "project:hj",
           "reasons": [
             {
               "kind": "tag",
@@ -5611,10 +5676,6 @@
           "declaredBy": "post:grounding-survives-summarization"
         },
         {
-          "kind": "link",
-          "declaredBy": "post:grounding-survives-summarization"
-        },
-        {
           "kind": "tag",
           "sharedTags": [
             "agent-harness",
@@ -5764,6 +5825,18 @@
         }
       ],
       "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:episteme",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:episteme"
+        }
+      ],
+      "tagSimilarity": 0
     },
     {
       "source": "post:grounding-survives-summarization",
@@ -10185,6 +10258,55 @@
         }
       ],
       "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:episteme",
+      "target": "project:kgx",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:episteme"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "knowledge-systems"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "project:episteme",
+      "target": "project:notfiles",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "project:episteme",
+      "target": "project:obfsck",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "cli",
+            "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
     },
     {
       "source": "project:godmode",

@@ -108,7 +108,7 @@ invent an ID.
 First, it marks the source as hostile. Document text is the most likely place
 for an injection, because the author of the document does not know they are
 about to become prompt input. This is the policy-before-effect argument from
-[policy-between-intent-and-effects](policy-between-intent-and-effects.md)
+[policy-between-intent-and-effects](@/blog/policy-between-intent-and-effects.md)
 applied to retrieved content rather than to tool calls.
 
 Second, the identifier-selection instruction is redundant with the schema and
