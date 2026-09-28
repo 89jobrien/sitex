@@ -1,0 +1,408 @@
+import {
+  forceCenter,
+  forceLink,
+  forceManyBody,
+  forceSimulation,
+} from "d3-force";
+import { select } from "d3-selection";
+import { zoom, zoomIdentity } from "d3-zoom";
+
+export const DEFAULT_EDGE_KINDS = Object.freeze(["explicit", "link"]);
+const MAX_MANIFEST_BYTES = 2_000_000;
+const MAX_NODES = 1_000;
+const MAX_EDGES = 10_000;
+const NODE_ID = /^(project|post):([a-z0-9]+(?:-[a-z0-9]+)*)$/;
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const TAG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+function invalidManifest() {
+  throw new TypeError("invalid content graph manifest");
+}
+
+function isBoundedString(value, maxLength) {
+  return typeof value === "string" && value.length <= maxLength;
+}
+
+function hasValidEvidence(evidence, nodeIds) {
+  return (
+    Array.isArray(evidence) &&
+    evidence.length <= 5 &&
+    evidence.every(
+      (item) =>
+        item &&
+        ["explicit", "link", "tag"].includes(item.kind) &&
+        (item.declaredBy === undefined || nodeIds.has(item.declaredBy)) &&
+        (item.sharedTags === undefined ||
+          (Array.isArray(item.sharedTags) &&
+            item.sharedTags.length <= 64 &&
+            item.sharedTags.every(
+              (tag) => isBoundedString(tag, 64) && TAG.test(tag),
+            ))),
+    )
+  );
+}
+
+export function validateContentGraphManifest(graph) {
+  if (
+    !graph ||
+    graph.schemaVersion !== 1 ||
+    !Array.isArray(graph.nodes) ||
+    !Array.isArray(graph.edges) ||
+    graph.nodes.length > MAX_NODES ||
+    graph.edges.length > MAX_EDGES
+  ) {
+    invalidManifest();
+  }
+
+  const nodeIds = new Set();
+  for (const node of graph.nodes) {
+    const match = isBoundedString(node?.id, 128) && NODE_ID.exec(node.id);
+    if (
+      !match ||
+      node.kind !== match[1] ||
+      nodeIds.has(node.id) ||
+      !isBoundedString(node.title, 200) ||
+      !isBoundedString(node.description, 2_000) ||
+      !isBoundedString(node.date, 10) ||
+      !ISO_DATE.test(node.date) ||
+      !Array.isArray(node.tags) ||
+      node.tags.length > 64 ||
+      node.tags.some((tag) => !isBoundedString(tag, 64) || !TAG.test(tag)) ||
+      new Set(node.tags).size !== node.tags.length ||
+      !Array.isArray(node.related) ||
+      node.related.length > 4 ||
+      !Array.isArray(node.backlinks) ||
+      node.backlinks.length > MAX_NODES ||
+      Object.hasOwn(node, "sourcePath") ||
+      node.route !==
+        `/${node.kind === "project" ? "projects" : "blog"}/${match[2]}/`
+    ) {
+      invalidManifest();
+    }
+    nodeIds.add(node.id);
+  }
+
+  for (const node of graph.nodes) {
+    if (
+      node.related.some(
+        (related) =>
+          !related ||
+          !nodeIds.has(related.id) ||
+          related.id === node.id ||
+          !hasValidEvidence(related.reasons, nodeIds),
+      ) ||
+      node.backlinks.some(
+        (backlink) =>
+          !backlink || !nodeIds.has(backlink.id) || backlink.id === node.id,
+      )
+    ) {
+      invalidManifest();
+    }
+  }
+
+  for (const edge of graph.edges) {
+    if (
+      !edge ||
+      !nodeIds.has(edge.source) ||
+      !nodeIds.has(edge.target) ||
+      edge.source === edge.target ||
+      typeof edge.directed !== "boolean" ||
+      !hasValidEvidence(edge.evidence, nodeIds) ||
+      !Number.isFinite(edge.tagSimilarity) ||
+      edge.tagSimilarity < 0 ||
+      edge.tagSimilarity > 1
+    ) {
+      invalidManifest();
+    }
+  }
+
+  return graph;
+}
+
+async function readManifest(response) {
+  const contentLength = Number(response.headers?.get?.("content-length"));
+  if (Number.isFinite(contentLength) && contentLength > MAX_MANIFEST_BYTES) {
+    invalidManifest();
+  }
+
+  if (typeof response.text === "function") {
+    const text = await response.text();
+    if (text.length > MAX_MANIFEST_BYTES) invalidManifest();
+    return validateContentGraphManifest(JSON.parse(text));
+  }
+
+  const graph = await response.json();
+  if (JSON.stringify(graph).length > MAX_MANIFEST_BYTES) invalidManifest();
+  return validateContentGraphManifest(graph);
+}
+
+function checkedValues(root, name) {
+  return new Set(
+    [...root.querySelectorAll(`input[name="${name}"]:checked`)].map(
+      ({ value }) => value,
+    ),
+  );
+}
+
+export function readFilterState(root) {
+  return {
+    query: root.querySelector('input[name="query"]')?.value.trim() ?? "",
+    kinds: checkedValues(root, "kind"),
+    tags: checkedValues(root, "tag"),
+    edgeKinds: checkedValues(root, "edge"),
+  };
+}
+
+function matchesNode(node, state) {
+  if (!state.kinds.has(node.kind)) return false;
+  if (state.tags.size > 0 && !node.tags.some((tag) => state.tags.has(tag))) {
+    return false;
+  }
+
+  const query = state.query.toLocaleLowerCase();
+  if (!query) return true;
+  return [node.title, node.description, ...node.tags]
+    .join(" ")
+    .toLocaleLowerCase()
+    .includes(query);
+}
+
+function edgeHasKind(edge, enabledKinds) {
+  return edge.evidence.some(({ kind }) => enabledKinds.has(kind));
+}
+
+export function filterGraph(graph, state) {
+  const nodes = graph.nodes.filter((node) => matchesNode(node, state));
+  const visibleIds = new Set(nodes.map(({ id }) => id));
+  const edges = graph.edges.filter(
+    (edge) =>
+      visibleIds.has(
+        typeof edge.source === "string" ? edge.source : edge.source.id,
+      ) &&
+      visibleIds.has(
+        typeof edge.target === "string" ? edge.target : edge.target.id,
+      ) &&
+      edgeHasKind(edge, state.edgeKinds),
+  );
+  return { nodes, edges };
+}
+
+function routeWithBase(route, manifestUrl) {
+  const marker = "/data/content-graph.json";
+  const path = new URL(manifestUrl, "https://example.invalid").pathname;
+  const basePath = path.endsWith(marker) ? path.slice(0, -marker.length) : "";
+  return `${basePath}${route}`.replace(/\/+/g, "/");
+}
+
+function addTagFilters(root, graph) {
+  const container = root.querySelector("[data-tag-filters]");
+  if (!container || container.childElementCount > 0) return;
+
+  const document = root.ownerDocument;
+  const tags = [
+    ...new Set(graph.nodes.flatMap(({ tags: nodeTags }) => nodeTags)),
+  ].sort();
+  for (const tag of tags) {
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.name = "tag";
+    input.value = tag;
+    label.append(input, ` ${tag}`);
+    container.append(label);
+  }
+}
+
+function renderDetails(root, node, manifestUrl) {
+  const details = root.querySelector("[data-graph-details]");
+  if (!details) return;
+
+  const document = root.ownerDocument;
+  const title = document.createElement("h2");
+  title.textContent = node.title;
+  const kind = document.createElement("p");
+  kind.textContent = node.kind;
+  const description = document.createElement("p");
+  description.textContent = node.description;
+  const link = document.createElement("a");
+  link.href = routeWithBase(node.route, manifestUrl);
+  link.textContent = `Open ${node.title}`;
+  details.replaceChildren(title, kind, description, link);
+  details.hidden = false;
+}
+
+function primaryEdgeKind(edge, enabledKinds) {
+  return (
+    edge.evidence.find(({ kind }) => enabledKinds.has(kind))?.kind ?? "tag"
+  );
+}
+
+function installZoom(root, svg, viewport) {
+  const zoomBehavior = zoom()
+    .scaleExtent([0.35, 4])
+    .on("zoom", ({ transform }) => viewport.attr("transform", transform));
+  svg.call(zoomBehavior);
+
+  for (const button of root.querySelectorAll("[data-graph-zoom]")) {
+    button.onclick = () => {
+      const action = button.dataset.graphZoom;
+      if (action === "reset") {
+        svg.call(zoomBehavior.transform, zoomIdentity);
+      } else {
+        svg.call(zoomBehavior.scaleBy, action === "in" ? 1.35 : 1 / 1.35);
+      }
+    };
+  }
+}
+
+function renderGraph(root, graph, state, manifestUrl, reduceMotion) {
+  const canvas = root.querySelector("[data-graph-canvas]");
+  if (!canvas) return;
+
+  const width = Math.max(canvas.clientWidth || 800, 320);
+  const height = Math.max(canvas.clientHeight || 560, 320);
+  const svg = select(canvas)
+    .append("svg")
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("role", "group")
+    .attr("aria-label", "Interactive content relationship graph");
+  const viewport = svg.append("g");
+  const edges = graph.edges.map((edge) => ({ ...edge }));
+  const nodes = graph.nodes.map((node) => ({ ...node }));
+
+  const lines = viewport
+    .append("g")
+    .attr("class", "graph-edges")
+    .selectAll("line")
+    .data(edges)
+    .join("line")
+    .attr(
+      "class",
+      (edge) =>
+        `graph-edge graph-edge-${primaryEdgeKind(edge, state.edgeKinds)}`,
+    );
+
+  const circles = viewport
+    .append("g")
+    .attr("class", "graph-nodes")
+    .selectAll("circle")
+    .data(nodes)
+    .join("circle")
+    .attr("r", 9)
+    .attr("class", (node) => `graph-node graph-node-${node.kind}`)
+    .attr("data-graph-node", ({ id }) => id)
+    .attr("role", "button")
+    .attr("tabindex", 0)
+    .attr("aria-label", (node) => `${node.title}, ${node.kind}`)
+    .on("click", (_, node) => selectNode(node))
+    .on("keydown", (event, node) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        selectNode(node);
+      }
+    });
+
+  function selectNode(node) {
+    circles.classed("is-selected", ({ id }) => id === node.id);
+    renderDetails(root, node, manifestUrl);
+  }
+
+  const updatePositions = () => {
+    lines
+      .attr("x1", ({ source }) => source.x)
+      .attr("y1", ({ source }) => source.y)
+      .attr("x2", ({ target }) => target.x)
+      .attr("y2", ({ target }) => target.y);
+    circles.attr("cx", ({ x }) => x).attr("cy", ({ y }) => y);
+  };
+  const simulation = forceSimulation(nodes)
+    .force("charge", forceManyBody().strength(-90))
+    .force("center", forceCenter(width / 2, height / 2))
+    .force(
+      "link",
+      forceLink(edges)
+        .id(({ id }) => id)
+        .distance(72),
+    )
+    .on("tick", updatePositions);
+
+  if (reduceMotion) {
+    simulation.stop();
+    simulation.tick(300);
+    updatePositions();
+  }
+
+  installZoom(root, svg, viewport);
+  return simulation;
+}
+
+function updateFallback(root, state) {
+  const query = state.query.toLocaleLowerCase();
+  for (const item of root.querySelectorAll("[data-node-kind]")) {
+    const matchesKind = state.kinds.has(item.dataset.nodeKind);
+    const tags = new Set(
+      (item.dataset.nodeTags ?? "").split(" ").filter(Boolean),
+    );
+    const matchesTags =
+      state.tags.size === 0 || [...state.tags].some((tag) => tags.has(tag));
+    const matchesText =
+      !query || item.textContent.toLocaleLowerCase().includes(query);
+    item.hidden = !(matchesKind && matchesTags && matchesText);
+  }
+}
+
+export async function initializeContentGraph(
+  root,
+  {
+    fetchImpl = globalThis.fetch,
+    matchMediaImpl = globalThis.matchMedia,
+    warnImpl = console.warn,
+  } = {},
+) {
+  if (!root || typeof fetchImpl !== "function") return false;
+  const manifestUrl = root.dataset.manifestUrl;
+
+  try {
+    const response = await fetchImpl(manifestUrl);
+    if (!response.ok)
+      throw new Error(`manifest request failed: ${response.status}`);
+    const graph = await readManifest(response);
+    addTagFilters(root, graph);
+    const reduceMotion =
+      typeof matchMediaImpl === "function" &&
+      matchMediaImpl("(prefers-reduced-motion: reduce)").matches;
+
+    let simulation;
+    const update = () => {
+      const state = readFilterState(root);
+      simulation?.stop();
+      root.querySelector("[data-graph-canvas]")?.replaceChildren();
+      const details = root.querySelector("[data-graph-details]");
+      if (details) details.hidden = true;
+      simulation = renderGraph(
+        root,
+        filterGraph(graph, state),
+        state,
+        manifestUrl,
+        reduceMotion,
+      );
+      updateFallback(root, state);
+    };
+    const controls = root.querySelector("[data-graph-controls]");
+    controls?.addEventListener("input", update);
+    controls?.addEventListener("submit", (event) => event.preventDefault());
+    update();
+    root.dataset.enhanced = "true";
+    return true;
+  } catch {
+    root.querySelector("[data-graph-canvas]")?.replaceChildren();
+    delete root.dataset.enhanced;
+    warnImpl("Content graph enhancement unavailable.");
+    return false;
+  }
+}
+
+if (typeof document !== "undefined") {
+  const root = document.querySelector("[data-content-graph]");
+  if (root) void initializeContentGraph(root);
+}

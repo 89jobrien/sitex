@@ -2,9 +2,15 @@ pipeline: lint
 budget: { calls: 4 }
 
 steps:
+  - step: prettier_check
+    handler: shell::capture
+    args:
+      cmd: "npx --no-install prettier --no-error-on-unmatched-pattern --check README.md CLAUDE.md 'content/**/*.md' 'docs/**/*.md' 'ideas/**/*.md' 'sass/**/*.scss' 'scripts/content-graph/**/*.mjs'"
+
   - step: markdownlint_check
     handler: shell::capture
     args:
+      # Keep this file list aligned with the lint:markdown script in package.json.
       cmd: "npx --no-install markdownlint-cli2 README.md CLAUDE.md 'content/**/*.md' 'docs/**/*.md' 'ideas/**/*.md'"
 
   - step: log_result

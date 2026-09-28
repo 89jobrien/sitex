@@ -2,8 +2,11 @@
 title: "looprs"
 date: 2026-08-18
 description: "A Rust CLI for running multi-turn LLM agent loops with tools and conditions, without a markdown-parsing prompt system. Supports Anthropic, OpenAI, and local Ollama providers."
+taxonomies:
+  tags: [agent-harness, agent-runtime, cli, llm]
 extra:
   repo: "https://github.com/89jobrien/looprs"
+  related: [project:agentlint, project:braid]
 ---
 
 A Rust LLM agent loop CLI. Tools, loops, and conditions — no convoluted markdown parsing system.

@@ -2,8 +2,11 @@
 title: "maid"
 date: 2026-08-18
 description: "A fast Rust CLI (internally named neatly) that sorts a directory's files into type-based subfolders, with dry-run preview, undo, and safe handling of hidden files."
+taxonomies:
+  tags: [automation, cli, developer-experience]
 extra:
   repo: "https://github.com/89jobrien/maid"
+  related: []
 ---
 
 A clean, fast CLI tool that organises files in a directory by sorting them into subfolders based on their file type. Built with Rust.

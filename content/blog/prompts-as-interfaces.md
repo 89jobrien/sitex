@@ -2,6 +2,10 @@
 title: Treat Agent Prompts Like Interfaces
 date: 2026-09-11
 description: "Why operational prompts need stable intent, concrete examples, and tests even though their implementation is prose."
+taxonomies:
+  tags: [agent-harness, automation, integration, security]
+extra:
+  related: [project:godmode, project:coursers, post:task-graph-vs-prompt]
 ---
 
 I keep agent instructions in Markdown, but I depend on them like code.

@@ -2,8 +2,11 @@
 title: "rx"
 date: 2026-08-18
 description: "Installs scripts from local paths or remote URLs into an XDG-style command directory and tracks them in a JSON registry, using prefixe's prefix-rewrite config to prepend validated prefixes to shell commands — not a secrets or env-var tool."
+taxonomies:
+  tags: [automation, cli, developer-experience, shell-tooling]
 extra:
   repo: "https://github.com/89jobrien/rx"
+  related: [post:25-projects-no-monorepo, project:prefixe]
 ---
 
 `rx` installs compatible scripts from local paths or remote URLs into a local command

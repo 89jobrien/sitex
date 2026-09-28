@@ -14,5 +14,6 @@
   </div>
   {% if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
   {{ page.content | safe }}
+  {% include "partials/relationships.html" %}
 </article>
 {% endblock content %}

@@ -2,8 +2,11 @@
 title: "updog"
 date: 2026-08-18
 description: 'Rust workspace implementing "ail," a 7-phase Agent Improvement Loop that collects shell-command traces, gathers human+LLM feedback, generates promptfoo evals, scores findings via HALO, and produces a handoff doc for updating an agent''s harness.'
+taxonomies:
+  tags: [agent-harness, automation, observability, testing]
 extra:
   repo: "https://github.com/89jobrien/updog"
+  related: [project:coursers, project:praxis]
 ---
 
 Agent Improvement Loop — systematic agent behavior improvement from observed traces.

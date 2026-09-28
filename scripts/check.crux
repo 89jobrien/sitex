@@ -1,10 +1,18 @@
 pipeline: check
-budget: { calls: 10 }
+budget: { calls: 12 }
 
 steps:
   - step: workflow_contracts
     handler: shell::capture
     args: { cmd: "sh scripts/test-workflow-contract.sh" }
+
+  - step: graph_tests
+    handler: shell::capture
+    args: { cmd: "bun run test" }
+
+  - step: graph_freshness
+    handler: shell::capture
+    args: { cmd: "bun run graph:check" }
 
   - step: workflow_plans
     handler: shell::capture

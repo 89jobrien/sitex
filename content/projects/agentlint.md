@@ -2,8 +2,11 @@
 title: "agentlint"
 date: 2026-08-18
 description: "Linter for AI coding agent harness files -- validates agents, skills, commands, hooks, settings, MCP config, and docs frontmatter (.claude/, .cursor/, AGENTS.md, CLAUDE.md) across major coding agent platforms."
+taxonomies:
+  tags: [agent-harness, cli, developer-experience, testing]
 extra:
   repo: "https://github.com/89jobrien/agentlint"
+  related: [project:devobs, project:looprs]
 ---
 
 Linter for AI coding agent harness files. Validates agents, skills, commands, hooks, settings,

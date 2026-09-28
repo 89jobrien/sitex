@@ -2,6 +2,11 @@
 title: "Method, package, runtime: three layers of agent tooling"
 date: 2026-08-23
 description: "A reader-first model for separating development methodology, workflow packaging, and agent runtime execution."
+taxonomies:
+  tags:
+    [agent-harness, agent-runtime, developer-experience, software-architecture]
+extra:
+  related: [project:godmode, project:atelier, project:braid]
 ---
 
 Agent tools become confusing when every product is described as an "agent platform."

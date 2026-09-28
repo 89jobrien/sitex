@@ -6,7 +6,8 @@ steps:
     handler: shell::capture
     args:
       # .zk/templates/*.md stays excluded because Prettier corrupts zk template expressions.
-      cmd: "npx --no-install prettier --no-error-on-unmatched-pattern --check README.md CLAUDE.md 'content/**/*.md' 'docs/**/*.md' 'ideas/**/*.md' 'sass/**/*.scss'"
+      # Keep this file list aligned with the format/format:check scripts in package.json.
+      cmd: "npx --no-install prettier --no-error-on-unmatched-pattern --check README.md CLAUDE.md 'content/**/*.md' 'docs/**/*.md' 'ideas/**/*.md' 'sass/**/*.scss' 'scripts/content-graph/**/*.mjs'"
 
   - step: log_result
     handler: ctrl::log

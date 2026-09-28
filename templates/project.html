@@ -12,5 +12,6 @@
   {% if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
   {% if page.extra.repo %}<p><a class="repo-cta" href="{{ page.extra.repo }}" rel="noreferrer">View repository</a></p>{% endif %}
   {{ page.content | safe }}
+  {% include "partials/relationships.html" %}
 </article>
 {% endblock content %}

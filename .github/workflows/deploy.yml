@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -19,11 +17,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.1
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.10
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Audit dependencies
+        run: bun audit
       - name: Install Zola
         uses: taiki-e/install-action@v2
         with:
-          tool: zola@0.19.2
-      - name: Build
+          tool: zola@0.23.3
+      - name: Check formatting
+        run: bun run format:check
+      - name: Lint Markdown
+        run: bun run lint:markdown
+      - name: Run graph tests
+        run: bun run test
+      - name: Check generated graph artifacts
+        run: bun run graph:check
+      - name: Check site
+        run: zola check --skip-external-links
+      - name: Build site
         run: zola build
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -33,6 +53,9 @@ jobs:
     if: ${{ vars.PAGES_ENABLED == 'true' }}
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

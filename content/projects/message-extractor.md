@@ -2,8 +2,11 @@
 title: "message-extractor"
 date: 2026-08-18
 description: "A Rust system for extracting, watching, and visualizing conversations from 7+ AI coding assistants in real time — a core extraction library, an SSE-streaming watcher service, and a Yew/WASM web UI for search and filtering."
+taxonomies:
+  tags: [integration, knowledge-systems, observability, web]
 extra:
   repo: "https://github.com/89jobrien/message-extractor"
+  related: [project:bamlish]
 ---
 
 A Rust-based system for extracting, monitoring, and visualizing conversations from AI coding assistants in real-time.

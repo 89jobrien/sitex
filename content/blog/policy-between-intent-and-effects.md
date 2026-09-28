@@ -2,6 +2,11 @@
 title: Put Policy at the Edge of the Effect
 date: 2026-09-11
 description: "Automation is safer when intent becomes a structured request and policy runs immediately before the component that can cause the effect."
+taxonomies:
+  tags: [agent-harness, automation, security, software-architecture]
+extra:
+  related:
+    [project:minibox, project:coursers, post:agent-safe-container-runtime]
 ---
 
 ```text

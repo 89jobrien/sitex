@@ -2,8 +2,11 @@
 title: "orca-strait"
 date: 2026-08-18
 description: "Claude Code plugin that reads GitHub issues, HANDOFF files, and an implementation plan, decomposes work by crate, and spawns parallel test-first sub-agents with hexagonal-architecture enforcement before integrating their results."
+taxonomies:
+  tags: [agent-harness, automation, testing, work-tracking]
 extra:
   repo: "https://github.com/89jobrien/orca-strait"
+  related: [project:godmode, project:tracers]
 ---
 
 Parallel sub-agent orchestrator for Rust workspaces.

@@ -2,8 +2,11 @@
 title: "neusym"
 date: 2026-08-18
 description: "An MCP server and CLI bridging Jira and Linear for bidirectional issue sync, built on rmcp/stdio and the crux runtime-trace model — every sync returns an auditable Crux<T> envelope with a step-by-step execution trace. Hexagonal five-crate layout, gated by cargo xtask pre-commit."
+taxonomies:
+  tags: [integration, mcp, observability, work-tracking]
 extra:
   repo: "https://github.com/89jobrien/neusym"
+  related: [project:crux, project:obfsck, project:taskit]
 ---
 
 An MCP server and CLI that bridges **Jira** and **Linear** for bidirectional issue sync.

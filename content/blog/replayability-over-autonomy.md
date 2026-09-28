@@ -2,6 +2,10 @@
 title: Build Agent Workflows for Recovery Before Autonomy
 date: 2026-09-11
 description: "Trustworthy agent workflows preserve inspectable progress, safely reuse completed work, and treat unattended execution as a later benefit."
+taxonomies:
+  tags: [agent-runtime, observability, testing, work-tracking]
+extra:
+  related: [project:crux, post:task-graph-vs-prompt]
 ---
 
 The most important question about an automated workflow is not, “How long can

@@ -2,8 +2,11 @@
 title: "crux"
 date: 2026-08-18
 description: "Agentic Rust DSL and typed runtime for YAML pipelines -- steps, fan-out, and error recovery are traced into a replayable Crux<T> value, with a #[crux::agent] escape hatch into Rust when logic gets custom."
+taxonomies:
+  tags: [agent-runtime, automation, observability, work-tracking]
 extra:
   repo: "https://github.com/89jobrien/crux"
+  related: [post:replayability-over-autonomy, project:devobs, project:praxis]
 ---
 
 Agentic workflows as YAML pipelines, backed by a typed Rust runtime.

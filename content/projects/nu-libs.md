@@ -2,8 +2,11 @@
 title: "nu_libs"
 date: 2026-08-18
 description: "Shared Nushell module library organized by category (git, net, fs, data, ui, std, task, rust, doob, misc), meant to be loaded whole or piecemeal into other Nu-based tooling across the workspace."
+taxonomies:
+  tags: [automation, developer-experience, shell-tooling]
 extra:
   repo: "https://github.com/89jobrien/nu_libs"
+  related: [project:doob, project:numcp, project:taskit]
 ---
 
 A library of Nushell modules organized by category.

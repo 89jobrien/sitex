@@ -2,8 +2,11 @@
 title: "obfsck"
 date: 2026-08-18
 description: "CLI that redacts secrets and PII from logs and structured text, with tiered Minimal/Standard/Paranoid obfuscation levels and stable identifier mapping; used elsewhere in the workspace as a pre-commit secrets-audit gate."
+taxonomies:
+  tags: [cli, mcp, observability, security]
 extra:
   repo: "https://github.com/89jobrien/obfsck"
+  related: [post:redaction-system-boundary, project:braid, project:neusym]
 ---
 
 Redacts secrets and PII from log lines and structured text.

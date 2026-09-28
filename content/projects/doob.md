@@ -2,8 +2,11 @@
 title: "doob"
 date: 2026-08-18
 description: "Agent-first todo CLI in Rust with an embedded SurrealDB store -- JSON output, batch operations, and git-based project/file context detection, built to feed session and task state to handoff tooling like hj and atelier's herald agent."
+taxonomies:
+  tags: [automation, cli, integration, work-tracking]
 extra:
   repo: "https://github.com/89jobrien/doob"
+  related: [post:machine-readable-cli, project:godmode, project:hj]
 ---
 
 Modern, agent-first todo CLI built with Rust and SurrealDB.

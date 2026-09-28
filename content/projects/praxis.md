@@ -2,8 +2,11 @@
 title: "praxis"
 date: 2026-08-18
 description: "Self-improving agent runtime for the crux agentic DSL: closes the loop between execution traces, evaluation, and strategy evolution by scoring runs, proposing evidence-backed strategy changes, and rolling back regressions."
+taxonomies:
+  tags: [agent-runtime, automation, observability, testing]
 extra:
   repo: "https://github.com/89jobrien/praxis"
+  related: [project:braid, project:crux, project:updog]
 ---
 
 Self-improving agent runtime for the [crux](https://github.com/89jobrien/crux) agentic DSL.

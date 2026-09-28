@@ -8,23 +8,23 @@ tags), Zola builds it as pages. Kept intentionally separate from
 
 ## Requirements
 
-- Zola `0.19.2`, matching validation and deployment.
+- Zola `0.23.3`, matching validation and deployment.
 - zk `0.15.6` or newer for note creation and listing.
 - Rust `1.89` or newer and `crux-agentic` `0.3.1` for the `crux` workflow runner.
 - Nushell `0.111.0` for zk rendering and editorial contract checks.
 - lychee `0.24.2` for concurrent external-link validation.
-- Node.js `22` or newer; `npm install --ignore-scripts` installs exact top-level Prettier and
-  `markdownlint-cli2` versions from `package.json`.
+- Node.js `22.22.1` and Bun `1.3.10`; `bun install --frozen-lockfile` installs the exact
+  top-level tool versions from `package.json`.
 
 Bootstrap the repository-owned tools with:
 
 ```text
 cargo install --git https://github.com/89jobrien/crux.git --rev 8d54a65df7696ec01b1ef27a5c0972422020efc1 --package crux-agentic --locked
 cargo install lychee --version 0.24.2 --locked
-npm install --ignore-scripts
+bun install --frozen-lockfile
 ```
 
-Install Zola `0.19.2` from its release artifacts. GitHub Actions uses
+Install Zola `0.23.3` from its release artifacts. GitHub Actions uses
 `taiki-e/install-action` for the same version. zk is editorial tooling and is not needed to
 build the site; CI checks its templates directly.
 
@@ -48,6 +48,58 @@ When a pitch becomes a post, remove it from the active queue; optionally retain 
 with `status: published` under `ideas/published/`.
 
 Fill in `extra.repo` in a project note to link to its GitHub repo.
+
+## Relationships
+
+Projects and posts participate in one generated relationship graph. Author tags with Zola's
+taxonomy metadata and curated links with namespaced IDs:
+
+```yaml
+taxonomies:
+  tags: [agent-workflows, rust]
+extra:
+  related: [project:minibox, post:policy-between-intent-and-effects]
+```
+
+Node IDs are `project:<file-stem>` or `post:<file-stem>`. Tags must be unique lowercase
+kebab-case values. `extra.related` is optional, must contain unique valid node IDs, and must
+not target the current page. Curated relationships appear on both pages; only incoming
+Markdown links appear under **Referenced by**. Shared tags can also create related-content
+edges when two pages share at least two tags or have tag similarity of at least 0.5.
+
+Drafts and section indexes are excluded. Links to known `/projects/` and `/blog/` routes and
+relative Markdown files under those content sections are inferred. Copied README-relative
+links such as `README.md`, `docs/...`, and asset links are ignored rather than rewritten.
+Custom Zola `slug` or `path` frontmatter is not supported for graph participants and causes
+generation to fail.
+
+The committed generated artifacts are `static/data/content-graph.json` and
+`static/js/content-graph.js`. Use the data-only commands while editing metadata, or the
+combined commands when either generated artifact may change:
+
+```text
+bun run graph:data:write  # regenerate the manifest only
+bun run graph:data:check  # check manifest freshness
+bun run graph:write       # regenerate the manifest and browser bundle
+bun run graph:check       # check both committed artifacts
+```
+
+The site exposes tag pages under `/tags/` and the explorer at `/graph/`. The graph route is
+server-rendered with a complete content list; JavaScript adds filtering and an SVG view. If
+the manifest cannot load or enhancement fails, the list remains available and no SVG is
+shown.
+
+The pinned tools are Node `22.22.1`, Bun `1.3.10`, and Zola `0.23.3`.
+
+## Verification
+
+```text
+bun run verify              # format, lint, tests, graph freshness, and Zola gates
+crux run Cruxfile graph     # graph tests and generated-artifact freshness
+crux run Cruxfile check     # graph gates followed by zola check
+crux run Cruxfile build     # check followed by zola build
+crux run Cruxfile ci        # lint plus the complete build chain
+```
 
 ## Preview
 
@@ -102,4 +154,4 @@ Zola also generates an Atom feed at `atom.xml` under the configured base URL.
 `ci` target with pinned tools. `.github/workflows/deploy.yml` is a separate production adapter:
 it builds on pushes to `main` or manual dispatch, but publishes to GitHub Pages only when the
 repository variable `PAGES_ENABLED` is `true` and Pages uses "GitHub Actions" as its source.
-Both workflows pin Zola `0.19.2`; the deployed base URL is configured in `config.toml`.
+Both workflows pin Zola `0.23.3`; the deployed base URL is configured in `config.toml`.

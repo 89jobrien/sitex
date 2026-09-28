@@ -2,6 +2,10 @@
 title: What a Task Graph Can Enforce That a Prompt Cannot
 date: 2026-09-11
 description: "Why I moved the important parts of an agent workflow out of instructions and into godmode's locally persisted task state."
+taxonomies:
+  tags: [agent-harness, automation, testing, work-tracking]
+extra:
+  related: [project:godmode, post:prompts-as-interfaces]
 ---
 
 A prompt cannot remember that work stopped halfway through. It can say what

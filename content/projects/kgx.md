@@ -2,8 +2,11 @@
 title: "kgx"
 date: 2026-08-18
 description: "Three-layer knowledge graph toolkit in Rust with zero-dependency, JSON-backed storage -- a GraphStore (BFS traversal, confidence filtering), DocumentStore (chunking and provenance), and WikiStore (markdown pages with wikilinks) behind a kgx library and kgx-cli binary, no external database required."
+taxonomies:
+  tags: [cli, knowledge-systems, observability]
 extra:
   repo: "https://github.com/89jobrien/kgx"
+  related: [project:devobs]
 ---
 
 Three-layer knowledge graph toolkit in Rust.

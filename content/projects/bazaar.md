@@ -2,8 +2,11 @@
 title: "bazaar"
 date: 2026-08-18
 description: "Claude Code plugin marketplace and showcase generator that indexes the author's open-source repos and plugins, including atelier, orca-strait, obfsck, minibox, coursers, godmode, and crux."
+taxonomies:
+  tags: [agent-harness, automation, developer-experience, web]
 extra:
   repo: "https://github.com/89jobrien/bazaar"
+  related: [project:89jobrien-github-io, project:atelier]
 ---
 
 Projects I maintain or contribute to.

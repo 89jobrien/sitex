@@ -2,6 +2,10 @@
 title: The Developer Tools Worth Maintaining Remove Decisions
 date: 2026-09-11
 description: "A practical test for whether a developer tool earns its upkeep: it should reliably remove a recurring decision, mistake, or manual step."
+taxonomies:
+  tags: [automation, developer-experience, work-tracking]
+extra:
+  related: [project:godmode, project:coursers, project:obfsck]
 ---
 
 Developers are good at building tools and bad at deciding when those tools have

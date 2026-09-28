@@ -2,8 +2,16 @@
 title: "mcpipe"
 date: 2026-08-18
 description: "Turns any MCP server (stdio or HTTP/SSE), OpenAPI spec, GraphQL endpoint, or existing shell CLI into a unified shell command, bridging disparate tool interfaces into one consistent CLI surface."
+taxonomies:
+  tags: [cli, integration, mcp]
 extra:
   repo: "https://github.com/89jobrien/mcpipe"
+  related:
+    [
+      post:one-cli-many-protocols,
+      post:tools-that-change-behavior,
+      project:numcp,
+    ]
 ---
 
 Turn any MCP server, OpenAPI spec, or GraphQL endpoint into a shell CLI.

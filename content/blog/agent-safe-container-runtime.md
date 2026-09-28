@@ -2,6 +2,11 @@
 title: Designing an Agent-Safe Container Interface
 date: 2026-09-11
 description: "A capability-scoped container interface that keeps inspection and ordinary runs available while gating dangerous operations."
+taxonomies:
+  tags: [agent-runtime, containers, security, software-architecture]
+extra:
+  related:
+    [project:minibox, project:crux, post:policy-between-intent-and-effects]
 ---
 
 An AI agent that can operate a container runtime can also ask that runtime to

@@ -6,6 +6,11 @@
   --surface: #171a21;
   --border: #2a303a;
   --focus: #fbbf24;
+  --project: #7dd3fc;
+  --post: #fbbf24;
+  --edge-explicit: #e6e6e6;
+  --edge-link: #7dd3fc;
+  --edge-tag: #6b7280;
 }
 
 * {
@@ -229,6 +234,227 @@ blockquote {
   }
 }
 
+.content-connections {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.tag-list,
+.related-card-list,
+.graph-node-list {
+  list-style: none;
+  padding: 0;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  a {
+    display: block;
+    padding: 0.2rem 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: 0.8rem;
+    text-decoration: none;
+  }
+}
+
+.related-card-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.related-card {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--surface);
+
+  p {
+    margin-bottom: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+}
+
+.related-kind,
+.eyebrow {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.backlinks ul {
+  padding-left: 1.25rem;
+}
+
+.graph-intro {
+  max-width: 650px;
+  margin-bottom: 2rem;
+}
+
+.graph-explorer {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.28fr) minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.graph-controls {
+  grid-row: span 3;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--surface);
+
+  > label,
+  legend {
+    font-weight: 700;
+  }
+
+  input[type="search"] {
+    width: 100%;
+    margin: 0.45rem 0 1rem;
+    padding: 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 0.35rem;
+    background: var(--bg);
+    color: var(--fg);
+  }
+
+  fieldset {
+    margin: 0 0 1rem;
+    padding: 0;
+    border: 0;
+  }
+
+  fieldset label,
+  [data-tag-filters] label {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  [data-tag-filters] {
+    max-height: 12rem;
+    overflow-y: auto;
+  }
+}
+
+.graph-zoom-controls {
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 0.35rem;
+    background: var(--surface);
+    color: var(--fg);
+    cursor: pointer;
+  }
+}
+
+.graph-canvas {
+  min-height: 36rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background:
+    radial-gradient(circle at 20% 20%, rgb(125 211 252 / 8%), transparent 35%),
+    radial-gradient(circle at 80% 70%, rgb(251 191 36 / 7%), transparent 40%),
+    var(--surface);
+
+  svg {
+    display: block;
+    width: 100%;
+    min-height: 36rem;
+  }
+}
+
+.graph-edge {
+  stroke-width: 1.2;
+  opacity: 0.55;
+}
+
+.graph-edge-explicit {
+  stroke: var(--edge-explicit);
+}
+
+.graph-edge-link {
+  stroke: var(--edge-link);
+}
+
+.graph-edge-tag {
+  stroke: var(--edge-tag);
+  stroke-dasharray: 3 4;
+}
+
+.graph-node {
+  cursor: pointer;
+  stroke: var(--bg);
+  stroke-width: 2;
+
+  &:focus,
+  &.is-selected {
+    outline: none;
+    stroke: var(--focus);
+    stroke-width: 4;
+  }
+}
+
+.graph-node-project {
+  fill: var(--project);
+}
+
+.graph-node-post {
+  fill: var(--post);
+}
+
+.graph-details {
+  padding: 1rem;
+  border-left: 3px solid var(--focus);
+  background: var(--surface);
+
+  h2,
+  p {
+    margin-top: 0;
+  }
+}
+
+.graph-fallback {
+  grid-column: 1 / -1;
+  margin-top: 2rem;
+}
+
+.graph-node-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 1rem;
+
+  li {
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @media (max-width: 640px) {
   body {
     padding-top: 1.25rem;
@@ -248,6 +474,39 @@ blockquote {
 
   .card-grid {
     grid-template-columns: 1fr;
+  }
+
+  .related-card-list,
+  .graph-node-list,
+  .graph-explorer {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-controls {
+    order: 1;
+    grid-row: auto;
+  }
+
+  .graph-fallback {
+    order: 2;
+    margin-top: 0;
+  }
+
+  .graph-zoom-controls {
+    order: 3;
+  }
+
+  .graph-canvas {
+    order: 4;
+  }
+
+  .graph-details {
+    order: 5;
+  }
+
+  .graph-canvas,
+  .graph-canvas svg {
+    min-height: 24rem;
   }
 
   .card-heading {

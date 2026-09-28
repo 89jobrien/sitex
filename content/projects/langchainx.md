@@ -2,8 +2,11 @@
 title: "langchainx"
 date: 2026-08-18
 description: "A Rust port of LangChain (forked from langchain-rust), split into 14 focused sub-crates for LLM chains, agents, memory, and embeddings. Adds typed errors, convenience macros (tool!/llm!/prompt!/chain!), and a three-tier offline/Ollama/container test suite."
+taxonomies:
+  tags: [agent-runtime, llm, testing]
 extra:
   repo: "https://github.com/89jobrien/langchainx"
+  related: [project:disyn, project:looprs]
 ---
 
 Building applications with LLMs through composability, with Rust.

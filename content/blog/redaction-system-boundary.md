@@ -2,6 +2,15 @@
 title: Redaction Is a System Boundary, Not a Cleanup Step
 date: 2026-09-11
 description: "Why obfsck can redact data before it enters LLM prompts, staged commits, or manually prepared support artifacts."
+taxonomies:
+  tags: [developer-experience, observability, security]
+extra:
+  related:
+    [
+      project:obfsck,
+      post:policy-between-intent-and-effects,
+      post:tools-that-change-behavior,
+    ]
 ---
 
 A log line can be safe on my machine and unsafe one command later. Paste it

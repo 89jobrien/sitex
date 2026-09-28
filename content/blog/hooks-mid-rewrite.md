@@ -2,6 +2,15 @@
 title: "Coursers: a runtime control plane for coding agents"
 date: 2026-08-23
 description: "How Coursers turns agent hook events into deterministic policy, command rewrites, output filtering, failure learning, and replayable evidence."
+taxonomies:
+  tags: [agent-harness, developer-experience, security, software-architecture]
+extra:
+  related:
+    [
+      project:coursers,
+      post:prompts-as-interfaces,
+      post:policy-between-intent-and-effects,
+    ]
 ---
 
 A prompt can ask an agent not to run a dangerous command. Coursers can stop

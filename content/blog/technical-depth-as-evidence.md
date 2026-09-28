@@ -2,6 +2,10 @@
 title: Explain the Decision, Then Show the System
 date: 2026-09-11
 description: "A reader-first framework for explaining systems work through situation, constraint, decision, outcome, and technical evidence."
+taxonomies:
+  tags: [observability, software-architecture, technical-writing]
+extra:
+  related: [project:minibox, project:coursers, project:taskit]
 ---
 
 Systems work is easiest to understand in four parts:

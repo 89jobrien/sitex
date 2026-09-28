@@ -21,6 +21,17 @@ targets:
         handler: shell::capture
         args: { cmd: "crux run scripts/lint.crux" }
 
+  # Standalone access to the content-graph gates. They also run inside
+  # scripts/check.crux, so `check` and `ci` do not need this target.
+  graph:
+    steps:
+      - step: graph_tests
+        handler: shell::capture
+        args: { cmd: "bun run test" }
+      - step: graph_freshness
+        handler: shell::capture
+        args: { cmd: "bun run graph:check" }
+
   check:
     steps:
       - step: check_run
@@ -28,6 +39,7 @@ targets:
         args: { cmd: "crux run scripts/check.crux" }
 
   build:
+    depends: [check]
     steps:
       - step: build_run
         handler: shell::capture

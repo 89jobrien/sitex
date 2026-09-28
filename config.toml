@@ -8,6 +8,7 @@ compile_sass = true
 build_search_index = false
 generate_feeds = true
 feed_filenames = ["atom.xml"]
+taxonomies = [{ name = "tags", feed = false }]
 
 # TODO(portfolio-sync): Refresh public project metadata from source repositories.
 

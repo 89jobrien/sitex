@@ -19,7 +19,7 @@ jobs:
       - name: Install Zola
         uses: taiki-e/install-action@v2
         with:
-          tool: zola@0.19.2
+          tool: zola@0.23.3
       - name: Install lychee
         uses: taiki-e/install-action@v2
         with:
@@ -38,11 +38,17 @@ jobs:
           cargo install --git https://github.com/89jobrien/crux.git
           --rev 8d54a65df7696ec01b1ef27a5c0972422020efc1
           --package crux-agentic --locked
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.10
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 22.22.1
       - name: Install quality tools
-        run: npm install --ignore-scripts
+        run: bun install --frozen-lockfile
+      - name: Audit dependencies
+        run: bun audit
       - name: Run non-mutating quality gates
         run: crux run Cruxfile ci

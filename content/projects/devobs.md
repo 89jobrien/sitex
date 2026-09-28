@@ -2,8 +2,11 @@
 title: "devobs"
 date: 2026-08-18
 description: "Public Obsidian vault tracking open-source projects under 89jobrien, kept up to date by crux pipelines and populated with kgx knowledge graphs rather than edited by hand."
+taxonomies:
+  tags: [automation, knowledge-systems, observability]
 extra:
   repo: "https://github.com/89jobrien/devobs"
+  related: [project:agentlint, project:crux, project:kgx]
 ---
 
 Public Obsidian vault for tracking open-source projects under [89jobrien](https://github.com/89jobrien). Automated with [crux](https://github.com/89jobrien/crux) pipelines and [kgx](https://github.com/89jobrien/kgx) knowledge graphs.

@@ -50,7 +50,7 @@ reject_text scripts/ci.crux "scripts/format.crux"
 require_text scripts/ci.crux "scripts/format-check.crux"
 
 require_text .github/workflows/validate.yml "pull_request:"
-require_text .github/workflows/validate.yml "zola@0.19.2"
+require_text .github/workflows/validate.yml "zola@0.23.3"
 require_text .github/workflows/validate.yml "8d54a65df7696ec01b1ef27a5c0972422020efc1"
 require_text .github/workflows/deploy.yml "vars.PAGES_ENABLED == 'true'"
 

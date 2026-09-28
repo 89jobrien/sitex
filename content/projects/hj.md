@@ -2,8 +2,11 @@
 title: "hj"
 date: 2026-08-18
 description: "Handoff journal CLI that tracks work-in-progress across sessions via structured per-repo YAML files -- triages open items at session start, appends a session log at close, syncs state to SQLite, and renders markdown summaries for humans and agents."
+taxonomies:
+  tags: [automation, cli, work-tracking]
 extra:
   repo: "https://github.com/89jobrien/hj"
+  related: [project:atelier, project:doob, project:godmode]
 ---
 
 `hj` tracks work-in-progress across sessions using structured YAML handoff files. Each repo

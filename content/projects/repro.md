@@ -2,8 +2,11 @@
 title: "repro"
 date: 2026-08-18
 description: "Reproducible container image builder and OCI tarball analyzer, driving Docker Buildx or Podman/BuildKit with SOURCE_DATE_EPOCH pinning to produce deterministic images, plus a standalone tarball digest verifier and Kani-based model checking."
+taxonomies:
+  tags: [containers, release-engineering, systems-software, testing]
 extra:
   repo: "https://github.com/89jobrien/repro"
+  related: [project:minibox, project:propkit]
 ---
 
 [![Crates.io](https://img.shields.io/crates/v/repro)](https://crates.io/crates/repro)

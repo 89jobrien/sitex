@@ -2,6 +2,10 @@
 title: One Workspace Without a Monorepo
 date: 2026-08-23
 description: "How discovery and automation coordinate more than a hundred repositories without taking ownership away from each project."
+taxonomies:
+  tags: [automation, developer-experience, observability, release-engineering]
+extra:
+  related: [project:minibox, post:contract-drift-as-migration]
 ---
 
 There is no workspace-wide `.git`. That is the point.

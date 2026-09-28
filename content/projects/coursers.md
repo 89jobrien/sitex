@@ -2,8 +2,16 @@
 title: "coursers"
 date: 2026-08-18
 description: "Claude Code hook pipeline that course-corrects AI-generated Bash commands -- the coursers tool blocks anti-pattern commands via PreToolUse/PostToolUse rules and learns from failures, backed by crs, a front controller that filters output, rewrites commands, and validates hooks."
+taxonomies:
+  tags: [agent-harness, automation, security, shell-tooling]
 extra:
   repo: "https://github.com/89jobrien/coursers"
+  related:
+    [
+      post:hooks-mid-rewrite,
+      post:policy-between-intent-and-effects,
+      project:prefixe,
+    ]
 ---
 
 Claude Code hook pipeline for course-correcting AI-generated Bash commands.
