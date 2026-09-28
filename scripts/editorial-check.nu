@@ -58,8 +58,13 @@ def published-index-errors [index_path: string] {
         }
 
         let slugs = $index.published_slugs
-        if ($slugs | length) != 12 {
-            $issues = ($issues | append "published index must contain the 12 promoted slugs")
+        # No upper bound: the ledger grows with every published post. The
+        # original exact-12 assertion was retired when the first twelve
+        # pitches were promoted (see docs/designs/2026-09-09-blog-idea-backlog-design.md),
+        # which also retired the exact-12 rule for the queue in favor of a
+        # 12-note maximum.
+        if ($slugs | is-empty) {
+            $issues = ($issues | append "published index is empty")
         }
         if (($slugs | uniq | length) != ($slugs | length)) {
             $issues = ($issues | append "published index contains duplicate slugs")
