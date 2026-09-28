@@ -318,6 +318,86 @@
       "backlinks": []
     },
     {
+      "id": "post:grounding-survives-summarization",
+      "kind": "post",
+      "title": "Grounding That Survives Summarization",
+      "description": "Why a span-id indirection keeps citations intact across a chunk-then-summarize pipeline, and what breaks when a model is allowed to write its own evidence.",
+      "date": "2026-09-28",
+      "route": "/blog/grounding-survives-summarization/",
+      "tags": [
+        "agent-harness",
+        "automation",
+        "integration",
+        "observability"
+      ],
+      "related": [
+        {
+          "id": "post:policy-between-intent-and-effects",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:grounding-survives-summarization"
+            },
+            {
+              "kind": "link",
+              "declaredBy": "post:grounding-survives-summarization"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:prompts-as-interfaces",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:grounding-survives-summarization"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "integration"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:devkit",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:updog",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "observability"
+              ]
+            }
+          ]
+        }
+      ],
+      "backlinks": []
+    },
+    {
       "id": "post:hexagonal-change-budget",
       "kind": "post",
       "title": "Hexagonal Architecture Is a Change-Budget Tool",
@@ -647,6 +727,26 @@
       ],
       "related": [
         {
+          "id": "post:grounding-survives-summarization",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:grounding-survives-summarization"
+            },
+            {
+              "kind": "link",
+              "declaredBy": "post:grounding-survives-summarization"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation"
+              ]
+            }
+          ]
+        },
+        {
           "id": "post:hooks-mid-rewrite",
           "reasons": [
             {
@@ -703,18 +803,13 @@
               ]
             }
           ]
-        },
-        {
-          "id": "post:redaction-system-boundary",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "post:redaction-system-boundary"
-            }
-          ]
         }
       ],
-      "backlinks": []
+      "backlinks": [
+        {
+          "id": "post:grounding-survives-summarization"
+        }
+      ]
     },
     {
       "id": "post:prompts-as-interfaces",
@@ -730,6 +825,23 @@
         "security"
       ],
       "related": [
+        {
+          "id": "post:grounding-survives-summarization",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:grounding-survives-summarization"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "integration"
+              ]
+            }
+          ]
+        },
         {
           "id": "project:coursers",
           "reasons": [
@@ -773,22 +885,6 @@
             {
               "kind": "explicit",
               "declaredBy": "post:task-graph-vs-prompt"
-            },
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-harness",
-                "automation"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:godmode",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "post:prompts-as-interfaces"
             },
             {
               "kind": "tag",
@@ -2033,7 +2129,7 @@
           ]
         },
         {
-          "id": "project:updog",
+          "id": "post:grounding-survives-summarization",
           "reasons": [
             {
               "kind": "tag",
@@ -2133,7 +2229,7 @@
       "id": "project:disyn",
       "kind": "project",
       "title": "disyn",
-      "description": "Hybrid symbolic+neural agent pipeline in Rust: raw observations pass through a typed 7-stage flow (FactExtractor, ProposalEngine, Verifier, a bounded RepairEngine loop, ActionExecutor) so neural proposals get validated and repaired before anything executes; build orchestration delegates via xtask to taskit.",
+      "description": "Hybrid symbolic+neural agent pipeline in Rust: raw observations pass through a typed 7-stage flow (FactExtractor, ProposalEngine, Verifier, a bounded RepairEngine loop, ActionExecutor) so neural proposals are checked before anything executes; build orchestration delegates via xtask to taskit.",
       "date": "2026-08-18",
       "route": "/projects/disyn/",
       "tags": [
@@ -2564,7 +2660,7 @@
       "id": "project:kgx",
       "kind": "project",
       "title": "kgx",
-      "description": "Three-layer knowledge graph toolkit in Rust with zero-dependency, JSON-backed storage -- a GraphStore (BFS traversal, confidence filtering), DocumentStore (chunking and provenance), and WikiStore (markdown pages with wikilinks) behind a kgx library and kgx-cli binary, no external database required.",
+      "description": "Three-layer knowledge graph toolkit in Rust with JSON-backed storage and no external database -- a GraphStore (BFS traversal, confidence filtering), DocumentStore (chunking with document-level source links), and WikiStore (markdown pages with wikilinks) behind a kgx library and kgx-cli binary.",
       "date": "2026-08-18",
       "route": "/projects/kgx/",
       "tags": [
@@ -2965,7 +3061,7 @@
           ]
         },
         {
-          "id": "project:neusym",
+          "id": "post:grounding-survives-summarization",
           "reasons": [
             {
               "kind": "tag",
@@ -3896,7 +3992,7 @@
       "id": "project:rslm",
       "kind": "project",
       "title": "rslm",
-      "description": "Recursive Language Model inference engine in Rust: instead of sending context directly to an LLM, the model writes Rhai scripts that a sandboxed engine executes, with pluggable OpenAI/Anthropic providers across a multi-crate workspace (core, providers, cli).",
+      "description": "Recursive Language Model inference engine in Rust: instead of sending context directly to an LLM, the model writes Rhai scripts that an in-process interpreter executes under a bounded operation count, with pluggable OpenAI/Anthropic providers across a multi-crate workspace (core, providers, cli, harness, store, bench).",
       "date": "2026-08-18",
       "route": "/projects/rslm/",
       "tags": [
@@ -3906,17 +4002,12 @@
       ],
       "related": [
         {
-          "id": "post:tools-that-change-behavior",
+          "id": "project:sandbox",
           "reasons": [
             {
               "kind": "explicit",
               "declaredBy": "project:rslm"
-            }
-          ]
-        },
-        {
-          "id": "project:sandbox",
-          "reasons": [
+            },
             {
               "kind": "explicit",
               "declaredBy": "project:sandbox"
@@ -3938,6 +4029,18 @@
         },
         {
           "id": "project:langchainx",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "llm"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:mlrs",
           "reasons": [
             {
               "kind": "tag",
@@ -4112,7 +4215,7 @@
       "id": "project:sandbox",
       "kind": "project",
       "title": "sandbox",
-      "description": "Rust workspace implementing a virtual bash interpreter over an in-memory VFS, with capability-based permissions and hard execution limits, for safely embedding shell-script evaluation in applications.",
+      "description": "Rust workspace implementing a virtual bash interpreter over an in-memory VFS, with default-deny capability permissions and operation-count execution limits, for safely embedding shell-script evaluation in applications.",
       "date": "2026-08-18",
       "route": "/projects/sandbox/",
       "tags": [
@@ -4124,6 +4227,10 @@
         {
           "id": "project:rslm",
           "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:rslm"
+            },
             {
               "kind": "explicit",
               "declaredBy": "project:sandbox"
@@ -4497,6 +4604,19 @@
           ]
         },
         {
+          "id": "post:grounding-survives-summarization",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
           "id": "post:task-graph-vs-prompt",
           "reasons": [
             {
@@ -4505,19 +4625,6 @@
                 "agent-harness",
                 "automation",
                 "testing"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:devkit",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-harness",
-                "automation",
-                "observability"
               ]
             }
           ]
@@ -4668,6 +4775,21 @@
           "sharedTags": [
             "developer-experience",
             "release-engineering"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:25-projects-no-monorepo",
+      "target": "post:grounding-survives-summarization",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "observability"
           ]
         }
       ],
@@ -5463,6 +5585,306 @@
         }
       ],
       "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "post:machine-readable-cli",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "integration"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "post:policy-between-intent-and-effects",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:grounding-survives-summarization"
+        },
+        {
+          "kind": "link",
+          "declaredBy": "post:grounding-survives-summarization"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "post:prompts-as-interfaces",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:grounding-survives-summarization"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "integration"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "post:task-graph-vs-prompt",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:atelier",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:bazaar",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:coursers",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:crux",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:devkit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:devobs",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:doob",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "integration"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:godmode",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:message-extractor",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "integration",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:neusym",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "integration",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:orca-strait",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:praxis",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:sanctum",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "automation",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
     },
     {
       "source": "post:hexagonal-change-budget",
@@ -7434,18 +7856,6 @@
         }
       ],
       "tagSimilarity": 0.4
-    },
-    {
-      "source": "post:tools-that-change-behavior",
-      "target": "project:rslm",
-      "directed": true,
-      "evidence": [
-        {
-          "kind": "explicit",
-          "declaredBy": "project:rslm"
-        }
-      ],
-      "tagSimilarity": 0
     },
     {
       "source": "post:tools-that-change-behavior",
@@ -11125,6 +11535,10 @@
       "target": "project:sandbox",
       "directed": true,
       "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "project:rslm"
+        },
         {
           "kind": "explicit",
           "declaredBy": "project:sandbox"
