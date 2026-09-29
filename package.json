@@ -16,7 +16,7 @@
     "graph:bundle:check": "node scripts/content-graph/bundle.mjs --check",
     "graph:write": "bun run graph:data:write && bun run graph:bundle",
     "graph:check": "bun run graph:data:check && bun run graph:bundle:check",
-    "verify": "bun run format:check && bun run lint:markdown && bun run test && bun run graph:check && zola check && zola build"
+    "verify": "bun run format:check && bun run lint:markdown && bun run test && bun run graph:check && zola check --skip-external-links && zola build"
   },
   "devDependencies": {
     "d3-force": "3.0.0",
