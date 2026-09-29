@@ -365,24 +365,20 @@
           ]
         },
         {
+          "id": "post:provenance-is-the-point",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:provenance-is-the-point"
+            }
+          ]
+        },
+        {
           "id": "project:episteme",
           "reasons": [
             {
               "kind": "explicit",
               "declaredBy": "project:episteme"
-            }
-          ]
-        },
-        {
-          "id": "project:devkit",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-harness",
-                "automation",
-                "observability"
-              ]
             }
           ]
         }
@@ -883,6 +879,68 @@
       "backlinks": []
     },
     {
+      "id": "post:provenance-is-the-point",
+      "kind": "post",
+      "title": "Provenance Is the Point, or Your Memory Is Rewriting Its Own Evidence",
+      "description": "Why the fix for a self-corrupting agent memory is not a better summarizer but a store that can cite what it overwrote, and what that looks like when it is a type instead of a doc comment.",
+      "date": "2026-09-28",
+      "route": "/blog/provenance-is-the-point/",
+      "tags": [
+        "knowledge-systems",
+        "observability",
+        "software-architecture"
+      ],
+      "related": [
+        {
+          "id": "project:kgx",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:provenance-is-the-point"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "knowledge-systems",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:grounding-survives-summarization",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:provenance-is-the-point"
+            }
+          ]
+        },
+        {
+          "id": "project:episteme",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:provenance-is-the-point"
+            }
+          ]
+        },
+        {
+          "id": "post:technical-depth-as-evidence",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "observability",
+                "software-architecture"
+              ]
+            }
+          ]
+        }
+      ],
+      "backlinks": []
+    },
+    {
       "id": "post:redaction-system-boundary",
       "kind": "post",
       "title": "Redaction Is a System Boundary, Not a Cleanup Step",
@@ -1153,6 +1211,18 @@
             {
               "kind": "explicit",
               "declaredBy": "post:technical-depth-as-evidence"
+            }
+          ]
+        },
+        {
+          "id": "post:provenance-is-the-point",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "observability",
+                "software-architecture"
+              ]
             }
           ]
         }
@@ -2195,12 +2265,12 @@
           ]
         },
         {
-          "id": "post:25-projects-no-monorepo",
+          "id": "post:provenance-is-the-point",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
-                "automation",
+                "knowledge-systems",
                 "observability"
               ]
             }
@@ -2453,19 +2523,16 @@
           ]
         },
         {
-          "id": "project:notfiles",
+          "id": "post:provenance-is-the-point",
           "reasons": [
             {
-              "kind": "tag",
-              "sharedTags": [
-                "cli",
-                "security"
-              ]
+              "kind": "explicit",
+              "declaredBy": "post:provenance-is-the-point"
             }
           ]
         },
         {
-          "id": "project:obfsck",
+          "id": "project:notfiles",
           "reasons": [
             {
               "kind": "tag",
@@ -2719,6 +2786,22 @@
       ],
       "related": [
         {
+          "id": "post:provenance-is-the-point",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:provenance-is-the-point"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "knowledge-systems",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:devobs",
           "reasons": [
             {
@@ -2761,18 +2844,6 @@
               "kind": "tag",
               "sharedTags": [
                 "knowledge-systems",
-                "observability"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:obfsck",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "cli",
                 "observability"
               ]
             }
@@ -3102,6 +3173,18 @@
           ]
         },
         {
+          "id": "post:provenance-is-the-point",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "knowledge-systems",
+                "observability"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:devobs",
           "reasons": [
             {
@@ -3120,18 +3203,6 @@
               "kind": "tag",
               "sharedTags": [
                 "knowledge-systems",
-                "observability"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "post:grounding-survives-summarization",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "integration",
                 "observability"
               ]
             }
@@ -5707,6 +5778,18 @@
     },
     {
       "source": "post:grounding-survives-summarization",
+      "target": "post:provenance-is-the-point",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:provenance-is-the-point"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:grounding-survives-summarization",
       "target": "post:task-graph-vs-prompt",
       "directed": false,
       "evidence": [
@@ -7205,6 +7288,82 @@
         }
       ],
       "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:provenance-is-the-point",
+      "target": "post:technical-depth-as-evidence",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "observability",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "post:provenance-is-the-point",
+      "target": "project:devobs",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "knowledge-systems",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "post:provenance-is-the-point",
+      "target": "project:episteme",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:provenance-is-the-point"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:provenance-is-the-point",
+      "target": "project:kgx",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:provenance-is-the-point"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "knowledge-systems",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "post:provenance-is-the-point",
+      "target": "project:message-extractor",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "knowledge-systems",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
     },
     {
       "source": "post:redaction-system-boundary",
