@@ -622,6 +622,64 @@
       "backlinks": []
     },
     {
+      "id": "post:make-the-compiler-refuse-what-it-cannot-replay",
+      "kind": "post",
+      "title": "Make the Compiler Refuse the Pipeline It Cannot Replay",
+      "description": "A value that steers control flow has three obligations — be present, be attributable, and be restorable from the trace — and when the trace format cannot meet the third, the fix is a compile error, not a wider schema.",
+      "date": "2026-09-28",
+      "route": "/blog/make-the-compiler-refuse-what-it-cannot-replay/",
+      "tags": [
+        "agent-runtime",
+        "software-architecture",
+        "testing"
+      ],
+      "related": [
+        {
+          "id": "post:provenance-is-the-point",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:make-the-compiler-refuse-what-it-cannot-replay"
+            }
+          ]
+        },
+        {
+          "id": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:make-the-compiler-refuse-what-it-cannot-replay"
+            }
+          ]
+        },
+        {
+          "id": "post:truth-and-evidence-are-two-axes",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "software-architecture"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "project:langchainx",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "testing"
+              ]
+            }
+          ]
+        }
+      ],
+      "backlinks": []
+    },
+    {
       "id": "post:one-cli-many-protocols",
       "kind": "post",
       "title": "One CLI Surface Across MCP, OpenAPI, GraphQL, and Shell",
@@ -933,11 +991,11 @@
           ]
         },
         {
-          "id": "post:truth-and-evidence-are-two-axes",
+          "id": "post:make-the-compiler-refuse-what-it-cannot-replay",
           "reasons": [
             {
               "kind": "explicit",
-              "declaredBy": "post:truth-and-evidence-are-two-axes"
+              "declaredBy": "post:make-the-compiler-refuse-what-it-cannot-replay"
             }
           ]
         }
@@ -1333,7 +1391,7 @@
           ]
         },
         {
-          "id": "post:agent-safe-container-runtime",
+          "id": "post:make-the-compiler-refuse-what-it-cannot-replay",
           "reasons": [
             {
               "kind": "tag",
@@ -1377,6 +1435,15 @@
           ]
         },
         {
+          "id": "post:make-the-compiler-refuse-what-it-cannot-replay",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:make-the-compiler-refuse-what-it-cannot-replay"
+            }
+          ]
+        },
+        {
           "id": "post:truth-and-evidence-are-two-axes",
           "reasons": [
             {
@@ -1392,18 +1459,6 @@
               "kind": "tag",
               "sharedTags": [
                 "observability",
-                "software-architecture"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "post:godmode-vs-agent-platforms",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-harness",
                 "software-architecture"
               ]
             }
@@ -3021,19 +3076,19 @@
           ]
         },
         {
-          "id": "project:mlrs",
+          "id": "post:make-the-compiler-refuse-what-it-cannot-replay",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
                 "agent-runtime",
-                "llm"
+                "testing"
               ]
             }
           ]
         },
         {
-          "id": "project:rslm",
+          "id": "project:mlrs",
           "reasons": [
             {
               "kind": "tag",
@@ -5432,6 +5487,21 @@
     },
     {
       "source": "post:agent-safe-container-runtime",
+      "target": "post:make-the-compiler-refuse-what-it-cannot-replay",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:agent-safe-container-runtime",
       "target": "post:policy-between-intent-and-effects",
       "directed": true,
       "evidence": [
@@ -5699,6 +5769,21 @@
         }
       ],
       "tagSimilarity": 0.6
+    },
+    {
+      "source": "post:godmode-vs-agent-platforms",
+      "target": "post:make-the-compiler-refuse-what-it-cannot-replay",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
     },
     {
       "source": "post:godmode-vs-agent-platforms",
@@ -6875,6 +6960,90 @@
         }
       ],
       "tagSimilarity": 0.6
+    },
+    {
+      "source": "post:make-the-compiler-refuse-what-it-cannot-replay",
+      "target": "post:provenance-is-the-point",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:make-the-compiler-refuse-what-it-cannot-replay"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:make-the-compiler-refuse-what-it-cannot-replay",
+      "target": "post:replayability-over-autonomy",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:make-the-compiler-refuse-what-it-cannot-replay",
+      "target": "post:truth-and-evidence-are-two-axes",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6666666666666666
+    },
+    {
+      "source": "post:make-the-compiler-refuse-what-it-cannot-replay",
+      "target": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:make-the-compiler-refuse-what-it-cannot-replay"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:make-the-compiler-refuse-what-it-cannot-replay",
+      "target": "project:langchainx",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "post:make-the-compiler-refuse-what-it-cannot-replay",
+      "target": "project:praxis",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "testing"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
     },
     {
       "source": "post:one-cli-many-protocols",

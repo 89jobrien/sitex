@@ -14,3 +14,5 @@ published_slugs:
   - grounding-survives-summarization
   - provenance-is-the-point
   - truth-and-evidence-are-two-axes
+  - your-policy-engine-cannot-tell-you-which-rules-are-dead
+  - make-the-compiler-refuse-what-it-cannot-replay
