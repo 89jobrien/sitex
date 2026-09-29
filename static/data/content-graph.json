@@ -892,6 +892,22 @@
       ],
       "related": [
         {
+          "id": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "observability",
+                "software-architecture"
+              ]
+            }
+          ]
+        },
+        {
           "id": "project:kgx",
           "reasons": [
             {
@@ -922,15 +938,6 @@
             {
               "kind": "explicit",
               "declaredBy": "post:truth-and-evidence-are-two-axes"
-            }
-          ]
-        },
-        {
-          "id": "project:episteme",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "post:provenance-is-the-point"
             }
           ]
         }
@@ -1317,12 +1324,74 @@
           ]
         },
         {
+          "id": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead"
+            }
+          ]
+        },
+        {
           "id": "post:agent-safe-container-runtime",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
                 "agent-runtime",
+                "software-architecture"
+              ]
+            }
+          ]
+        }
+      ],
+      "backlinks": []
+    },
+    {
+      "id": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "kind": "post",
+      "title": "Your Policy Engine Cannot Tell You Which Rules Are Dead",
+      "description": "Four independent ways a hook engine loses the ability to answer a basic question about itself, all of them the same shape — the thing that would tell you is not in the build graph.",
+      "date": "2026-09-28",
+      "route": "/blog/your-policy-engine-cannot-tell-you-which-rules-are-dead/",
+      "tags": [
+        "agent-harness",
+        "observability",
+        "software-architecture"
+      ],
+      "related": [
+        {
+          "id": "post:provenance-is-the-point",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "observability",
+                "software-architecture"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:truth-and-evidence-are-two-axes",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead"
+            }
+          ]
+        },
+        {
+          "id": "post:technical-depth-as-evidence",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "observability",
                 "software-architecture"
               ]
             }
@@ -1334,7 +1403,7 @@
             {
               "kind": "tag",
               "sharedTags": [
-                "agent-runtime",
+                "agent-harness",
                 "software-architecture"
               ]
             }
@@ -5663,6 +5732,21 @@
     },
     {
       "source": "post:godmode-vs-agent-platforms",
+      "target": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:godmode-vs-agent-platforms",
       "target": "project:agentlint",
       "directed": false,
       "evidence": [
@@ -5898,6 +5982,21 @@
         }
       ],
       "tagSimilarity": 0
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
     },
     {
       "source": "post:grounding-survives-summarization",
@@ -6275,6 +6374,21 @@
           "sharedTags": [
             "developer-experience",
             "security"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:hooks-mid-rewrite",
+      "target": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "software-architecture"
           ]
         }
       ],
@@ -7011,6 +7125,21 @@
     },
     {
       "source": "post:policy-between-intent-and-effects",
+      "target": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:policy-between-intent-and-effects",
       "target": "project:atelier",
       "directed": false,
       "evidence": [
@@ -7411,6 +7540,25 @@
         }
       ],
       "tagSimilarity": 0
+    },
+    {
+      "source": "post:provenance-is-the-point",
+      "target": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "observability",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
     },
     {
       "source": "post:provenance-is-the-point",
@@ -7957,6 +8105,21 @@
     },
     {
       "source": "post:technical-depth-as-evidence",
+      "target": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "observability",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "post:technical-depth-as-evidence",
       "target": "project:coursers",
       "directed": true,
       "evidence": [
@@ -8252,6 +8415,48 @@
           "sharedTags": [
             "automation",
             "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:truth-and-evidence-are-two-axes",
+      "target": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "target": "project:devkit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "observability"
           ]
         }
       ],
