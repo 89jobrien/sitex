@@ -6,6 +6,7 @@ taxonomies:
   tags: [agent-runtime, automation, observability, work-tracking]
 extra:
   repo: "https://github.com/89jobrien/crux"
+  site: "https://89jobrien.github.io/crux/"
   related: [post:replayability-over-autonomy, project:devobs, project:praxis]
 ---
 

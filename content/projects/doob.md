@@ -6,6 +6,7 @@ taxonomies:
   tags: [automation, cli, integration, work-tracking]
 extra:
   repo: "https://github.com/89jobrien/doob"
+  site: "https://89jobrien.github.io/doob/"
   related: [post:machine-readable-cli, project:godmode, project:hj]
 ---
 

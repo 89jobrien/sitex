@@ -114,6 +114,46 @@ test("rejects invalid graph metadata", () => {
       }),
     /extra.repo must use an https:\/\/ URL/,
   );
+
+  assert.throws(
+    () =>
+      normalizeDocument({
+        ...projectInput,
+        frontmatter: {
+          ...projectInput.frontmatter,
+          extra: {
+            ...projectInput.frontmatter.extra,
+            site: "not-a-url",
+          },
+        },
+      }),
+    /extra.site must use an https:\/\/ URL/,
+  );
+});
+
+test("accepts a well-formed extra.site and tolerates its absence", () => {
+  const withSite = normalizeDocument({
+    ...projectInput,
+    frontmatter: {
+      ...projectInput.frontmatter,
+      extra: {
+        ...projectInput.frontmatter.extra,
+        site: "https://89jobrien.github.io/crux/",
+      },
+    },
+  });
+
+  const withoutSite = normalizeDocument({
+    ...projectInput,
+    frontmatter: {
+      ...projectInput.frontmatter,
+      extra: { ...projectInput.frontmatter.extra, site: undefined },
+    },
+  });
+
+  // extra.site is a display-only field: it must not reach the graph document.
+  assert.deepEqual(withSite, withoutSite);
+  assert.equal(withSite.id, "project:minibox");
 });
 
 test("normalizes a missing description to an empty string", () => {

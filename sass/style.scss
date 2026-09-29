@@ -180,6 +180,12 @@ blockquote {
   white-space: nowrap;
 }
 
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 .repo-cta {
   display: inline-block;
   padding: 0.45rem 0.75rem;

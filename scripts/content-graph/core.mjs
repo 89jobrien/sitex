@@ -113,17 +113,17 @@ function normalizeRelatedIds(value) {
   return relatedIds.toSorted(compareCodeUnits);
 }
 
-function validateRepositoryUrl(value) {
+function validateHttpsUrl(value, field) {
   if (value === undefined || value === "") return;
   if (typeof value !== "string") {
-    throw new TypeError("extra.repo must use an https:// URL");
+    throw new TypeError(`${field} must use an https:// URL`);
   }
 
   try {
     const url = new URL(value);
     if (url.protocol !== "https:" || !url.hostname) throw new TypeError();
   } catch {
-    throw new TypeError("extra.repo must use an https:// URL");
+    throw new TypeError(`${field} must use an https:// URL`);
   }
 }
 
@@ -149,7 +149,8 @@ export function normalizeDocument(input) {
   const kind = section === "projects" ? "project" : "post";
   const taxonomies = frontmatter.taxonomies ?? {};
   const extra = frontmatter.extra ?? {};
-  validateRepositoryUrl(extra.repo);
+  validateHttpsUrl(extra.repo, "extra.repo");
+  validateHttpsUrl(extra.site, "extra.site");
 
   return {
     id: `${kind}:${stem}`,

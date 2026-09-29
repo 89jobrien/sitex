@@ -10,7 +10,12 @@
 <article>
   <h1>{{ page.title }}</h1>
   {% if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
-  {% if page.extra.repo %}<p><a class="repo-cta" href="{{ page.extra.repo }}" rel="noreferrer">View repository</a></p>{% endif %}
+  {% if page.extra.repo or page.extra.site %}
+  <p class="project-links">
+    {% if page.extra.repo %}<a class="repo-cta" href="{{ page.extra.repo }}" rel="noreferrer">View repository</a>{% endif %}
+    {% if page.extra.site %}<a class="repo-cta" href="{{ page.extra.site }}" rel="noreferrer">Reference site</a>{% endif %}
+  </p>
+  {% endif %}
   {{ page.content | safe }}
   {% include "partials/relationships.html" %}
 </article>
