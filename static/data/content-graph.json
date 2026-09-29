@@ -139,13 +139,13 @@
           ]
         },
         {
-          "id": "project:disyn",
+          "id": "post:truth-and-evidence-are-two-axes",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
                 "agent-runtime",
-                "security"
+                "software-architecture"
               ]
             }
           ]
@@ -374,11 +374,11 @@
           ]
         },
         {
-          "id": "project:episteme",
+          "id": "post:truth-and-evidence-are-two-axes",
           "reasons": [
             {
               "kind": "explicit",
-              "declaredBy": "project:episteme"
+              "declaredBy": "post:truth-and-evidence-are-two-axes"
             }
           ]
         }
@@ -917,23 +917,20 @@
           ]
         },
         {
+          "id": "post:truth-and-evidence-are-two-axes",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:truth-and-evidence-are-two-axes"
+            }
+          ]
+        },
+        {
           "id": "project:episteme",
           "reasons": [
             {
               "kind": "explicit",
               "declaredBy": "post:provenance-is-the-point"
-            }
-          ]
-        },
-        {
-          "id": "post:technical-depth-as-evidence",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "observability",
-                "software-architecture"
-              ]
             }
           ]
         }
@@ -1283,6 +1280,63 @@
             {
               "kind": "explicit",
               "declaredBy": "project:mcpipe"
+            }
+          ]
+        }
+      ],
+      "backlinks": []
+    },
+    {
+      "id": "post:truth-and-evidence-are-two-axes",
+      "kind": "post",
+      "title": "Truth Value and Evidence Provenance Are Two Different Questions",
+      "description": "Why a four-valued truth type is not enough for a rules engine, and how keeping provenance on a second axis turns a dangerous default into a well-defined one.",
+      "date": "2026-09-28",
+      "route": "/blog/truth-and-evidence-are-two-axes/",
+      "tags": [
+        "agent-runtime",
+        "software-architecture"
+      ],
+      "related": [
+        {
+          "id": "post:grounding-survives-summarization",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:truth-and-evidence-are-two-axes"
+            }
+          ]
+        },
+        {
+          "id": "post:provenance-is-the-point",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:truth-and-evidence-are-two-axes"
+            }
+          ]
+        },
+        {
+          "id": "post:agent-safe-container-runtime",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "software-architecture"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:godmode-vs-agent-platforms",
+          "reasons": [
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-runtime",
+                "software-architecture"
+              ]
             }
           ]
         }
@@ -5332,6 +5386,21 @@
     },
     {
       "source": "post:agent-safe-container-runtime",
+      "target": "post:truth-and-evidence-are-two-axes",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "post:agent-safe-container-runtime",
       "target": "project:braid",
       "directed": false,
       "evidence": [
@@ -5579,6 +5648,21 @@
     },
     {
       "source": "post:godmode-vs-agent-platforms",
+      "target": "post:truth-and-evidence-are-two-axes",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-runtime",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.5
+    },
+    {
+      "source": "post:godmode-vs-agent-platforms",
       "target": "project:agentlint",
       "directed": false,
       "evidence": [
@@ -5802,6 +5886,18 @@
         }
       ],
       "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:grounding-survives-summarization",
+      "target": "post:truth-and-evidence-are-two-axes",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:truth-and-evidence-are-two-axes"
+        }
+      ],
+      "tagSimilarity": 0
     },
     {
       "source": "post:grounding-survives-summarization",
@@ -7303,6 +7399,18 @@
         }
       ],
       "tagSimilarity": 0.5
+    },
+    {
+      "source": "post:provenance-is-the-point",
+      "target": "post:truth-and-evidence-are-two-axes",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:truth-and-evidence-are-two-axes"
+        }
+      ],
+      "tagSimilarity": 0
     },
     {
       "source": "post:provenance-is-the-point",
