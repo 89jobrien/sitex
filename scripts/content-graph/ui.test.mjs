@@ -5,6 +5,7 @@ import { parseHTML } from "linkedom";
 
 import {
   DEFAULT_EDGE_KINDS,
+  NODE_KINDS,
   filterGraph,
   initializeContentGraph,
   readFilterState,
@@ -92,6 +93,52 @@ function fixture() {
   return { document, root: document.querySelector("[data-content-graph]") };
 }
 
+function previewFixture() {
+  const { document } = parseHTML(`
+    <section data-content-graph data-graph-mode="preview" data-manifest-url="/sitex/data/content-graph.json">
+      <div data-graph-canvas></div>
+      <p data-graph-fallback><a href="/sitex/graph/">Open the content graph</a></p>
+    </section>
+  `);
+  return { document, root: document.querySelector("[data-content-graph]") };
+}
+
+function manifestResponse(graph_) {
+  return async () => ({ ok: true, json: async () => structuredClone(graph_) });
+}
+
+function viewportTransform(root) {
+  const transform = root
+    .querySelector(".graph-nodes")
+    .parentNode.getAttribute("transform");
+  const match = /translate\((-?[\d.]+) (-?[\d.]+)\) scale\(([\d.]+)\)/.exec(
+    transform,
+  );
+  return {
+    offsetX: Number(match[1]),
+    offsetY: Number(match[2]),
+    scale: Number(match[3]),
+  };
+}
+
+function scatteredGraph(count) {
+  return {
+    schemaVersion: 1,
+    nodes: Array.from({ length: count }, (_, index) => ({
+      id: `project:node-${index}`,
+      kind: "project",
+      title: `Node ${index}`,
+      description: "Unconnected node",
+      date: "2026-09-12",
+      route: `/projects/node-${index}/`,
+      tags: [],
+      related: [],
+      backlinks: [],
+    })),
+    edges: [],
+  };
+}
+
 test("reads filter state with explicit and link edges enabled initially", () => {
   const { root } = fixture();
 
@@ -171,14 +218,10 @@ test("initializes details, accessible nodes, keyboard activation, and navigation
 
 test("rebuilds only for input events", async () => {
   const { document, root } = fixture();
-  await initializeContentGraph(root, {
-    fetchImpl: async () => ({
-      ok: true,
-      json: async () => structuredClone(graph),
-    }),
-  });
+  await initializeContentGraph(root, { fetchImpl: manifestResponse(graph) });
   const canvas = root.querySelector("[data-graph-canvas]");
   const initialSvg = canvas.querySelector("svg");
+  assert.ok(initialSvg.__zoom, "explorer installs zoom behavior");
 
   root
     .querySelector('input[name="query"]')
@@ -194,10 +237,7 @@ test("rebuilds only for input events", async () => {
 test("settles graph positions synchronously when reduced motion is preferred", async () => {
   const { root } = fixture();
   await initializeContentGraph(root, {
-    fetchImpl: async () => ({
-      ok: true,
-      json: async () => structuredClone(graph),
-    }),
+    fetchImpl: manifestResponse(graph),
     matchMediaImpl: () => ({ matches: true }),
   });
 
@@ -205,6 +245,102 @@ test("settles graph positions synchronously when reduced motion is preferred", a
     assert.match(node.getAttribute("cx"), /^-?\d+(?:\.\d+)?$/);
     assert.match(node.getAttribute("cy"), /^-?\d+(?:\.\d+)?$/);
   }
+});
+
+test("reads every node in preview mode without filter controls", () => {
+  const { root } = previewFixture();
+
+  assert.deepEqual(readFilterState(root), {
+    query: "",
+    kinds: new Set(NODE_KINDS),
+    tags: new Set(),
+    edgeKinds: new Set(DEFAULT_EDGE_KINDS),
+  });
+});
+
+test("renders a read-only preview that navigates instead of trapping wheel input", async () => {
+  const { document, root } = previewFixture();
+  const navigated = [];
+
+  const initialized = await initializeContentGraph(root, {
+    fetchImpl: manifestResponse(graph),
+    navigateImpl: (url) => navigated.push(url),
+    matchMediaImpl: () => ({ matches: true }),
+  });
+
+  assert.equal(initialized, true);
+  assert.equal(root.querySelectorAll("[data-graph-node]").length, 3);
+  assert.equal(root.querySelectorAll(".graph-edge").length, 2);
+  assert.equal(
+    root.querySelector("[data-graph-node]").getAttribute("role"),
+    "link",
+  );
+  assert.equal(
+    root.querySelector("[data-graph-node]").getAttribute("aria-label"),
+    "Open Alpha Runner, project",
+  );
+  assert.equal(root.querySelector("svg").__zoom, undefined);
+
+  const alpha = root.querySelector('[data-graph-node="project:alpha"]');
+  alpha.dispatchEvent(
+    Object.assign(new document.defaultView.Event("keydown"), {
+      key: "Enter",
+    }),
+  );
+  assert.deepEqual(navigated, ["/sitex/projects/alpha/"]);
+
+  const space = new document.defaultView.Event("keydown");
+  Object.defineProperty(space, "key", { value: " " });
+  alpha.dispatchEvent(space);
+  assert.deepEqual(navigated, ["/sitex/projects/alpha/"]);
+
+  alpha.dispatchEvent(
+    new document.defaultView.Event("click", { bubbles: true }),
+  );
+  assert.deepEqual(navigated, [
+    "/sitex/projects/alpha/",
+    "/sitex/projects/alpha/",
+  ]);
+});
+
+test("settles unconnected preview nodes inside the canvas at readable size", async () => {
+  const { root } = previewFixture();
+
+  await initializeContentGraph(root, {
+    fetchImpl: manifestResponse(scatteredGraph(24)),
+  });
+
+  const { offsetX, offsetY, scale } = viewportTransform(root);
+  // Without preview gravity the many-body charge drifts unconnected nodes
+  // outward, which the fit then compensates by shrinking every node.
+  assert.ok(
+    scale >= 0.9 && scale <= 1,
+    `fit scale ${scale} keeps nodes legible`,
+  );
+
+  for (const node of root.querySelectorAll("[data-graph-node]")) {
+    const x = Number(node.getAttribute("cx")) * scale + offsetX;
+    const y = Number(node.getAttribute("cy")) * scale + offsetY;
+    assert.ok(x >= 0 && x <= 800, `node x ${x} stays inside the viewBox`);
+    assert.ok(y >= 0 && y <= 560, `node y ${y} stays inside the viewBox`);
+  }
+});
+
+test("fails open in preview mode when the manifest cannot be loaded", async () => {
+  const { root } = previewFixture();
+  const warnings = [];
+
+  const initialized = await initializeContentGraph(root, {
+    fetchImpl: async () => {
+      throw new Error("offline");
+    },
+    warnImpl: (message) => warnings.push(message),
+  });
+
+  assert.equal(initialized, false);
+  assert.equal(root.querySelector("svg"), null);
+  assert.equal(root.querySelector("[data-graph-fallback]").hidden, false);
+  assert.deepEqual(warnings, ["Content graph enhancement unavailable."]);
 });
 
 test("validates manifest schema, bounds, routes, and edge endpoints", () => {

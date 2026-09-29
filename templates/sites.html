@@ -1,0 +1,51 @@
+{% extends "base.html" %} {% block title %}Reference Sites — {{ config.title
+}}{% endblock title %} {% block description %}Standalone reference sites
+published for Joseph O'Brien's projects.{% endblock description %} {% block
+social_title %}Reference Sites — {{ config.title }}{% endblock social_title %}
+{% block social_description %}Standalone reference sites published for Joseph
+O'Brien's projects.{% endblock social_description %} {% block content %} {% set
+projects = get_section(path="projects/_index.md") %}
+<header class="page-intro">
+  <p class="eyebrow">Published documentation</p>
+  <h1>{{ page.title }}</h1>
+  <p class="lede">
+    Each of these projects publishes its own site from
+    <code>89jobrien.github.io</code>. They are longer than the write-ups here
+    and stay close to the source they document.
+  </p>
+</header>
+
+<ul class="card-list card-grid">
+  {% for project in projects.pages | sort(attribute="title") %} {% if
+  project.extra.site %}
+  <li class="card">
+    <div class="card-heading">
+      <a href="{{ project.permalink }}">{{ project.title }}</a>
+      <a
+        class="repo-link"
+        href="{{ project.extra.site }}"
+        rel="noreferrer"
+        aria-label="Reference site for {{ project.title }}"
+        >Site</a
+      >
+    </div>
+    {% if project.description %}
+    <p>{{ project.description }}</p>
+    {% endif %}
+    <p class="card-meta">
+      {% for tag in project.taxonomies.tags %}<a
+        class="tag-link"
+        href="{{ get_url(path='/tags/' ~ tag) }}"
+        >{{ tag }}</a
+      >{% endfor %}
+    </p>
+  </li>
+  {% endif %} {% endfor %}
+</ul>
+
+<p class="lede">
+  Not listed yet? Reference sites appear here as soon as a project's note
+  declares
+  <code>extra.site</code>.
+</p>
+{% endblock content %}

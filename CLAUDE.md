@@ -102,6 +102,16 @@ crux run Cruxfile ci # non-mutating aggregate; each quality gate runs once
 - `/tags/` provides taxonomy browsing. `/graph/` starts with a complete server-rendered content
   list and progressively adds filters and an SVG graph. If the manifest request or enhancement
   fails, the list remains available and the SVG is left empty.
+- The home page reuses that bundle in preview mode (`data-graph-mode="preview"` in
+  `templates/index.html`): no filter controls, no zoom or wheel capture, one settled frame instead
+  of an animation, nodes act as links into the target page, and a `<details>` info bubble explains
+  the projection. Without JavaScript the section still offers the `/graph/` link. Preview branches
+  live in `scripts/content-graph/ui.mjs` and require `bun run graph:bundle` so the committed bundle
+  stays fresh.
+- `/sites/` (`templates/sites.html`) is derived from project metadata rather than authored content:
+  it lists every project declaring `extra.site`. Sites publish automatically to
+  `https://89jobrien.github.io/<repo>/`, so `extra.site` must equal the URL derived from
+  `extra.repo`; `scripts/editorial-check.nu` fails the build when it drifts.
 - Tested workflow versions are Zola `0.23.3`, zk `0.15.6` or newer, Nushell `0.111.0`, Rust `1.89` or newer,
   `crux-agentic` `0.3.1` at revision `8d54a65`, lychee `0.24.2`, Node.js `22.22.1`, Bun `1.3.10`,
   Prettier `3.9.6`, and `markdownlint-cli2` `0.23.2`. Use `bun install --frozen-lockfile` for the exact
