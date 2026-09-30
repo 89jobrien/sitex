@@ -81,6 +81,39 @@ def published-index-errors [index_path: string] {
     }
 }
 
+def note-site-errors [note: path] {
+    # Project reference sites are published automatically at
+    # https://89jobrien.github.io/<repo>/, so extra.site is only ever a marker
+    # for "this project has a site" plus the URL the convention already implies.
+    try {
+        let metadata = (frontmatter $note)
+        if "extra" not-in ($metadata | columns) { return [] }
+
+        let extra = ($metadata | get extra)
+        if "site" not-in ($extra | columns) { return [] }
+
+        if "repo" not-in ($extra | columns) {
+            return [$"($note): extra.site requires extra.repo"]
+        }
+
+        let repo_name = ($extra | get repo | split row "/" | where {|segment| $segment != ""} | last)
+        let expected = $"https://89jobrien.github.io/($repo_name)/"
+        if ($extra | get site) != $expected {
+            return [$"($note): extra.site must be ($expected)"]
+        }
+        []
+    } catch {|error|
+        [$"($note): ($error.msg)"]
+    }
+}
+
+def project-site-errors [] {
+    glob "content/projects/*.md"
+    | where {|path| ($path | path basename) != "_index.md"}
+    | each {|note| note-site-errors $note }
+    | flatten
+}
+
 def main [] {
     mut errors = []
 
@@ -143,6 +176,7 @@ def main [] {
     let tracked_index = (do { git ls-files --error-unmatch $index_path } | complete)
     $errors = ($errors | append (command-failure $tracked_index $"untracked published index: ($index_path)"))
     $errors = ($errors | append (published-index-errors $index_path))
+    $errors = ($errors | append (project-site-errors))
 
     let output = (mktemp -d)
     let build = (do { zola build --force --output-dir $output } | complete)

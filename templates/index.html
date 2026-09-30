@@ -56,4 +56,39 @@
     {% endfor %}
   </ul>
 </section>
+
+<section class="home-section" aria-labelledby="content-graph">
+  <div class="section-heading">
+    <h2 id="content-graph">How the work connects</h2>
+    <details class="info-bubble">
+      <summary><span class="info-bubble-icon" aria-hidden="true">i</span> About this graph</summary>
+      <p class="info-bubble-body">
+        Every project and essay on this site, laid out by the same relationship data behind the
+        explorer. A line means one references the other, links to it, or shares tags with it. Choose
+        any point to open it, or use the explorer to filter by tag and relationship type.
+      </p>
+    </details>
+    <a href="{{ get_url(path="/graph/") }}">Explore graph</a>
+  </div>
+  <div
+    class="graph-preview"
+    data-content-graph
+    data-graph-mode="preview"
+    data-manifest-url="{{ get_url(path="data/content-graph.json") }}"
+  >
+    <div
+      class="graph-canvas"
+      data-graph-canvas
+      role="region"
+      aria-label="Relationship graph of projects and essays"
+    ></div>
+    <p class="graph-preview-fallback">
+      <a href="{{ get_url(path="/graph/") }}">Open the content graph</a> to browse every project and
+      essay with filters.
+    </p>
+  </div>
+</section>
 {% endblock content %}
+{% block scripts %}
+<script src="{{ get_url(path="js/content-graph.js") }}" defer></script>
+{% endblock scripts %}

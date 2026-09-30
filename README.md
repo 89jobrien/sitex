@@ -19,7 +19,7 @@ tags), Zola builds it as pages. Kept intentionally separate from
 Bootstrap the repository-owned tools with:
 
 ```text
-cargo install --git https://github.com/89jobrien/crux.git --rev 8d54a65df7696ec01b1ef27a5c0972422020efc1 --package crux-agentic --locked
+cargo install --git https://github.com/89jobrien/crux.git --rev 8d54a65df7696ec01b1ef27a5c0972422020efc1 crux-agentic --locked
 cargo install lychee --version 0.24.2 --locked
 bun install --frozen-lockfile
 ```
@@ -48,6 +48,22 @@ When a pitch becomes a post, remove it from the active queue; optionally retain 
 with `status: published` under `ideas/published/`.
 
 Fill in `extra.repo` in a project note to link to its GitHub repo.
+
+## Reference sites
+
+Project sites are published automatically to `https://89jobrien.github.io/<repo>/`. A project gets
+a site by adding `extra.site` to its note, set to exactly that URL — the repository name is the
+whole input:
+
+```yaml
+extra:
+  repo: "https://github.com/89jobrien/doob"
+  site: "https://89jobrien.github.io/doob/"
+```
+
+`/sites/` lists every project that declares `extra.site`, and the editorial check fails the build
+when a declared site URL drifts from the URL implied by `extra.repo`. Notes without `extra.site`
+never appear there, even though a repository exists.
 
 ## Relationships
 
@@ -88,6 +104,10 @@ The site exposes tag pages under `/tags/` and the explorer at `/graph/`. The gra
 server-rendered with a complete content list; JavaScript adds filtering and an SVG view. If
 the manifest cannot load or enhancement fails, the list remains available and no SVG is
 shown.
+
+The home page renders the same data as a preview: the SVG only, without the search box, filters,
+or zoom, with an info bubble explaining what the lines mean and a link to the full explorer.
+Nodes open the page they represent.
 
 The pinned tools are Node `22.22.1`, Bun `1.3.10`, and Zola `0.23.3`.
 
@@ -136,8 +156,9 @@ network access; lychee checks HTTP(S) links concurrently with bounded timeouts. 
 HTTP 403 and 429 responses are accepted as network-policy and rate-limit exceptions; other
 confirmed HTTP errors fail the check.
 
-`crux run Cruxfile build` writes to a temporary directory, verifies prefix-safe project/blog
-links, representative project and post pages, and `atom.xml`, then removes the output.
+`crux run Cruxfile build` writes to a temporary directory, verifies prefix-safe project, sites, and
+blog links, the home-page graph preview, representative project and post pages, and `atom.xml`,
+then removes the output.
 `crux run Cruxfile serve` remains a long-running local-only target. Executable workflow
 ownership lives in the standalone pipelines under `scripts/`; `Cruxfile` is only a dispatcher.
 

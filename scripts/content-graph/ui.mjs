@@ -1,13 +1,18 @@
 import {
   forceCenter,
+  forceCollide,
   forceLink,
   forceManyBody,
   forceSimulation,
+  forceX,
+  forceY,
 } from "d3-force";
 import { select } from "d3-selection";
 import { zoom, zoomIdentity } from "d3-zoom";
 
 export const DEFAULT_EDGE_KINDS = Object.freeze(["explicit", "link"]);
+export const NODE_KINDS = Object.freeze(["project", "post"]);
+const PREVIEW_MODE = "preview";
 const MAX_MANIFEST_BYTES = 2_000_000;
 const MAX_NODES = 1_000;
 const MAX_EDGES = 10_000;
@@ -144,7 +149,20 @@ function checkedValues(root, name) {
   );
 }
 
+function isPreview(root) {
+  return root?.dataset?.graphMode === PREVIEW_MODE;
+}
+
 export function readFilterState(root) {
+  if (isPreview(root)) {
+    return {
+      query: "",
+      kinds: new Set(NODE_KINDS),
+      tags: new Set(),
+      edgeKinds: new Set(DEFAULT_EDGE_KINDS),
+    };
+  }
+
   return {
     query: root.querySelector('input[name="query"]')?.value.trim() ?? "",
     kinds: checkedValues(root, "kind"),
@@ -255,7 +273,33 @@ function installZoom(root, svg, viewport) {
   }
 }
 
-function renderGraph(root, graph, state, manifestUrl, reduceMotion) {
+function fitViewport(viewport, nodes, width, height) {
+  if (nodes.length === 0) return;
+
+  const padding = 28;
+  const xs = nodes.map(({ x }) => x);
+  const ys = nodes.map(({ y }) => y);
+  const [minX, maxX] = [Math.min(...xs), Math.max(...xs)];
+  const [minY, maxY] = [Math.min(...ys), Math.max(...ys)];
+  const scale = Math.min(
+    (width - padding * 2) / Math.max(maxX - minX, 1),
+    (height - padding * 2) / Math.max(maxY - minY, 1),
+    1,
+  );
+  const offsetX = width / 2 - ((minX + maxX) / 2) * scale;
+  const offsetY = height / 2 - ((minY + maxY) / 2) * scale;
+  viewport.attr(
+    "transform",
+    `translate(${offsetX.toFixed(2)} ${offsetY.toFixed(2)}) scale(${scale.toFixed(3)})`,
+  );
+}
+
+function renderGraph(
+  root,
+  graph,
+  state,
+  { manifestUrl, reduceMotion, preview = false, navigate = () => {} },
+) {
   const canvas = root.querySelector("[data-graph-canvas]");
   if (!canvas) return;
 
@@ -291,18 +335,26 @@ function renderGraph(root, graph, state, manifestUrl, reduceMotion) {
     .attr("r", 9)
     .attr("class", (node) => `graph-node graph-node-${node.kind}`)
     .attr("data-graph-node", ({ id }) => id)
-    .attr("role", "button")
+    .attr("role", preview ? "link" : "button")
     .attr("tabindex", 0)
-    .attr("aria-label", (node) => `${node.title}, ${node.kind}`)
-    .on("click", (_, node) => selectNode(node))
+    .attr("aria-label", (node) =>
+      preview
+        ? `Open ${node.title}, ${node.kind}`
+        : `${node.title}, ${node.kind}`,
+    )
+    .on("click", (_, node) => activate(node))
     .on("keydown", (event, node) => {
-      if (event.key === "Enter" || event.key === " ") {
+      if (event.key === "Enter" || (!preview && event.key === " ")) {
         event.preventDefault();
-        selectNode(node);
+        activate(node);
       }
     });
 
-  function selectNode(node) {
+  function activate(node) {
+    if (preview) {
+      navigate(routeWithBase(node.route, manifestUrl));
+      return;
+    }
     circles.classed("is-selected", ({ id }) => id === node.id);
     renderDetails(root, node, manifestUrl);
   }
@@ -316,23 +368,37 @@ function renderGraph(root, graph, state, manifestUrl, reduceMotion) {
     circles.attr("cx", ({ x }) => x).attr("cy", ({ y }) => y);
   };
   const simulation = forceSimulation(nodes)
-    .force("charge", forceManyBody().strength(-90))
+    .force("charge", forceManyBody().strength(preview ? -55 : -90))
     .force("center", forceCenter(width / 2, height / 2))
     .force(
       "link",
       forceLink(edges)
         .id(({ id }) => id)
-        .distance(72),
+        .distance(preview ? 52 : 72),
     )
     .on("tick", updatePositions);
 
-  if (reduceMotion) {
+  if (preview) {
+    // The preview settles on a single frame inside a short canvas. Gravity keeps
+    // weakly connected nodes from drifting outward against the many-body charge,
+    // and collision keeps the dots apart at preview density.
+    simulation
+      .force("x", forceX(width / 2).strength(0.05))
+      .force("y", forceY(height / 2).strength(0.1))
+      .force("collide", forceCollide(12));
+  }
+
+  if (reduceMotion || preview) {
     simulation.stop();
     simulation.tick(300);
     updatePositions();
   }
 
-  installZoom(root, svg, viewport);
+  if (preview) {
+    fitViewport(viewport, nodes, width, height);
+  } else {
+    installZoom(root, svg, viewport);
+  }
   return simulation;
 }
 
@@ -351,23 +417,31 @@ function updateFallback(root, state) {
   }
 }
 
+function defaultNavigate(url) {
+  globalThis.location?.assign?.(url);
+}
+
 export async function initializeContentGraph(
   root,
   {
     fetchImpl = globalThis.fetch,
     matchMediaImpl = globalThis.matchMedia,
     warnImpl = console.warn,
+    navigateImpl = defaultNavigate,
   } = {},
 ) {
   if (!root || typeof fetchImpl !== "function") return false;
   const manifestUrl = root.dataset.manifestUrl;
+  const preview = isPreview(root);
 
   try {
     const response = await fetchImpl(manifestUrl);
     if (!response.ok)
       throw new Error(`manifest request failed: ${response.status}`);
     const graph = await readManifest(response);
-    addTagFilters(root, graph);
+    if (!preview) {
+      addTagFilters(root, graph);
+    }
     const reduceMotion =
       typeof matchMediaImpl === "function" &&
       matchMediaImpl("(prefers-reduced-motion: reduce)").matches;
@@ -379,13 +453,12 @@ export async function initializeContentGraph(
       root.querySelector("[data-graph-canvas]")?.replaceChildren();
       const details = root.querySelector("[data-graph-details]");
       if (details) details.hidden = true;
-      simulation = renderGraph(
-        root,
-        filterGraph(graph, state),
-        state,
+      simulation = renderGraph(root, filterGraph(graph, state), state, {
         manifestUrl,
         reduceMotion,
-      );
+        preview,
+        navigate: navigateImpl,
+      });
       updateFallback(root, state);
     };
     const controls = root.querySelector("[data-graph-controls]");

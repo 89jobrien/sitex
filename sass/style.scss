@@ -302,6 +302,96 @@ blockquote {
   padding-left: 1.25rem;
 }
 
+.page-intro {
+  max-width: 650px;
+  margin-bottom: 2rem;
+}
+
+.info-bubble {
+  position: relative;
+
+  summary {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    color: var(--muted);
+    font-size: 0.85em;
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:hover {
+      color: var(--fg);
+    }
+
+    &:focus-visible {
+      border-radius: 999px;
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+  }
+
+  &[open] summary {
+    color: var(--fg);
+  }
+}
+
+.info-bubble-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  font-size: 0.85em;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.info-bubble-body {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.5rem);
+  left: 50%;
+  width: min(24rem, 80vw);
+  margin: 0;
+  padding: 0.85rem 1rem;
+  transform: translateX(-50%);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--surface);
+  box-shadow: 0 1rem 2rem rgb(0 0 0 / 45%);
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.graph-preview {
+  margin-top: 1rem;
+
+  .graph-canvas,
+  .graph-canvas svg {
+    min-height: 24rem;
+  }
+}
+
+.graph-preview-fallback {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+.graph-preview[data-enhanced="true"] .graph-preview-fallback {
+  display: none;
+}
+
+.tag-link {
+  color: var(--muted);
+}
+
 .graph-intro {
   max-width: 650px;
   margin-bottom: 2rem;

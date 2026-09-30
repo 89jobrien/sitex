@@ -19,7 +19,7 @@ explicitly extracts ever enters a provider message.
 
 ## Isolation model
 
-`rslm` sandboxes generated scripts with **[rhai](https://github.com/rhais/rhai)**,
+`rslm` sandboxes generated scripts with **[rhai](https://github.com/rhaiscript/rhai)**,
 not with the separate `sandbox` project on this site. Rhai runs in-process with
 no subprocess and no OS-level isolation, bounded by
 `engine.set_max_operations(1_000_000)` (`crates/rslm-core/src/env.rs:26`).
