@@ -19,7 +19,7 @@ tags), Zola builds it as pages. Kept intentionally separate from
 Bootstrap the repository-owned tools with:
 
 ```text
-cargo install --git https://github.com/89jobrien/crux.git --rev 8d54a65df7696ec01b1ef27a5c0972422020efc1 --package crux-agentic --locked
+cargo install --git https://github.com/89jobrien/crux.git --rev 8d54a65df7696ec01b1ef27a5c0972422020efc1 crux-agentic --locked
 cargo install lychee --version 0.24.2 --locked
 bun install --frozen-lockfile
 ```

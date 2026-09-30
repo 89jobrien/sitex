@@ -37,7 +37,7 @@ jobs:
         run: >-
           cargo install --git https://github.com/89jobrien/crux.git
           --rev 8d54a65df7696ec01b1ef27a5c0972422020efc1
-          --package crux-agentic --locked
+          crux-agentic --locked
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
         with:
