@@ -6,6 +6,7 @@ taxonomies:
   tags: [containers, mcp, security, systems-software]
 extra:
   repo: "https://github.com/89jobrien/minibox"
+  site: "https://89jobrien.github.io/minibox/"
   related:
     [
       post:agent-safe-container-runtime,
