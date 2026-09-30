@@ -33,8 +33,6 @@ jobs:
           curl -fsSL https://github.com/zk-org/zk/releases/download/v0.15.6/zk-v0.15.6-linux-amd64.tar.gz -o /tmp/zk.tar.gz
           tar -xzf /tmp/zk.tar.gz -C /tmp
           sudo install /tmp/zk /usr/local/bin/zk
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
       - name: Install Crux
         run: >-
           cargo install --git https://github.com/89jobrien/crux.git
