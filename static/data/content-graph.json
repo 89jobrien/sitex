@@ -154,6 +154,66 @@
       "backlinks": []
     },
     {
+      "id": "post:authority-down-evidence-up",
+      "kind": "post",
+      "title": "Authority Flows Down, Evidence Flows Up",
+      "description": "The rule that makes automation governable: an execution system may report what happened, but it never decides whether the outcome was good enough to promote. Where manual work recurs, that is an architecture gap rather than a process to streamline.",
+      "date": "2026-09-30",
+      "route": "/blog/authority-down-evidence-up/",
+      "tags": [
+        "agent-harness",
+        "developer-experience",
+        "observability",
+        "software-architecture"
+      ],
+      "related": [
+        {
+          "id": "post:policy-between-intent-and-effects",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:authority-down-evidence-up"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "software-architecture"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post:replayability-over-autonomy",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:authority-down-evidence-up"
+            }
+          ]
+        },
+        {
+          "id": "project:cargo-promote",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:authority-down-evidence-up"
+            }
+          ]
+        },
+        {
+          "id": "project:taskit",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:authority-down-evidence-up"
+            }
+          ]
+        }
+      ],
+      "backlinks": []
+    },
+    {
       "id": "post:contract-drift-as-migration",
       "kind": "post",
       "title": "Make Contract Drift Fail Before It Becomes Migration Work",
@@ -433,13 +493,13 @@
           ]
         },
         {
-          "id": "post:contract-drift-as-migration",
+          "id": "post:authority-down-evidence-up",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
                 "developer-experience",
-                "integration"
+                "software-architecture"
               ]
             }
           ]
@@ -515,7 +575,7 @@
           ]
         },
         {
-          "id": "post:godmode-vs-agent-platforms",
+          "id": "post:authority-down-evidence-up",
           "reasons": [
             {
               "kind": "tag",
@@ -828,17 +888,17 @@
           ]
         },
         {
-          "id": "post:grounding-survives-summarization",
+          "id": "post:authority-down-evidence-up",
           "reasons": [
             {
               "kind": "explicit",
-              "declaredBy": "post:grounding-survives-summarization"
+              "declaredBy": "post:authority-down-evidence-up"
             },
             {
               "kind": "tag",
               "sharedTags": [
                 "agent-harness",
-                "automation"
+                "software-architecture"
               ]
             }
           ]
@@ -1117,6 +1177,15 @@
           ]
         },
         {
+          "id": "post:authority-down-evidence-up",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:authority-down-evidence-up"
+            }
+          ]
+        },
+        {
           "id": "project:praxis",
           "reasons": [
             {
@@ -1125,19 +1194,6 @@
                 "agent-runtime",
                 "observability",
                 "testing"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:tracers",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-runtime",
-                "observability",
-                "work-tracking"
               ]
             }
           ]
@@ -1450,11 +1506,12 @@
           ]
         },
         {
-          "id": "post:technical-depth-as-evidence",
+          "id": "post:authority-down-evidence-up",
           "reasons": [
             {
               "kind": "tag",
               "sharedTags": [
+                "agent-harness",
                 "observability",
                 "software-architecture"
               ]
@@ -2062,6 +2119,15 @@
           ]
         },
         {
+          "id": "post:authority-down-evidence-up",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:authority-down-evidence-up"
+            }
+          ]
+        },
+        {
           "id": "project:hj",
           "reasons": [
             {
@@ -2081,18 +2147,6 @@
               "sharedTags": [
                 "automation",
                 "ci-cd"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "project:maid",
-          "reasons": [
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "automation",
-                "cli"
               ]
             }
           ]
@@ -4828,24 +4882,20 @@
           ]
         },
         {
+          "id": "post:authority-down-evidence-up",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:authority-down-evidence-up"
+            }
+          ]
+        },
+        {
           "id": "post:technical-depth-as-evidence",
           "reasons": [
             {
               "kind": "explicit",
               "declaredBy": "post:technical-depth-as-evidence"
-            }
-          ]
-        },
-        {
-          "id": "project:disyn",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:disyn"
-            },
-            {
-              "kind": "explicit",
-              "declaredBy": "project:taskit"
             }
           ]
         }
@@ -5126,6 +5176,21 @@
     }
   ],
   "edges": [
+    {
+      "source": "post:25-projects-no-monorepo",
+      "target": "post:authority-down-evidence-up",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "developer-experience",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
     {
       "source": "post:25-projects-no-monorepo",
       "target": "post:contract-drift-as-migration",
@@ -5672,6 +5737,304 @@
         }
       ],
       "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "post:godmode-vs-agent-platforms",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "developer-experience",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "post:grounding-survives-summarization",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "post:hexagonal-change-budget",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "developer-experience",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "post:hooks-mid-rewrite",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "developer-experience",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.6
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "post:policy-between-intent-and-effects",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:authority-down-evidence-up"
+        },
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "post:provenance-is-the-point",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "observability",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "post:redaction-system-boundary",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "developer-experience",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "post:replayability-over-autonomy",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:authority-down-evidence-up"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "post:technical-depth-as-evidence",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "observability",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "observability",
+            "software-architecture"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.75
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "project:agentlint",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "project:atelier",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "project:bazaar",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "project:cargo-promote",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:authority-down-evidence-up"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "project:claude-code-statusline",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "developer-experience",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "project:devkit",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "project:godmode",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "project:steve",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "developer-experience"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.4
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "project:taskit",
+      "directed": true,
+      "evidence": [
+        {
+          "kind": "explicit",
+          "declaredBy": "post:authority-down-evidence-up"
+        }
+      ],
+      "tagSimilarity": 0
+    },
+    {
+      "source": "post:authority-down-evidence-up",
+      "target": "project:updog",
+      "directed": false,
+      "evidence": [
+        {
+          "kind": "tag",
+          "sharedTags": [
+            "agent-harness",
+            "observability"
+          ]
+        }
+      ],
+      "tagSimilarity": 0.3333333333333333
     },
     {
       "source": "post:contract-drift-as-migration",
