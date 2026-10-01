@@ -125,6 +125,12 @@ crux run Cruxfile ci # non-mutating aggregate; each quality gate runs once
   concurrent HTTP(S) checks and accepts timeouts plus HTTP 403 and 429 responses as network-policy
   and rate-limit exceptions while failing other confirmed HTTP errors. Zola, Node, and Bun versions
   are pinned in `.mise.toml` and must match `.github/workflows/validate.yml`.
+- Both workflows pin the runner to `ubuntu-24.04` instead of `ubuntu-latest`, because `ubuntu-latest`
+  migrates to Ubuntu 26 on 2026-10-19 and an unpinned runner silently changes the CI platform. Bump
+  that pin deliberately and re-run both workflows.
+- `actions/setup-node` exists only to place `node` on `PATH` for Prettier, markdownlint, and
+  `node --test`; installing dependencies is Bun's job. Since `setup-node` v5+ enables npm caching
+  by default, both workflows pass `package-manager-cache: false`.
 - `config.toml` enables the Atom feed at `atom.xml`.
 - `config.toml` sets the deployed base URL to `<https://89jobrien.github.io/sitex>`; keep generated
   links prefix-safe with Zola's `get_url` helpers.
