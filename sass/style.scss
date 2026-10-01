@@ -460,6 +460,7 @@ blockquote {
 }
 
 .graph-canvas {
+  position: relative;
   min-height: 36rem;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -513,6 +514,87 @@ blockquote {
 
 .graph-node-post {
   fill: var(--post);
+}
+
+// Hover and keyboard-focus readout. Positioned from live geometry in ui.mjs, so
+// it stays put through zoom, pan, and the settling simulation.
+.graph-tooltip {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  top: 0;
+  width: max-content;
+  max-width: min(18rem, calc(100% - 1rem));
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--muted);
+  border-radius: 0.5rem;
+  background: var(--bg);
+  box-shadow: 0 0.9rem 1.6rem rgb(0 0 0 / 55%);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  pointer-events: none;
+
+  &[hidden] {
+    display: none;
+  }
+
+  > * {
+    margin: 0;
+  }
+
+  > * + * {
+    margin-top: 0.35rem;
+  }
+
+  .graph-tooltip-title {
+    font-weight: 700;
+  }
+
+  .graph-tooltip-meta,
+  .graph-tooltip-summary {
+    color: var(--muted);
+  }
+
+  .graph-tooltip-summary {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .graph-tooltip-meta {
+    font-size: 0.9em;
+  }
+
+  .graph-tooltip-hint {
+    color: var(--accent);
+    font-size: 0.9em;
+  }
+
+  .graph-tooltip-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    padding: 0;
+    list-style: none;
+
+    li {
+      padding: 0.05rem 0.45rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.9em;
+    }
+  }
+}
+
+.graph-tooltip-project {
+  border-left-color: var(--project);
+}
+
+.graph-tooltip-post {
+  border-left-color: var(--post);
 }
 
 .graph-details {
