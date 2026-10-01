@@ -202,5 +202,5 @@ else justify its own maintenance cost.
 - [Doob's JSON output](https://github.com/89jobrien/doob/blob/main/crates/doob/src/output/json.rs)
 - [Coursers pre-tool command handling](https://github.com/89jobrien/coursers/blob/4931a35a669d3bff039d563394536e745a117cfc/crates/coursers/src/hook/pre.rs)
 - [Obfsck's redaction pipeline](https://github.com/89jobrien/obfsck/blob/main/src/lib.rs)
-- [Crux's typed execution trace](https://github.com/89jobrien/crux/blob/main/crates/crux-types/src/crux_value.rs)
+- [Crux's typed execution trace](https://github.com/89jobrien/crux/blob/main/crates/crux-types/src/emission.rs)
 - [RSLM's context-query execution](https://github.com/89jobrien/rslm/blob/main/crates/rslm-core/src/rlm.rs)
