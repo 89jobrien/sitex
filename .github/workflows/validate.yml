@@ -13,9 +13,9 @@ concurrency:
 
 jobs:
   quality:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install Zola
         uses: taiki-e/install-action@v2
         with:
@@ -43,9 +43,12 @@ jobs:
         with:
           bun-version: 1.3.10
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22.22.1
+          # Dependencies are installed by Bun, not npm. setup-node v5+ enables
+          # npm caching by default; that is both wrong and unnecessary here.
+          package-manager-cache: false
       - name: Install quality tools
         run: bun install --frozen-lockfile
       - name: Audit dependencies
