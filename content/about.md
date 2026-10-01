@@ -50,11 +50,6 @@ constrained grants; facts flow upward as evidence.** An execution system may
 report what happened, but it never gets to decide whether that outcome is
 sufficient for a merge, a release, a rule activation, or a durable state change.
 
-The same discipline shows up outside software. [myrv](@/projects/myrv.md)
-applies it to vehicle telemetry — OBD-II, RV-C, and battery data turned into
-confidence-scored diagnostics with explicit human confirmation before anything
-safety-relevant happens.
-
 ## How I work
 
 I work through a short set of questions rather than accumulating process:
