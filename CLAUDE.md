@@ -105,9 +105,15 @@ crux run Cruxfile ci # non-mutating aggregate; each quality gate runs once
 - The home page reuses that bundle in preview mode (`data-graph-mode="preview"` in
   `templates/index.html`): no filter controls, no zoom or wheel capture, one settled frame instead
   of an animation, nodes act as links into the target page, and a `<details>` info bubble explains
-  the projection. Without JavaScript the section still offers the `/graph/` link. Preview branches
-  live in `scripts/content-graph/ui.mjs` and require `bun run graph:bundle` so the committed bundle
-  stays fresh.
+  the projection. Without JavaScript the section still offers the `/graph/` link. The section sits
+  directly below the bio, ahead of featured projects and latest writing, so the graph leads the
+  page. Preview branches live in `scripts/content-graph/ui.mjs` and require `bun run graph:bundle`
+  so the committed bundle stays fresh.
+- Both the home preview and `/graph/` share one hover and keyboard-focus tooltip, a single `.graph-tooltip`
+  element appended to the canvas. It is `aria-hidden`, `pointer-events: none`, and positioned from live
+  `getBoundingClientRect` geometry rather than simulation coordinates, so it stays correct through
+  the settling simulation, zoom, and pan; `updatePositions` re-syncs it on every tick while visible.
+  Node text reaches the tooltip only through `textContent`, never `innerHTML`.
 - `/sites/` (`templates/sites.html`) is derived from project metadata rather than authored content:
   it lists every project declaring `extra.site`. Sites publish automatically to
   `https://89jobrien.github.io/<repo>/`, so `extra.site` must equal the URL derived from

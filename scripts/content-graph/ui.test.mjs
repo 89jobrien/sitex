@@ -303,6 +303,75 @@ test("renders a read-only preview that navigates instead of trapping wheel input
   ]);
 });
 
+test("reads a hover tooltip for preview nodes and hides it on leave", async () => {
+  const { document, root } = previewFixture();
+
+  await initializeContentGraph(root, {
+    fetchImpl: manifestResponse(graph),
+    matchMediaImpl: () => ({ matches: true }),
+  });
+
+  const tooltip = root.querySelector("[data-graph-canvas] .graph-tooltip");
+  assert.ok(tooltip, "preview renders a tooltip element");
+  assert.equal(tooltip.hidden, true);
+  assert.equal(tooltip.getAttribute("aria-hidden"), "true");
+
+  const alpha = root.querySelector('[data-graph-node="project:alpha"]');
+  alpha.dispatchEvent(new document.defaultView.Event("mouseenter"));
+
+  assert.equal(tooltip.hidden, false);
+  assert.equal(tooltip.className, "graph-tooltip graph-tooltip-project");
+  assert.match(tooltip.textContent, /Alpha Runner/);
+  assert.match(tooltip.textContent, /Project · 2026-09-12/);
+  assert.match(tooltip.textContent, /Automates release checks/);
+  assert.deepEqual(
+    [...tooltip.querySelectorAll(".graph-tooltip-tags li")].map(
+      (item) => item.textContent,
+    ),
+    ["automation", "testing"],
+  );
+  assert.match(tooltip.textContent, /Select to open this page/);
+
+  alpha.dispatchEvent(new document.defaultView.Event("mouseleave"));
+  assert.equal(tooltip.hidden, true);
+});
+
+test("reports connection counts in the explorer tooltip without the open hint", async () => {
+  const { document, root } = fixture();
+  const connected = structuredClone(graph);
+  connected.nodes[0].related = [
+    { id: "post:bravo", reasons: [{ kind: "link" }] },
+  ];
+  connected.nodes[0].backlinks = [{ id: "project:charlie" }];
+
+  await initializeContentGraph(root, {
+    fetchImpl: manifestResponse(connected),
+    matchMediaImpl: () => ({ matches: true }),
+  });
+
+  const tooltip = root.querySelector("[data-graph-canvas] .graph-tooltip");
+  const alpha = root.querySelector('[data-graph-node="project:alpha"]');
+
+  alpha.dispatchEvent(new document.defaultView.Event("focus"));
+  assert.equal(tooltip.hidden, false);
+  assert.match(tooltip.textContent, /2 direct connections/);
+  assert.doesNotMatch(tooltip.textContent, /Select to open/);
+
+  alpha.dispatchEvent(new document.defaultView.Event("blur"));
+  assert.equal(tooltip.hidden, true);
+});
+
+test("keeps one tooltip across explorer re-renders", async () => {
+  const { document, root } = fixture();
+  await initializeContentGraph(root, { fetchImpl: manifestResponse(graph) });
+
+  root
+    .querySelector('input[name="query"]')
+    .dispatchEvent(new document.defaultView.Event("input", { bubbles: true }));
+
+  assert.equal(root.querySelectorAll(".graph-tooltip").length, 1);
+});
+
 test("settles unconnected preview nodes inside the canvas at readable size", async () => {
   const { root } = previewFixture();
 

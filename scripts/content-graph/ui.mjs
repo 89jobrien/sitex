@@ -12,7 +12,11 @@ import { zoom, zoomIdentity } from "d3-zoom";
 
 export const DEFAULT_EDGE_KINDS = Object.freeze(["explicit", "link"]);
 export const NODE_KINDS = Object.freeze(["project", "post"]);
+const NODE_LABELS = Object.freeze({ project: "Project", post: "Essay" });
 const PREVIEW_MODE = "preview";
+const TOOLTIP_TAGS = 4;
+const TOOLTIP_GAP = 10;
+const TOOLTIP_INSET = 8;
 const MAX_MANIFEST_BYTES = 2_000_000;
 const MAX_NODES = 1_000;
 const MAX_EDGES = 10_000;
@@ -255,6 +259,90 @@ function primaryEdgeKind(edge, enabledKinds) {
   );
 }
 
+function tooltipLine(document, className, text) {
+  const line = document.createElement("p");
+  line.className = className;
+  line.textContent = text;
+  return line;
+}
+
+function renderTooltip(tooltip, node, { preview }) {
+  const document = tooltip.ownerDocument;
+  tooltip.className = `graph-tooltip graph-tooltip-${node.kind}`;
+  const children = [
+    tooltipLine(document, "graph-tooltip-title", node.title),
+    tooltipLine(
+      document,
+      "graph-tooltip-meta",
+      `${NODE_LABELS[node.kind] ?? node.kind} · ${node.date}`,
+    ),
+  ];
+
+  if (node.description) {
+    children.push(
+      tooltipLine(document, "graph-tooltip-summary", node.description),
+    );
+  }
+
+  if (node.tags.length > 0) {
+    const tags = document.createElement("ul");
+    tags.className = "graph-tooltip-tags";
+    for (const tag of node.tags.slice(0, TOOLTIP_TAGS)) {
+      const item = document.createElement("li");
+      item.textContent = tag;
+      tags.append(item);
+    }
+    children.push(tags);
+  }
+
+  const connections = node.related.length + node.backlinks.length;
+  if (connections > 0) {
+    children.push(
+      tooltipLine(
+        document,
+        "graph-tooltip-meta",
+        `${connections} direct connection${connections === 1 ? "" : "s"}`,
+      ),
+    );
+  }
+
+  if (preview) {
+    children.push(
+      tooltipLine(document, "graph-tooltip-hint", "Select to open this page"),
+    );
+  }
+
+  tooltip.replaceChildren(...children);
+  tooltip.hidden = false;
+}
+
+// Reads live geometry rather than simulation coordinates so the tooltip stays
+// correct while nodes move and while the explorer is zoomed or panned.
+function positionTooltip(tooltip, canvas, anchor) {
+  const bounds = canvas.getBoundingClientRect?.();
+  const box = anchor?.getBoundingClientRect?.();
+  if (!bounds?.width || !bounds?.height) return;
+  if (!box || (!box.width && !box.height)) return;
+
+  const width = tooltip.offsetWidth;
+  const height = tooltip.offsetHeight;
+  const centerX = box.left - bounds.left + box.width / 2;
+  const bottom = box.bottom - bounds.top;
+  const inset = TOOLTIP_INSET;
+  const room = Math.max(bounds.width - width - inset, inset);
+
+  const left = Math.min(Math.max(centerX - width / 2, inset), room);
+  let top = box.top - bounds.top - height - TOOLTIP_GAP;
+  if (top < inset) top = bottom + TOOLTIP_GAP;
+  top = Math.min(
+    Math.max(top, inset),
+    Math.max(bounds.height - height - inset, inset),
+  );
+
+  tooltip.style.left = `${Math.round(left)}px`;
+  tooltip.style.top = `${Math.round(top)}px`;
+}
+
 function installZoom(root, svg, viewport) {
   const zoomBehavior = zoom()
     .scaleExtent([0.35, 4])
@@ -311,6 +399,26 @@ function renderGraph(
     .attr("role", "group")
     .attr("aria-label", "Interactive content relationship graph");
   const viewport = svg.append("g");
+  const tooltip = canvas.ownerDocument.createElement("div");
+  tooltip.className = "graph-tooltip";
+  tooltip.setAttribute("aria-hidden", "true");
+  tooltip.hidden = true;
+  canvas.append(tooltip);
+
+  let tooltipAnchor = null;
+  const syncTooltip = () => {
+    if (tooltipAnchor) positionTooltip(tooltip, canvas, tooltipAnchor);
+  };
+  const hideTooltip = () => {
+    tooltipAnchor = null;
+    tooltip.hidden = true;
+  };
+  const showTooltip = function (_, node) {
+    renderTooltip(tooltip, node, { preview });
+    tooltipAnchor = this;
+    syncTooltip();
+  };
+
   const edges = graph.edges.map((edge) => ({ ...edge }));
   const nodes = graph.nodes.map((node) => ({ ...node }));
 
@@ -343,6 +451,10 @@ function renderGraph(
         : `${node.title}, ${node.kind}`,
     )
     .on("click", (_, node) => activate(node))
+    .on("mouseenter", showTooltip)
+    .on("mouseleave", hideTooltip)
+    .on("focus", showTooltip)
+    .on("blur", hideTooltip)
     .on("keydown", (event, node) => {
       if (event.key === "Enter" || (!preview && event.key === " ")) {
         event.preventDefault();
@@ -366,6 +478,7 @@ function renderGraph(
       .attr("x2", ({ target }) => target.x)
       .attr("y2", ({ target }) => target.y);
     circles.attr("cx", ({ x }) => x).attr("cy", ({ y }) => y);
+    syncTooltip();
   };
   const simulation = forceSimulation(nodes)
     .force("charge", forceManyBody().strength(preview ? -55 : -90))
