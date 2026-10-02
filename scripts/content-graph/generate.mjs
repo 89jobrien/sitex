@@ -16,6 +16,11 @@ import {
 const CONTENT_ROUTE = /^\/(projects|blog)\/([a-z0-9]+(?:-[a-z0-9]+)*)\/?$/;
 const CONTENT_FILE =
   /^content\/(projects|blog)\/([a-z0-9]+(?:-[a-z0-9]+)*)\.md$/;
+// zk wiki links address notes from the repository root, e.g. "@/blog/bravo.md".
+// Zola rewrites them into absolute site URLs, but without this branch the graph
+// resolved them against the source directory and dropped them, so every editorial
+// cross-reference produced no edge and no backlink.
+const WIKI_LINK = /^@\//;
 
 function routeFromContentPath(contentPath) {
   const match = CONTENT_FILE.exec(contentPath);
@@ -28,6 +33,9 @@ function normalizeLinkTarget(url, sourcePath) {
   }
 
   const cleanUrl = url.split(/[?#]/, 1)[0];
+  if (WIKI_LINK.test(cleanUrl)) {
+    return routeFromContentPath(`content/${cleanUrl.slice(2)}`);
+  }
   const routeMatch = CONTENT_ROUTE.exec(cleanUrl);
   if (routeMatch) {
     return `/${routeMatch[1]}/${routeMatch[2]}/`;

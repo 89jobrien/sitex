@@ -392,27 +392,14 @@
       ],
       "related": [
         {
-          "id": "post:prompts-as-interfaces",
+          "id": "post:policy-between-intent-and-effects",
           "reasons": [
             {
               "kind": "explicit",
               "declaredBy": "post:grounding-survives-summarization"
             },
             {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-harness",
-                "automation",
-                "integration"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "post:policy-between-intent-and-effects",
-          "reasons": [
-            {
-              "kind": "explicit",
+              "kind": "link",
               "declaredBy": "post:grounding-survives-summarization"
             },
             {
@@ -430,20 +417,52 @@
             {
               "kind": "explicit",
               "declaredBy": "post:provenance-is-the-point"
+            },
+            {
+              "kind": "link",
+              "declaredBy": "post:provenance-is-the-point"
             }
           ]
         },
         {
-          "id": "post:truth-and-evidence-are-two-axes",
+          "id": "project:episteme",
           "reasons": [
             {
               "kind": "explicit",
-              "declaredBy": "post:truth-and-evidence-are-two-axes"
+              "declaredBy": "project:episteme"
+            },
+            {
+              "kind": "link",
+              "declaredBy": "project:episteme"
+            }
+          ]
+        },
+        {
+          "id": "post:prompts-as-interfaces",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:grounding-survives-summarization"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation",
+                "integration"
+              ]
             }
           ]
         }
       ],
-      "backlinks": []
+      "backlinks": [
+        {
+          "id": "post:provenance-is-the-point"
+        },
+        {
+          "id": "project:episteme"
+        }
+      ]
     },
     {
       "id": "post:hexagonal-change-budget",
@@ -695,6 +714,19 @@
       ],
       "related": [
         {
+          "id": "post:your-range-check-cannot-tell-compliance-from-capitulation",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:your-range-check-cannot-tell-compliance-from-capitulation"
+            },
+            {
+              "kind": "link",
+              "declaredBy": "post:your-range-check-cannot-tell-compliance-from-capitulation"
+            }
+          ]
+        },
+        {
           "id": "post:provenance-is-the-point",
           "reasons": [
             {
@@ -713,15 +745,6 @@
           ]
         },
         {
-          "id": "post:your-range-check-cannot-tell-compliance-from-capitulation",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "post:your-range-check-cannot-tell-compliance-from-capitulation"
-            }
-          ]
-        },
-        {
           "id": "post:truth-and-evidence-are-two-axes",
           "reasons": [
             {
@@ -734,7 +757,11 @@
           ]
         }
       ],
-      "backlinks": []
+      "backlinks": [
+        {
+          "id": "post:your-range-check-cannot-tell-compliance-from-capitulation"
+        }
+      ]
     },
     {
       "id": "post:one-cli-many-protocols",
@@ -830,6 +857,26 @@
       ],
       "related": [
         {
+          "id": "post:grounding-survives-summarization",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:grounding-survives-summarization"
+            },
+            {
+              "kind": "link",
+              "declaredBy": "post:grounding-survives-summarization"
+            },
+            {
+              "kind": "tag",
+              "sharedTags": [
+                "agent-harness",
+                "automation"
+              ]
+            }
+          ]
+        },
+        {
           "id": "post:hooks-mid-rewrite",
           "reasons": [
             {
@@ -886,25 +933,13 @@
               ]
             }
           ]
-        },
-        {
-          "id": "post:authority-down-evidence-up",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "post:authority-down-evidence-up"
-            },
-            {
-              "kind": "tag",
-              "sharedTags": [
-                "agent-harness",
-                "software-architecture"
-              ]
-            }
-          ]
         }
       ],
-      "backlinks": []
+      "backlinks": [
+        {
+          "id": "post:grounding-survives-summarization"
+        }
+      ]
     },
     {
       "id": "post:prompts-as-interfaces",
@@ -1007,6 +1042,32 @@
       ],
       "related": [
         {
+          "id": "post:grounding-survives-summarization",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:provenance-is-the-point"
+            },
+            {
+              "kind": "link",
+              "declaredBy": "post:provenance-is-the-point"
+            }
+          ]
+        },
+        {
+          "id": "post:truth-and-evidence-are-two-axes",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "post:truth-and-evidence-are-two-axes"
+            },
+            {
+              "kind": "link",
+              "declaredBy": "post:truth-and-evidence-are-two-axes"
+            }
+          ]
+        },
+        {
           "id": "post:your-policy-engine-cannot-tell-you-which-rules-are-dead",
           "reasons": [
             {
@@ -1037,27 +1098,13 @@
               ]
             }
           ]
-        },
-        {
-          "id": "post:grounding-survives-summarization",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "post:provenance-is-the-point"
-            }
-          ]
-        },
-        {
-          "id": "post:make-the-compiler-refuse-what-it-cannot-replay",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "post:make-the-compiler-refuse-what-it-cannot-replay"
-            }
-          ]
         }
       ],
-      "backlinks": []
+      "backlinks": [
+        {
+          "id": "post:truth-and-evidence-are-two-axes"
+        }
+      ]
     },
     {
       "id": "post:redaction-system-boundary",
@@ -1417,16 +1464,20 @@
       ],
       "related": [
         {
-          "id": "post:grounding-survives-summarization",
+          "id": "post:provenance-is-the-point",
           "reasons": [
             {
               "kind": "explicit",
+              "declaredBy": "post:truth-and-evidence-are-two-axes"
+            },
+            {
+              "kind": "link",
               "declaredBy": "post:truth-and-evidence-are-two-axes"
             }
           ]
         },
         {
-          "id": "post:provenance-is-the-point",
+          "id": "post:grounding-survives-summarization",
           "reasons": [
             {
               "kind": "explicit",
@@ -1535,16 +1586,20 @@
       ],
       "related": [
         {
-          "id": "post:grounding-survives-summarization",
+          "id": "post:make-the-compiler-refuse-what-it-cannot-replay",
           "reasons": [
             {
               "kind": "explicit",
+              "declaredBy": "post:your-range-check-cannot-tell-compliance-from-capitulation"
+            },
+            {
+              "kind": "link",
               "declaredBy": "post:your-range-check-cannot-tell-compliance-from-capitulation"
             }
           ]
         },
         {
-          "id": "post:make-the-compiler-refuse-what-it-cannot-replay",
+          "id": "post:grounding-survives-summarization",
           "reasons": [
             {
               "kind": "explicit",
@@ -2785,6 +2840,19 @@
       ],
       "related": [
         {
+          "id": "post:grounding-survives-summarization",
+          "reasons": [
+            {
+              "kind": "explicit",
+              "declaredBy": "project:episteme"
+            },
+            {
+              "kind": "link",
+              "declaredBy": "project:episteme"
+            }
+          ]
+        },
+        {
           "id": "project:kgx",
           "reasons": [
             {
@@ -2797,15 +2865,6 @@
                 "cli",
                 "knowledge-systems"
               ]
-            }
-          ]
-        },
-        {
-          "id": "post:grounding-survives-summarization",
-          "reasons": [
-            {
-              "kind": "explicit",
-              "declaredBy": "project:episteme"
             }
           ]
         },
@@ -6418,6 +6477,10 @@
           "declaredBy": "post:grounding-survives-summarization"
         },
         {
+          "kind": "link",
+          "declaredBy": "post:grounding-survives-summarization"
+        },
+        {
           "kind": "tag",
           "sharedTags": [
             "agent-harness",
@@ -6454,6 +6517,10 @@
       "evidence": [
         {
           "kind": "explicit",
+          "declaredBy": "post:provenance-is-the-point"
+        },
+        {
+          "kind": "link",
           "declaredBy": "post:provenance-is-the-point"
         }
       ],
@@ -6626,6 +6693,10 @@
       "evidence": [
         {
           "kind": "explicit",
+          "declaredBy": "project:episteme"
+        },
+        {
+          "kind": "link",
           "declaredBy": "project:episteme"
         }
       ],
@@ -7453,6 +7524,10 @@
         {
           "kind": "explicit",
           "declaredBy": "post:your-range-check-cannot-tell-compliance-from-capitulation"
+        },
+        {
+          "kind": "link",
+          "declaredBy": "post:your-range-check-cannot-tell-compliance-from-capitulation"
         }
       ],
       "tagSimilarity": 0
@@ -8147,6 +8222,10 @@
       "evidence": [
         {
           "kind": "explicit",
+          "declaredBy": "post:truth-and-evidence-are-two-axes"
+        },
+        {
+          "kind": "link",
           "declaredBy": "post:truth-and-evidence-are-two-axes"
         }
       ],

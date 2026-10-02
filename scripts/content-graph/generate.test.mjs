@@ -49,6 +49,43 @@ test("ignores links outside graph content", () => {
   assert.deepEqual(extractGraphLinks(body, "content/projects/alpha.md"), []);
 });
 
+test("resolves zk wiki links to content routes", () => {
+  const body = [
+    "[Blog bravo](@/blog/bravo.md)",
+    "[Project alpha](@/projects/alpha.md)",
+  ].join("\n");
+
+  assert.deepEqual(extractGraphLinks(body, "content/projects/charlie.md"), [
+    "/blog/bravo/",
+    "/projects/alpha/",
+  ]);
+});
+
+test("normalizes anchors and queries on wiki links", () => {
+  const body = [
+    "[Anchored](@/blog/bravo.md#section)",
+    "[Queried](@/blog/bravo.md?x=1)",
+  ].join("\n");
+
+  // extractGraphLinks sorts but does not dedupe; repeated routes are expected and
+  // are collapsed when evidence is recorded downstream.
+  assert.deepEqual(extractGraphLinks(body, "content/projects/charlie.md"), [
+    "/blog/bravo/",
+    "/blog/bravo/",
+  ]);
+});
+
+test("wiki links outside graph content stay ignored", () => {
+  const body = [
+    "[Section index](@/blog/_index.md)",
+    "[Root about](@/about.md)",
+    "[Copied readme](@/README.md)",
+    "[Copied docs](@/docs/architecture.md)",
+  ].join("\n");
+
+  assert.deepEqual(extractGraphLinks(body, "content/projects/charlie.md"), []);
+});
+
 test("rejects unresolved content-shaped links", async () => {
   await assert.rejects(
     generateContentGraph({
